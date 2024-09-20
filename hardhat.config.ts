@@ -85,7 +85,7 @@ const config: HardhatUserConfig = {
       viaIR: true,
     },
   },
-  defaultNetwork: "holesky",
+  defaultNetwork: "arbitrumSepolia",
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
