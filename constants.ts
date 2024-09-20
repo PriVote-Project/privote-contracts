@@ -1,7 +1,8 @@
 export const InitialVoiceCreditProxyContractName = "ConstantInitialVoiceCreditProxy";
 export const GatekeeperContractName = "FreeForAllGatekeeper";
 export const VerifierContractName = "Verifier";
-
+export const DestinationPrivoteContractName = "DestinationPrivote";
+export const sourcePrivoteContractName = "SourcePrivote";
 // zk registry config
 export const stateTreeDepth = 10;
 export const intStateTreeDepth = 1;

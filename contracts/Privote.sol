@@ -11,7 +11,7 @@ import { InitialVoiceCreditProxy } from "maci-contracts/contracts/initialVoiceCr
 
 /// @title Privote - A Private Voting Protocol
 /// @notice Allows userss to deploy multiple private polls according to their needs
-contract Privote is MACI, Ownable(msg.sender) {
+contract Privote is MACI, Ownable {
 	struct PollData {
 		uint256 id;
 		string name;
