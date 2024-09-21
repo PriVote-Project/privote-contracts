@@ -23,6 +23,7 @@ contract Privote is MACI, Ownable {
 		uint256 endTime;
 		uint256 numOfOptions;
 		string[] options;
+		string[] optionInfo;
 		string tallyJsonCID;
 		PubKey coordinatorPubKey;
 		address pollDeployer;
@@ -47,6 +48,7 @@ contract Privote is MACI, Ownable {
 		Privote.PollContracts pollContracts,
 		string name,
 		string[] options,
+		string[] optionInfo,
 		string metadata,
 		uint256 startTime,
 		uint256 endTime,
@@ -130,6 +132,7 @@ contract Privote is MACI, Ownable {
 	function createPoll(
 		string calldata _name,
 		string[] calldata _options,
+		string[] calldata _optionInfo,
 		string calldata _metadata,
 		uint256 _duration,
 		Mode isQv,
@@ -169,6 +172,7 @@ contract Privote is MACI, Ownable {
 			endTime: endTime,
 			pollContracts: pollContracts,
 			options: _options,
+			optionInfo: _optionInfo,
 			tallyJsonCID: "",
 			pollDeployer: msg.sender,
 			coordinatorPubKey: coordinatorPubKey,
@@ -182,6 +186,7 @@ contract Privote is MACI, Ownable {
 			pollContracts,
 			_name,
 			_options,
+			_optionInfo,
 			_metadata,
 			block.timestamp,
 			endTime,
