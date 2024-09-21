@@ -8,6 +8,7 @@ import { IMessageProcessorFactory } from "maci-contracts/contracts/interfaces/IM
 import { ITallyFactory } from "maci-contracts/contracts/interfaces/ITallyFactory.sol";
 import { SignUpGatekeeper } from "maci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol";
 import { InitialVoiceCreditProxy } from "maci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
+import { ITally } from "./interfaces/ITally.sol";
 
 /// @title Privote - A Private Voting Protocol
 /// @notice Allows userss to deploy multiple private polls according to their needs
@@ -246,7 +247,10 @@ contract Privote is MACI, Ownable {
 			block.timestamp > poll.endTime + poll.slashThreshold,
 			"Slash threshold not reached"
 		);
-		require(stakes[poll.pollDeployer] > 0, "No stake to slash");
+		require(
+			!ITally(poll.pollContracts.tally).isTallied(),
+			"Poll already tallied"
+		);
 
 		uint256 stakeToSlash = stakes[poll.pollDeployer];
 		stakes[poll.pollDeployer] = 0;

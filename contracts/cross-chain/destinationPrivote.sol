@@ -4,7 +4,7 @@ pragma solidity 0.8.20;
 import { CCIPReceiver } from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
 import { Client } from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
 import { Withdraw } from "./utils/Withdraw.sol";
-import { IPrivote } from "../IPrivote.sol";
+import { IPrivote } from "../interfaces/IPrivote.sol";
 import { IPoll } from "maci-contracts/contracts/interfaces/IPoll.sol";
 import { DomainObjs } from "maci-contracts/contracts/utilities/DomainObjs.sol";
 

@@ -9,6 +9,7 @@ import { ITallyFactory } from "maci-contracts/contracts/interfaces/ITallyFactory
 import { SignUpGatekeeper } from "maci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol";
 import { InitialVoiceCreditProxy } from "maci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
 import { IPoll } from "maci-contracts/contracts/interfaces/IPoll.sol";
+import { ITally } from "./interfaces/ITally.sol";
 import "@anon-aadhaar/contracts/interfaces/IAnonAadhaar.sol";
 import "@anon-aadhaar/contracts/interfaces/IAnonAadhaarVote.sol";
 
@@ -253,6 +254,11 @@ contract PrivoteAnon is MACI, Ownable, IAnonAadhaarVote {
 			block.timestamp > poll.endTime + poll.slashThreshold,
 			"Slash threshold not reached"
 		);
+		require(
+			!ITally(poll.pollContracts.tally).isTallied(),
+			"Poll already tallied"
+		);
+
 		require(stakes[poll.pollDeployer] > 0, "No stake to slash");
 
 		uint256 stakeToSlash = stakes[poll.pollDeployer];

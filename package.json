@@ -34,7 +34,7 @@
     "hardhat-artifactor": "^0.2.0",
     "maci-circuits": "2.0.0",
     "maci-cli": "2.0.0",
-    "maci-contracts": "2.0.0",
+    "maci-contracts": "2.3.0",
     "maci-core": "2.0.0",
     "maci-crypto": "2.0.0",
     "maci-domainobjs": "2.0.0",

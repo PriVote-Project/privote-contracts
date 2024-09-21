@@ -4779,26 +4779,7 @@ maci-cli@2.0.0:
     maci-domainobjs "^2.0.0"
     prompt "^1.3.0"
 
-maci-contracts@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/maci-contracts/-/maci-contracts-2.0.0.tgz#c8d80ac93081d7b95b484bdef5351045c65c0147"
-  integrity sha512-+Ase2pKiEXWN2mYk1T3T3vFaSFl3kEfmHn0ogsnwQjddTZS46RiDLGf+V8/yZSfbwaeYG/qDfTDc3wg6cbOcSg==
-  dependencies:
-    "@nomicfoundation/hardhat-ethers" "^3.0.6"
-    "@nomicfoundation/hardhat-toolbox" "^5.0.0"
-    "@openzeppelin/contracts" "^5.0.2"
-    circomlibjs "^0.1.7"
-    ethers "^6.13.2"
-    hardhat "^2.22.7"
-    lowdb "^1.0.0"
-    maci-circuits "^2.0.0"
-    maci-core "^2.0.0"
-    maci-crypto "^2.0.0"
-    maci-domainobjs "^2.0.0"
-    solidity-docgen "^0.6.0-beta.36"
-    uuid "^10.0.0"
-
-maci-contracts@^2.0.0:
+maci-contracts@2.3.0, maci-contracts@^2.0.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/maci-contracts/-/maci-contracts-2.3.0.tgz#f828e03ab9390144428a51a5c8a231222d5dd0f6"
   integrity sha512-9G/aEA3CpdKgBhzGcqCVfJqI6Tjeo6r9MXaAKMejFFoobIPWqjE8m/g+IKI+QbhLjI5PTNLaja5ji4ZuOfB8Yg==
