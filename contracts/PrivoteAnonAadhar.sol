@@ -14,13 +14,13 @@ import "@anon-aadhaar/contracts/interfaces/IAnonAadhaarVote.sol";
 
 /// @title Privote - A Private Voting Protocol
 /// @notice Allows userss to deploy multiple private polls according to their needs
-contract Privote is MACI, Ownable, IAnonAadhaarVote {
+contract PrivoteAnon is MACI, Ownable, IAnonAadhaarVote {
 	struct PollData {
 		uint256 id;
 		string name;
 		bytes encodedOptions;
 		string metadata;
-		Privote.PollContracts pollContracts;
+		PrivoteAnon.PollContracts pollContracts;
 		uint256 startTime;
 		uint256 endTime;
 		uint256 numOfOptions;
@@ -48,7 +48,7 @@ contract Privote is MACI, Ownable, IAnonAadhaarVote {
 	event PollCreated(
 		uint256 indexed pollId,
 		address indexed creator,
-		Privote.PollContracts pollContracts,
+		PrivoteAnon.PollContracts pollContracts,
 		string name,
 		string[] options,
 		string metadata,
