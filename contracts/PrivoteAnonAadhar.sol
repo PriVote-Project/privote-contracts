@@ -35,6 +35,9 @@ contract PrivoteAnon is MACI, Ownable, IAnonAadhaarVote {
 
 	mapping(uint256 => PollData) internal _polls;
 
+	// Mapping to track if a userNullifier has voted in a poll
+	mapping(uint256 => mapping(uint256 => bool)) public hasVoted;
+
 	TreeDepths public treeDepths;
 	address public verifier;
 	address public vkRegistry;
@@ -196,6 +199,66 @@ contract PrivoteAnon is MACI, Ownable, IAnonAadhaarVote {
 		);
 	}
 
+	function slashPollDeployer(uint256 _pollId) public {
+		PollData storage poll = _polls[_pollId];
+		require(
+			block.timestamp > poll.endTime + poll.slashThreshold,
+			"Slash threshold not reached"
+		);
+		require(
+			!ITally(poll.pollContracts.tally).isTallied(),
+			"Poll already tallied"
+		);
+
+		require(stakes[poll.pollDeployer] > 0, "No stake to slash");
+
+		uint256 stakeToSlash = stakes[poll.pollDeployer];
+		stakes[poll.pollDeployer] = 0;
+
+		emit PollDeployerSlashed(poll.pollDeployer, stakeToSlash);
+	}
+
+	function vote(
+		uint256 _pollId,
+		Message memory _message,
+		PubKey memory _encPubKey,
+		uint nullifierSeed,
+		uint nullifier,
+		uint timestamp,
+		uint signal,
+		uint[4] memory revealArray,
+		uint[8] memory groth16Proof
+	) public {
+		require(
+			addressToUint256(msg.sender) == signal,
+			"[AnonAadhaarVote]: wrong user signal sent."
+		);
+		require(
+			isLessThan3HoursAgo(timestamp) == true,
+			"[AnonAadhaarVote]: Proof must be generated with Aadhaar data generated less than 3 hours ago."
+		);
+		require(_polls[_pollId].endTime > block.timestamp, "Poll has ended");
+		// Check that user hasn't already voted
+		require(
+			!hasVoted[_pollId][nullifier],
+			"[AnonAadhaarVote]: User has already voted for this poll"
+		);
+		require(
+			IAnonAadhaar(anonAadhaarVerifierAddr).verifyAnonAadhaarProof(
+				nullifierSeed, // nulifier seed
+				nullifier,
+				timestamp,
+				signal,
+				revealArray,
+				groth16Proof
+			) == true,
+			"[AnonAadhaarVote]: proof sent is not valid."
+		);
+		PollData memory poll = fetchPoll(_pollId);
+		IPoll(poll.pollContracts.poll).publishMessage(_message, _encPubKey);
+		hasVoted[_pollId][nullifier] = true;
+	}
+
 	function getPollId(address _poll) public view returns (uint256 pollId) {
 		if (pollIds[_poll] >= nextPollId) revert PollAddressDoesNotExist(_poll);
 		pollId = pollIds[_poll];
@@ -248,49 +311,18 @@ contract PrivoteAnon is MACI, Ownable, IAnonAadhaarVote {
 		return _polls[_pollId];
 	}
 
-	function slashPollDeployer(uint256 _pollId) public {
-		PollData storage poll = _polls[_pollId];
-		require(
-			block.timestamp > poll.endTime + poll.slashThreshold,
-			"Slash threshold not reached"
-		);
-		require(
-			!ITally(poll.pollContracts.tally).isTallied(),
-			"Poll already tallied"
-		);
-
-		require(stakes[poll.pollDeployer] > 0, "No stake to slash");
-
-		uint256 stakeToSlash = stakes[poll.pollDeployer];
-		stakes[poll.pollDeployer] = 0;
-
-		emit PollDeployerSlashed(poll.pollDeployer, stakeToSlash);
+	function addressToUint256(address _addr) private pure returns (uint256) {
+		return uint256(uint160(_addr));
 	}
 
-	function vote(
+	function isLessThan3HoursAgo(uint timestamp) public view returns (bool) {
+		return timestamp > (block.timestamp - 3 * 60 * 60);
+	}
+
+	function checkVoted(
 		uint256 _pollId,
-		Message memory _message,
-		PubKey memory _encPubKey,
-		uint nullifierSeed,
-		uint nullifier,
-		uint timestamp,
-		uint signal,
-		uint[4] memory revealArray,
-		uint[8] memory groth16Proof
-	) public {
-		require(_polls[_pollId].endTime > block.timestamp, "Poll has ended");
-		require(
-			IAnonAadhaar(anonAadhaarVerifierAddr).verifyAnonAadhaarProof(
-				nullifierSeed, // nulifier seed
-				nullifier,
-				timestamp,
-				signal,
-				revealArray,
-				groth16Proof
-			) == true,
-			"[AnonAadhaarVote]: proof sent is not valid."
-		);
-		PollData memory poll = fetchPoll(_pollId);
-		IPoll(poll.pollContracts.poll).publishMessage(_message, _encPubKey);
+		uint256 _nullifier
+	) public view returns (bool) {
+		return hasVoted[_pollId][_nullifier];
 	}
 }
