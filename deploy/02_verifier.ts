@@ -6,6 +6,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
   const { deployer } = await hre.getNamedAccounts();
 
   await hre.deployments.deploy(VerifierContractName, {
+    contract: "@anon-aadhaar/contracts/src/Verifier.sol:Verifier",
     from: deployer,
     args: [],
     log: true,

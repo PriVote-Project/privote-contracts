@@ -1,5 +1,5 @@
 export const InitialVoiceCreditProxyContractName = "ConstantInitialVoiceCreditProxy";
-export const GatekeeperContractName = "FreeForAllGatekeeper";
+export const AnonAadhaarVerifierContractName = "AnonAadhaarVerifier";
 export const VerifierContractName = "Verifier";
 export const DestinationPrivoteContractName = "DestinationPrivote";
 export const sourcePrivoteContractName = "SourcePrivote";

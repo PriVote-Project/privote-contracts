@@ -1,12 +1,15 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { GatekeeperContractName, InitialVoiceCreditProxyContractName, stateTreeDepth } from "../constants";
+import { InitialVoiceCreditProxyContractName, stateTreeDepth } from "../constants";
 import { Privote, SignUpGatekeeper } from "../typechain-types";
 import { genEmptyBallotRoots } from "maci-contracts";
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
-
+  let GatekeeperContractName = process.env.GATEKEEPER_CONTRACT_NAME;
+  if (GatekeeperContractName == null) {
+    GatekeeperContractName = "FreeForAllGatekeeper";
+  }
   const poseidonT3 = await hre.ethers.getContract("PoseidonT3", deployer);
   const poseidonT4 = await hre.ethers.getContract("PoseidonT4", deployer);
   const poseidonT5 = await hre.ethers.getContract("PoseidonT5", deployer);
