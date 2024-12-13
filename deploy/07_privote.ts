@@ -47,7 +47,9 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
 
   const privote = await hre.ethers.getContract<Privote>("Privote", deployer);
 
-  console.log(`The Privote contract is deployed at ${await privote.getAddress()}`);
+  console.log(
+    `The Privote contract is deployed at ${await privote.getAddress()} with gatekeeper ${await gatekeeper.getAddress()}`,
+  );
 
   const tx = await gatekeeper.setMaciInstance(await privote.getAddress());
   await tx.wait(1);
