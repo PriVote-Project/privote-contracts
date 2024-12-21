@@ -239,6 +239,49 @@ contract Privote is MACI, Ownable {
 		}
 	}
 
+	// Possible gas optimizations
+
+	function fetchUserPolls(
+		address user,
+		uint256 _page,
+		uint256 _perPage,
+		bool _ascending
+	) public view returns (PollData[] memory polls_) {
+		uint256 totalPolls = 0;
+		for (uint256 i = 0; i < nextPollId; i++) {
+			if (_polls[i].pollDeployer == user) {
+				totalPolls++;
+			}
+		}
+
+		uint256 start = (_page - 1) * _perPage;
+		uint256 end = start + _perPage - 1;
+
+		if (start >= totalPolls) {
+			return new PollData[](0);
+		}
+
+		if (end >= totalPolls) {
+			end = totalPolls - 1;
+		}
+
+		polls_ = new PollData[](end - start + 1);
+
+		uint256 index = 0;
+		uint256 pollIndex = 0;
+		for (uint256 i = 0; i < nextPollId; i++) {
+			if (_polls[i].pollDeployer == user) {
+				if (pollIndex >= start && pollIndex <= end) {
+					uint256 actualIndex = _ascending
+						? pollIndex
+						: totalPolls - pollIndex - 1;
+					polls_[index++] = _polls[actualIndex];
+				}
+				pollIndex++;
+			}
+		}
+	}
+
 	function fetchPoll(
 		uint256 _pollId
 	) public view returns (PollData memory poll_) {

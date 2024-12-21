@@ -10,21 +10,38 @@ async function main() {
 
   const stake = "10000000000000000";
 
+  const polltype = {
+    pollType: 1,
+  };
   // run the createPoll function
   const createPollTx = await maci.createPoll(
-    "PollNameg", // _name
+    "Second Poll", // _name
     ["test 1", "test 2"], // _options
-    ["0x", "0x"], // _optionInfo
-    "Poll Metadata", // _metadata
-    86400, // _duration (example duration in seconds)
-    0, // isQv
+    [
+      "0x1220f9b143d20c5e45c4dc68e3503e87de1362483228fb879ff0bf077f3cea09e342",
+      "0x1220a8e180adeb4552998c010380598a4a27c54042de65c4998099c49e62d0aab575",
+    ], // _optionInfo
+    JSON.stringify(polltype), // _metadata
+    1500, // _duration (example duration in seconds)
+    1, // isQv
     {
-      x: "7241728685366863917285668999330892372683604660822807916359904479991538689337",
-      y: "15227291638174786727851591747573626451311594421326528332958841360833178655475",
+      x: "13535291647970247930571087761159266333028401619892661034694917035715014373354",
+      y: "10433700327017784209221532426023326189334505034888576969273601943943499914081",
     }, // coordinatorPubKey
     "none", // authType
     { value: stake }, // Pass the stake value as msg.value
   );
+
+  // const createPollTx = await maci.createPoll(
+  //   “Second Poll”,
+  //   [‘Candidate 1', 'Candidate 2’],
+  //   ['0x1220f9b143d20c5e45c4dc68e3503e87de1362483228fb879ff0bf077f3cea09e342', '0x1220a8e180adeb4552998c010380598a4a27c54042de65c4998099c49e62d0aab575’],
+  //     "{\"pollType\”:1}”,1342n,
+  //     1,
+  //     {x: '13535291647970247930571087761159266333028401619892661034694917035715014373354', y: '10433700327017784209221532426023326189334505034888576969273601943943499914081’},
+  //     "none”,
+  //   { value: stake }, // Pass the stake value as msg.value
+  // );
 
   await createPollTx.wait(1);
   console.log("Poll created");

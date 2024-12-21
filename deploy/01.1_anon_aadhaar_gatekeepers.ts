@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { AnonAadhaarVerifierContractName } from "../constants";
+import { AnonAadhaarVerifierContractName, AnonAadhaarContractName } from "../constants";
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   if (process.env.GATEKEEPER_CONTRACT_NAME === "AnonAadhaarGatekeeper") {
@@ -16,6 +16,17 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
       log: true,
       autoMine: true,
     });
+    const testPubkeyHash = "15134874015316324267425466444584014077184337590635665158241104437045239495873";
+    // Deploy AnonAadhaar contract\
+    const anonAadhaar = await hre.deployments.deploy(AnonAadhaarContractName, {
+      from: deployer,
+      args: [anonAadhaarVerifier.address, testPubkeyHash],
+      log: true,
+      autoMine: true,
+    });
+
+    console.log(`The AnonAadhaarVerifier is deployed at ${anonAadhaarVerifier.address}`);
+    console.log(`The AnonAadhaar is deployed at ${anonAadhaar.address}, with pubkey hash ${testPubkeyHash}`);
 
     // Generate a random nullifier seed
     const nullifierSeed = "4534";
@@ -23,7 +34,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     // Deploy AnonAadhaarGatekeeper contract
     await hre.deployments.deploy(contractName, {
       from: deployer,
-      args: [anonAadhaarVerifier.address, nullifierSeed],
+      args: [anonAadhaar.address, nullifierSeed],
       log: true,
       autoMine: true,
     });
