@@ -46,16 +46,16 @@
       "messageBatchDepth": 1,
       "zkeys": {
         "qv": {
-          "processMessagesZkey": "//wsl.localhost/Ubuntu/home/wsl-ubuntu/blockchain/ethsingapore/privote-contracts/zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test.0.zkey",
-          "tallyVotesZkey": "//wsl.localhost/Ubuntu/home/wsl-ubuntu/blockchain/ethsingapore/privote-contracts/zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test.0.zkey",
-          "processWasm": "//wsl.localhost/Ubuntu/home/wsl-ubuntu/blockchain/ethsingapore/privote-contracts/zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test_js/ProcessMessages_10-2-1-2_test.wasm",
-          "tallyWasm": "//wsl.localhost/Ubuntu/home/wsl-ubuntu/blockchain/ethsingapore/privote-contracts/zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test_js/TallyVotes_10-1-2_test.wasm"
+          "processMessagesZkey": "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test.0.zkey",
+          "tallyVotesZkey": "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test.0.zkey",
+          "processWasm": "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test_js/ProcessMessages_10-2-1-2_test.wasm",
+          "tallyWasm": "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test_js/TallyVotes_10-1-2_test.wasm"
         },
         "nonQv": {
-          "processMessagesZkey": "//wsl.localhost/Ubuntu/home/wsl-ubuntu/blockchain/ethsingapore/privote-contracts/zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test.0.zkey",
-          "tallyVotesZkey": "//wsl.localhost/Ubuntu/home/wsl-ubuntu/blockchain/ethsingapore/privote-contracts/zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test.0.zkey",
-          "processWasm": "//wsl.localhost/Ubuntu/home/wsl-ubuntu/blockchain/ethsingapore/privote-contracts/zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test_js/ProcessMessagesNonQv_10-2-1-2_test.wasm",
-          "tallyWasm": "//wsl.localhost/Ubuntu/home/wsl-ubuntu/blockchain/ethsingapore/privote-contracts/zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test_js/TallyVotesNonQv_10-1-2_test.wasm"
+          "processMessagesZkey": "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test.0.zkey",
+          "tallyVotesZkey": "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test.0.zkey",
+          "processWasm": "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test_js/ProcessMessagesNonQv_10-2-1-2_test.wasm",
+          "tallyWasm": "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test_js/TallyVotesNonQv_10-1-2_test.wasm"
         }
       }
     },

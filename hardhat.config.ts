@@ -86,7 +86,7 @@ const config: HardhatUserConfig = {
       viaIR: true,
     },
   },
-  defaultNetwork: "hardhat",
+  defaultNetwork: "localhost",
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
@@ -103,7 +103,7 @@ const config: HardhatUserConfig = {
       // },
       loggingEnabled: false,
     },
-    localhost: {
+    anvil: {
       url: "http://127.0.0.1:8545",
       accounts: [deployerPrivateKey],
     },
