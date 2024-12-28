@@ -1,5 +1,8 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { ContractStorage, EContracts } from "maci-contracts";
+
+const storage = ContractStorage.getInstance();
 
 async function deployPoseidenContract(
   name: "PoseidonT3" | "PoseidonT4" | "PoseidonT5" | "PoseidonT6",
@@ -30,6 +33,38 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
 
   const poseidonT6 = await deployPoseidenContract("PoseidonT6", hre);
   console.log(`The poseidonT6 is deployed at ${await poseidonT6.getAddress()}`);
+
+  await storage.register({
+    id: EContracts.PoseidonT3,
+    // @ts-expect-error mismatch
+    contract: poseidonT3,
+    args: [],
+    network: hre.network.name,
+  });
+
+  await storage.register({
+    id: EContracts.PoseidonT4,
+    // @ts-expect-error mismatch
+    contract: poseidonT4,
+    args: [],
+    network: hre.network.name,
+  });
+
+  await storage.register({
+    id: EContracts.PoseidonT5,
+    // @ts-expect-error mismatch
+    contract: poseidonT5,
+    args: [],
+    network: hre.network.name,
+  });
+
+  await storage.register({
+    id: EContracts.PoseidonT6,
+    // @ts-expect-error mismatch
+    contract: poseidonT6,
+    args: [],
+    network: hre.network.name,
+  });
 };
 
 export default deployContracts;

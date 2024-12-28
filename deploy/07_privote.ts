@@ -2,7 +2,9 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { InitialVoiceCreditProxyContractName, stateTreeDepth } from "../constants";
 import { Privote, SignUpGatekeeper } from "../typechain-types";
-import { genEmptyBallotRoots } from "maci-contracts";
+import { genEmptyBallotRoots, ContractStorage, EContracts } from "maci-contracts";
+
+const storage = ContractStorage.getInstance();
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
@@ -45,16 +47,34 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     autoMine: true,
   });
 
-  const privote = await hre.ethers.getContract<Privote>("Privote", deployer);
+  const maci = await hre.ethers.getContract<Privote>("Privote", deployer);
 
   console.log(
-    `The Privote contract is deployed at ${await privote.getAddress()} with gatekeeper ${await gatekeeper.getAddress()}`,
+    `The Privote contract is deployed at ${await maci.getAddress()} with gatekeeper ${await gatekeeper.getAddress()}`,
   );
 
-  const tx = await gatekeeper.setMaciInstance(await privote.getAddress());
+  const tx = await gatekeeper.setMaciInstance(await maci.getAddress());
   await tx.wait(1);
+
+  await storage.register({
+    id: EContracts.MACI,
+    // @ts-expect-error expected maci
+    contract: maci,
+    args: [
+      await pollFactory.getAddress(),
+      await messageProcessorFactory.getAddress(),
+      await tallyFactory.getAddress(),
+      await gatekeeper.getAddress(),
+      await initialVoiceCreditProxy.getAddress(),
+      stateTreeDepth,
+      emptyBallotRoots.map((root: bigint) => root.toString()),
+      stake,
+      threshold,
+    ],
+    network: hre.network.name,
+  });
 };
 
 export default deployContracts;
 
-deployContracts.tags = ["PRIVOTE"];
+deployContracts.tags = ["MACI"];

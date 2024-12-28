@@ -1,7 +1,11 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { AnonAadhaarVerifierContractName, AnonAadhaarContractName } from "../constants";
+import { ContractStorage, EContracts } from "maci-contracts";
 
+import { AnonAadhaarGatekeeper } from "../typechain-types";
+
+const storage = ContractStorage.getInstance();
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   if (process.env.GATEKEEPER_CONTRACT_NAME === "AnonAadhaarGatekeeper") {
     const { deployer } = await hre.getNamedAccounts();
@@ -39,10 +43,16 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
       autoMine: true,
     });
 
-    const gatekeeper = await hre.ethers.getContract(contractName, deployer);
+    const gatekeeper = await hre.ethers.getContract<AnonAadhaarGatekeeper>(contractName, deployer);
     console.log(
       `The AnonAadhaarGatekeeper is deployed at ${await gatekeeper.getAddress()}, with nullifier seed ${nullifierSeed}`,
     );
+    await storage.register({
+      id: EContracts.FreeForAllGatekeeper,
+      contract: gatekeeper,
+      network: hre.network.name,
+      args: [],
+    });
   } else {
     console.log("Skipping AnonAadhaarGatekeeper deployment");
   }

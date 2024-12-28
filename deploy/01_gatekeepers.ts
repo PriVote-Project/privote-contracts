@@ -1,5 +1,8 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { ContractStorage, EContracts } from "maci-contracts";
+import { FreeForAllGatekeeper } from "../typechain-types/";
+const storage = ContractStorage.getInstance();
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
@@ -13,8 +16,14 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
       autoMine: true,
     });
 
-    const gatekeeper = await hre.ethers.getContract(contractName, deployer);
+    const gatekeeper = await hre.ethers.getContract<FreeForAllGatekeeper>(contractName, deployer);
     console.log(`The gatekeeper is deployed at ${await gatekeeper.getAddress()}`);
+    await storage.register({
+      id: EContracts.FreeForAllGatekeeper,
+      contract: gatekeeper,
+      network: hre.network.name,
+      args: [],
+    });
   } else {
     console.log("Skipping FreeForAllGatekeeper deployment");
   }

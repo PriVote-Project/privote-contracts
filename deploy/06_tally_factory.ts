@@ -1,6 +1,12 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 
+import { ContractStorage, EContracts } from "maci-contracts";
+
+import type { TallyFactory } from "../typechain-types";
+
+const storage = ContractStorage.getInstance();
+
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
 
@@ -22,7 +28,14 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     autoMine: true,
   });
 
-  const tallyFactory = await hre.ethers.getContract("TallyFactory", deployer);
+  const tallyFactory = await hre.ethers.getContract<TallyFactory>("TallyFactory", deployer);
+
+  await storage.register({
+    id: EContracts.TallyFactory,
+    contract: tallyFactory,
+    args: [],
+    network: hre.network.name,
+  });
 
   console.log(`The tally factory is deployed at ${await tallyFactory.getAddress()}`);
 };

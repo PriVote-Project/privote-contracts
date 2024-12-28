@@ -15,7 +15,8 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 import "hardhat-artifactor";
 import { task, subtask } from "hardhat/config";
-
+import "maci-contracts/tasks/runner/merge";
+import "maci-contracts/tasks/runner/prove";
 /**
  * Allow to copy a directory from source to target
  * @param source - the source directory

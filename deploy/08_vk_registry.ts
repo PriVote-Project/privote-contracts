@@ -1,5 +1,6 @@
 import { extractVk } from "maci-circuits";
 import { VerifyingKey } from "maci-domainobjs";
+import { ContractStorage, EContracts } from "maci-contracts";
 
 import type { IVerifyingKeyStruct } from "maci-contracts";
 import type { VkRegistry } from "../typechain-types";
@@ -22,6 +23,8 @@ export enum EMode {
   QV,
   NON_QV,
 }
+
+const storage = ContractStorage.getInstance();
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
@@ -60,6 +63,12 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     [tallyVkParam, tallyVkNonQvParam],
   );
   await tx.wait();
+  await storage.register({
+    id: EContracts.VkRegistry,
+    contract: vkRegistry,
+    args: [],
+    network: hre.network.name,
+  });
 };
 
 export default deployContracts;
