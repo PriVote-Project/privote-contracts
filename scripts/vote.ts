@@ -7,8 +7,8 @@ import { Keypair, PCommand, PubKey } from "maci-domainobjs";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  //   const maci = await ethers.getContract<Privote>("Privote", deployer);
   const maci = new ethers.Contract(maciContract.address, maciContract.abi, deployer);
+  // votes for first poll created using createPoll
   const pollContract = await maci.fetchPoll(0);
   const poll = new ethers.Contract(pollContract.pollContracts.poll, pollAbi.abi, deployer);
   const coordinatorPubKeyResult = await poll.coordinatorPubKey();
@@ -17,9 +17,7 @@ async function main() {
     BigInt((coordinatorPubKeyResult as any)[1].toString()),
   ]);
   const lazyIMTData = await maci.lazyIMTData();
-  console.log(typeof lazyIMTData.numberOfLeaves);
-  const stateIndex = lazyIMTData.numberOfLeaves - BigInt(1);
-  console.log("stateIndex", stateIndex);
+  const stateIndex = lazyIMTData.numberOfLeaves;
   const votes = [
     {
       index: 1,
@@ -50,12 +48,6 @@ async function main() {
       newKey,
     ),
   );
-  console.log(votesToMessage);
-  console.log(
-    votesToMessage[0].message.asContractParam() as unknown as {
-      data: readonly [bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint];
-    },
-  );
 
   const vote = await poll.publishMessage(
     votesToMessage[0].message.asContractParam() as unknown as {
@@ -64,7 +56,7 @@ async function main() {
     votesToMessage[0].encKeyPair.pubKey.asContractParam() as unknown as { x: bigint; y: bigint },
   );
   await vote.wait(1);
-  console.log("voted for 2nd option");
+  console.log("voted for option");
 }
 
 function getMessageAndEncKeyPair(
