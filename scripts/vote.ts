@@ -16,8 +16,6 @@ async function main() {
     BigInt((coordinatorPubKeyResult as any)[0].toString()),
     BigInt((coordinatorPubKeyResult as any)[1].toString()),
   ]);
-  const lazyIMTData = await maci.lazyIMTData();
-  const stateIndex = lazyIMTData.numberOfLeaves;
   const votes = [
     {
       index: 1,
@@ -28,8 +26,13 @@ async function main() {
   const encodedSignupData = "0x";
   const initialVoiceCreditProxyData = "0x";
   const newKey = new Keypair();
+  const pubKey_x = newKey.pubKey.asContractParam().x.toString();
+  const pubKey_y = newKey.pubKey.asContractParam().y.toString();
   const signUpTx = await maci.signUp(
-    newKey.pubKey.asContractParam() as unknown as { x: bigint; y: bigint },
+    {
+      x: pubKey_x,
+      y: pubKey_y,
+    },
     encodedSignupData,
     initialVoiceCreditProxyData,
   );
@@ -37,6 +40,7 @@ async function main() {
   await signUpTx.wait(1);
   console.log("User signed up");
 
+  const stateIndex = (await maci.pubKeyToStateIndex(pubKey_x, pubKey_y)) - 1n;
   const votesToMessage = votes.map((v, i) =>
     getMessageAndEncKeyPair(
       stateIndex,

@@ -57,8 +57,9 @@ contract Privote is MACI, Ownable {
 
 	event PollTallyCIDUpdated(uint256 indexed pollId, string tallyJsonCID);
 	event PollDeployerSlashed(address indexed pollDeployer, uint256 amount);
-	// pubkey.x => pubkey.y => bool
-	mapping(uint256 => mapping(uint256 => bool)) public isPublicKeyRegistered;
+	// pubkey.x => pubkey.y => uint40
+	// user would have to subtract one from this value while using this to vote for particular PubKey
+	mapping(uint256 => mapping(uint256 => uint40)) public pubKeyToStateIndex;
 
 	error PubKeyAlreadyRegistered();
 	error PollAddressDoesNotExist(address _poll);
@@ -117,7 +118,7 @@ contract Privote is MACI, Ownable {
 		bytes memory _initialVoiceCreditProxyData
 	) public override {
 		// check if the pubkey is already registered
-		if (isPublicKeyRegistered[_pubKey.x][_pubKey.y])
+		if (pubKeyToStateIndex[_pubKey.x][_pubKey.y] != 0)
 			revert PubKeyAlreadyRegistered();
 
 		super.signUp(
@@ -126,7 +127,7 @@ contract Privote is MACI, Ownable {
 			_initialVoiceCreditProxyData
 		);
 
-		isPublicKeyRegistered[_pubKey.x][_pubKey.y] = true;
+		pubKeyToStateIndex[_pubKey.x][_pubKey.y] = lazyIMTData.numberOfLeaves;
 	}
 
 	function createPoll(
@@ -241,19 +242,23 @@ contract Privote is MACI, Ownable {
 
 	// Possible gas optimizations
 
+	function userTotalPolls(address user) public view returns (uint256) {
+		uint256 total = 0;
+		for (uint256 i = 0; i < nextPollId; i++) {
+			if (_polls[i].pollDeployer == user) {
+				total++;
+			}
+		}
+		return total;
+	}
+
 	function fetchUserPolls(
 		address user,
 		uint256 _page,
 		uint256 _perPage,
 		bool _ascending
 	) public view returns (PollData[] memory polls_) {
-		uint256 totalPolls = 0;
-		for (uint256 i = 0; i < nextPollId; i++) {
-			if (_polls[i].pollDeployer == user) {
-				totalPolls++;
-			}
-		}
-
+		uint256 totalPolls = userTotalPolls(user);
 		uint256 start = (_page - 1) * _perPage;
 		uint256 end = start + _perPage - 1;
 
@@ -266,18 +271,21 @@ contract Privote is MACI, Ownable {
 		}
 
 		polls_ = new PollData[](end - start + 1);
-
 		uint256 index = 0;
-		uint256 pollIndex = 0;
+		uint256 counted = 0;
 		for (uint256 i = 0; i < nextPollId; i++) {
 			if (_polls[i].pollDeployer == user) {
-				if (pollIndex >= start && pollIndex <= end) {
-					uint256 actualIndex = _ascending
-						? pollIndex
-						: totalPolls - pollIndex - 1;
-					polls_[index++] = _polls[actualIndex];
+				if (counted >= start && counted <= end) {
+					if (_ascending) {
+						polls_[index++] = _polls[i];
+					} else {
+						polls_[end - index++] = _polls[i];
+					}
 				}
-				pollIndex++;
+				counted++;
+				if (counted > end) {
+					break;
+				}
 			}
 		}
 	}
