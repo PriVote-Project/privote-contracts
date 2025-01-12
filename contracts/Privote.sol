@@ -29,6 +29,7 @@ contract Privote is MACI, Ownable {
 		address pollDeployer;
 		uint256 slashThreshold;
 		string authType;
+		Mode isQv;
 	}
 
 	mapping(uint256 => PollData) internal _polls;
@@ -178,7 +179,8 @@ contract Privote is MACI, Ownable {
 			pollDeployer: msg.sender,
 			coordinatorPubKey: coordinatorPubKey,
 			slashThreshold: slashThreshold,
-			authType: authType
+			authType: authType,
+			isQv: isQv
 		});
 
 		emit PollCreated(
