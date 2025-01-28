@@ -2,6 +2,8 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import fs from "fs";
 
+import { getNetworkName, getAuthType } from "../utils";
+
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
 
@@ -28,11 +30,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     contractAddresses = JSON.parse(fileData);
   }
 
-  let networkName = hre.network.name;
-  const gatekeeperContractName = process.env.GATEKEEPER_CONTRACT_NAME || "FreeForAllGatekeeper";
-  if (gatekeeperContractName !== "FreeForAllGatekeeper") {
-    networkName += `_${gatekeeperContractName}`;
-  }
+  let networkName = getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME));
 
   // Update the entry for the current network
   contractAddresses[networkName] = {

@@ -1,8 +1,10 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { InitialVoiceCreditProxyContractName, stateTreeDepth } from "../constants";
-import { Privote, SignUpGatekeeper } from "../typechain-types";
-import { genEmptyBallotRoots, ContractStorage, EContracts } from "maci-contracts";
+import { genEmptyBallotRoots, ContractStorage, EContracts, type SignUpGatekeeper } from "maci-contracts";
+import { getNetworkName, getAuthType } from "../utils";
+
+import { Privote } from "../typechain-types";
 
 const storage = ContractStorage.getInstance();
 
@@ -71,7 +73,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
       stake,
       threshold,
     ],
-    network: hre.network.name,
+    network: getNetworkName(hre.network.name, getAuthType(GatekeeperContractName)),
   });
 };
 

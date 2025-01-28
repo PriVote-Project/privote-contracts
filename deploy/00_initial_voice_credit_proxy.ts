@@ -2,8 +2,11 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { InitialVoiceCreditProxyContractName } from "../constants";
 import { ContractStorage, EContracts } from "maci-contracts";
-const storage = ContractStorage.getInstance();
+import { getAuthType, getNetworkName } from "../utils";
+
 import type { ConstantInitialVoiceCreditProxy } from "../typechain-types";
+
+const storage = ContractStorage.getInstance();
 
 const DEFAULT_INITIAL_VOICE_CREDITS = 99;
 
@@ -26,7 +29,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     id: EContracts.ConstantInitialVoiceCreditProxy,
     contract: initialVoiceCreditProxy,
     args: [DEFAULT_INITIAL_VOICE_CREDITS.toString()],
-    network: hre.network.name,
+    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
   });
 };
 

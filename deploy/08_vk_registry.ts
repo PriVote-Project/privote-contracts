@@ -3,10 +3,10 @@ import { VerifyingKey } from "maci-domainobjs";
 import { ContractStorage, EContracts } from "maci-contracts";
 
 import type { IVerifyingKeyStruct } from "maci-contracts";
-import type { VkRegistry } from "../typechain-types";
 
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { getAuthType, getNetworkName } from "../utils";
 import {
   intStateTreeDepth,
   messageBatchDepth,
@@ -18,6 +18,7 @@ import {
   tallyVotesZkeyPath,
   voteOptionTreeDepth,
 } from "../constants";
+import type { VkRegistry } from "../typechain-types";
 
 export enum EMode {
   QV,
@@ -67,7 +68,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     id: EContracts.VkRegistry,
     contract: vkRegistry,
     args: [],
-    network: hre.network.name,
+    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
   });
 };
 

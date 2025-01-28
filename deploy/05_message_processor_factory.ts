@@ -2,6 +2,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { ContractStorage, EContracts } from "maci-contracts";
 
+import { getNetworkName, getAuthType } from "../utils";
 import type { MessageProcessorFactory } from "../typechain-types";
 
 const storage = ContractStorage.getInstance();
@@ -36,7 +37,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     id: EContracts.MessageProcessorFactory,
     contract: messageProcessorFactory,
     args: [],
-    network: hre.network.name,
+    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
   });
 
   console.log(`The message processor factory is deployed at ${await messageProcessorFactory.getAddress()}`);

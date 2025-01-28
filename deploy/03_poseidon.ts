@@ -2,6 +2,8 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { ContractStorage, EContracts } from "maci-contracts";
 
+import { getAuthType, getNetworkName } from "../utils";
+
 const storage = ContractStorage.getInstance();
 
 async function deployPoseidenContract(
@@ -34,12 +36,14 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
   const poseidonT6 = await deployPoseidenContract("PoseidonT6", hre);
   console.log(`The poseidonT6 is deployed at ${await poseidonT6.getAddress()}`);
 
+  const networkName = getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME));
+
   await storage.register({
     id: EContracts.PoseidonT3,
     // @ts-expect-error mismatch
     contract: poseidonT3,
     args: [],
-    network: hre.network.name,
+    network: networkName,
   });
 
   await storage.register({
@@ -47,7 +51,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     // @ts-expect-error mismatch
     contract: poseidonT4,
     args: [],
-    network: hre.network.name,
+    network: networkName,
   });
 
   await storage.register({
@@ -55,7 +59,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     // @ts-expect-error mismatch
     contract: poseidonT5,
     args: [],
-    network: hre.network.name,
+    network: networkName,
   });
 
   await storage.register({
@@ -63,7 +67,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     // @ts-expect-error mismatch
     contract: poseidonT6,
     args: [],
-    network: hre.network.name,
+    network: networkName,
   });
 };
 

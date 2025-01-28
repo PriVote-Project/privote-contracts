@@ -1,6 +1,8 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { ContractStorage, EContracts } from "maci-contracts";
+
+import { getNetworkName, getAuthType } from "../utils";
 import type { PollFactory } from "../typechain-types";
 
 const storage = ContractStorage.getInstance();
@@ -34,7 +36,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     id: EContracts.PollFactory,
     contract: pollFactory,
     args: [],
-    network: hre.network.name,
+    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
   });
 };
 

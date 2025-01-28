@@ -3,6 +3,8 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { AnonAadhaarVerifierContractName, AnonAadhaarContractName } from "../constants";
 import { ContractStorage, EContracts } from "maci-contracts";
 
+import { getNetworkName, getAuthType } from "../utils";
+
 import { AnonAadhaarGatekeeper } from "../typechain-types";
 
 const storage = ContractStorage.getInstance();
@@ -50,7 +52,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     await storage.register({
       id: EContracts.FreeForAllGatekeeper,
       contract: gatekeeper,
-      network: hre.network.name,
+      network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
       args: [],
     });
   } else {

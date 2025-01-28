@@ -3,6 +3,7 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { VerifierContractName } from "../constants";
 import { ContractStorage, EContracts } from "maci-contracts";
 
+import { getAuthType, getNetworkName } from "../utils";
 import type { Verifier } from "../typechain-types";
 
 const storage = ContractStorage.getInstance();
@@ -24,7 +25,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     id: EContracts.Verifier,
     contract: verifier,
     args: [],
-    network: hre.network.name,
+    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
   });
 };
 
