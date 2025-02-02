@@ -18,6 +18,7 @@ import { task, subtask } from "hardhat/config";
 import "./tasks/merge";
 import "./tasks/prove";
 import "./tasks/genResults";
+import "./tasks/submitOnChain";
 /**
  * Allow to copy a directory from source to target
  * @param source - the source directory

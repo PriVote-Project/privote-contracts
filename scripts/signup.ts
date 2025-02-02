@@ -1,7 +1,6 @@
 import { ethers } from "hardhat";
 import * as maciContract from "../deployments/localhost/Privote.json";
 import * as anonAadhaarContract from "../deployments/localhost/AnonAadhaarGatekeeper.json";
-import { anonAadhaar } from "../typechain-types";
 
 async function main() {
   const [deployer] = await ethers.getSigners();

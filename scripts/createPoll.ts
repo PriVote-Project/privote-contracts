@@ -18,14 +18,14 @@ async function main() {
   const newKeypair = Keypair.fromJSON(coordinatorKeyPair);
   // run the createPoll function with dummy data
   const createPollTx = await maci.createPoll(
-    "third Poll", // _name
+    "first Poll", // _name
     ["test 1", "test 2"], // _options
     [
       "0x1220f9b143d20c5e45c4dc68e3503e87de1362483228fb879ff0bf077f3cea09e342",
       "0x1220a8e180adeb4552998c010380598a4a27c54042de65c4998099c49e62d0aab575",
     ], // _optionInfo
     JSON.stringify(polltype), // _metadata
-    150, // _duration (example duration in seconds)
+    100, // _duration (example duration in seconds)
     1, // isQv
     newKeypair.pubKey.asContractParam(), // coordinatorPubKey
     "none", // authType
