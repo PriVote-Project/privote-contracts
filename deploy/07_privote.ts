@@ -24,8 +24,8 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
   const messageProcessorFactory = await hre.ethers.getContract("MessageProcessorFactory", deployer);
   const tallyFactory = await hre.ethers.getContract("TallyFactory", deployer);
   const emptyBallotRoots = genEmptyBallotRoots(stateTreeDepth);
-  const stake = "10000000000000000";
-  const threshold = "100000000000000";
+  const stake = "1000000000000000";
+  const threshold = "1000000000000";
   await hre.deployments.deploy("Privote", {
     from: deployer,
     args: [
@@ -60,7 +60,6 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
 
   await storage.register({
     id: EContracts.MACI,
-    // @ts-expect-error expected maci
     contract: maci,
     args: [
       await pollFactory.getAddress(),

@@ -37,4 +37,10 @@ interface ITally {
 	) external view returns (bool);
 
 	function isTallied() external view returns (bool);
+
+	function totalTallyResults() external view returns (uint256);
+
+	function tallyResults(
+		uint256 _voteOptionIndex
+	) external view returns (uint256 value, bool flag);
 }

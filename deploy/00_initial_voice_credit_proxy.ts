@@ -8,7 +8,7 @@ import type { ConstantInitialVoiceCreditProxy } from "../typechain-types";
 
 const storage = ContractStorage.getInstance();
 
-const DEFAULT_INITIAL_VOICE_CREDITS = 99;
+const DEFAULT_INITIAL_VOICE_CREDITS = 100;
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();

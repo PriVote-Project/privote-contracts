@@ -9,10 +9,11 @@ import { ITallyFactory } from "maci-contracts/contracts/interfaces/ITallyFactory
 import { SignUpGatekeeper } from "maci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol";
 import { InitialVoiceCreditProxy } from "maci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
 import { ITally } from "./interfaces/ITally.sol";
+import { ReentrancyGuard } from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /// @title Privote - A Private Voting Protocol
 /// @notice Allows userss to deploy multiple private polls according to their needs
-contract Privote is MACI, Ownable {
+contract Privote is MACI, Ownable, ReentrancyGuard {
 	struct PollData {
 		uint256 id;
 		string name;
@@ -39,6 +40,7 @@ contract Privote is MACI, Ownable {
 	address public vkRegistry;
 	uint256 public stake;
 	uint256 public slashThreshold;
+	uint256 public totalStaked;
 
 	mapping(address => uint256) public pollIds;
 	mapping(address => uint256) public stakes;
@@ -65,6 +67,14 @@ contract Privote is MACI, Ownable {
 	error PubKeyAlreadyRegistered();
 	error PollAddressDoesNotExist(address _poll);
 	error InvalidCaller();
+	error StakeAmountMismatch();
+	error NotPollDeployer();
+	error PollNotTallied();
+	error SlashThresholdNotReached();
+	error PollAlreadyTallied();
+	error InsufficientStake();
+	error NoStakeToWithdraw();
+	error NoExcessBalance();
 
 	constructor(
 		IPollFactory _pollFactory,
@@ -142,7 +152,11 @@ contract Privote is MACI, Ownable {
 		string calldata authType
 	) public payable {
 		// TODO: check if the number of options are more than limit
-		require(msg.value >= stake, "Stake amount mismatch");
+		if (msg.value < stake) revert StakeAmountMismatch();
+
+		stakes[msg.sender] += stake;
+		totalStaked += stake;
+
 		uint256 pollId = nextPollId;
 
 		deployPoll(
@@ -195,6 +209,44 @@ contract Privote is MACI, Ownable {
 			endTime,
 			authType
 		);
+	}
+
+	function slashPollDeployer(uint256 _pollId) public {
+		PollData storage poll = _polls[_pollId];
+		if (block.timestamp <= poll.endTime + poll.slashThreshold)
+			revert SlashThresholdNotReached();
+		if (ITally(poll.pollContracts.tally).isTallied())
+			revert PollAlreadyTallied();
+		uint256 stakeToSlash = stake;
+		if (stakes[poll.pollDeployer] < stakeToSlash)
+			revert InsufficientStake();
+
+		stakes[poll.pollDeployer] -= stakeToSlash;
+		totalStaked -= stakeToSlash;
+
+		emit PollDeployerSlashed(poll.pollDeployer, stakeToSlash);
+	}
+
+	function withdrawStake(uint256 _pollId) external nonReentrant {
+		PollData storage poll = _polls[_pollId];
+		if (poll.pollDeployer != msg.sender) revert NotPollDeployer();
+		if (!ITally(poll.pollContracts.tally).isTallied())
+			revert PollNotTallied();
+		uint256 amount = stakes[msg.sender];
+		if (amount == 0) revert NoStakeToWithdraw();
+
+		stakes[msg.sender] = 0;
+		totalStaked -= amount;
+		(bool sent, ) = msg.sender.call{ value: amount }("");
+		require(sent, "Withdraw failed");
+	}
+
+	function withdrawExcessBalance() external onlyOwner {
+		uint256 excess = address(this).balance - totalStaked;
+		if (excess <= 0) revert NoExcessBalance();
+
+		(bool sent, ) = msg.sender.call{ value: excess }("");
+		require(sent, "Owner withdraw failed");
 	}
 
 	function getPollId(address _poll) public view returns (uint256 pollId) {
@@ -299,20 +351,27 @@ contract Privote is MACI, Ownable {
 		return _polls[_pollId];
 	}
 
-	function slashPollDeployer(uint256 _pollId) public {
+	// Returns the poll tally results for a given poll id.
+	function getPollResult(
+		uint256 _pollId
+	) external view returns (uint256[] memory results) {
+		if (_pollId >= nextPollId) revert PollDoesNotExist(_pollId);
 		PollData storage poll = _polls[_pollId];
-		require(
-			block.timestamp > poll.endTime + poll.slashThreshold,
-			"Slash threshold not reached"
-		);
-		require(
-			!ITally(poll.pollContracts.tally).isTallied(),
-			"Poll already tallied"
-		);
+		ITally tally = ITally(poll.pollContracts.tally);
+		if (!tally.isTallied()) revert PollNotTallied();
+		uint256 len = tally.totalTallyResults();
+		results = new uint256[](len);
+		for (uint256 i = 0; i < len; i++) {
+			(uint256 value, ) = tally.tallyResults(i);
+			results[i] = value;
+		}
+	}
 
-		uint256 stakeToSlash = stakes[poll.pollDeployer];
-		stakes[poll.pollDeployer] = 0;
+	receive() external payable {
+		// Allow receiving Ether
+	}
 
-		emit PollDeployerSlashed(poll.pollDeployer, stakeToSlash);
+	fallback() external payable {
+		// Fallback function
 	}
 }

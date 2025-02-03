@@ -40,7 +40,6 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
 
   await storage.register({
     id: EContracts.PoseidonT3,
-    // @ts-expect-error mismatch
     contract: poseidonT3,
     args: [],
     network: networkName,
@@ -48,7 +47,6 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
 
   await storage.register({
     id: EContracts.PoseidonT4,
-    // @ts-expect-error mismatch
     contract: poseidonT4,
     args: [],
     network: networkName,
@@ -56,7 +54,6 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
 
   await storage.register({
     id: EContracts.PoseidonT5,
-    // @ts-expect-error mismatch
     contract: poseidonT5,
     args: [],
     network: networkName,
@@ -64,7 +61,6 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
 
   await storage.register({
     id: EContracts.PoseidonT6,
-    // @ts-expect-error mismatch
     contract: poseidonT6,
     args: [],
     network: networkName,
