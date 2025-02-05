@@ -26,7 +26,7 @@ async function main() {
     ], // _optionInfo
     JSON.stringify(polltype), // _metadata
     100, // _duration (example duration in seconds)
-    1, // isQv
+    1, // NON_QV
     newKeypair.pubKey.asContractParam(), // coordinatorPubKey
     "none", // authType
     { value: stake }, // Pass the stake value as msg.value

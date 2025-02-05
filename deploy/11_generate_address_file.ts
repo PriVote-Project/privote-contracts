@@ -3,9 +3,11 @@ import { DeployFunction } from "hardhat-deploy/types";
 import fs from "fs";
 
 import { getNetworkName, getAuthType } from "../utils";
+import { PollType } from "../utils/types";
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
+  const pollType = process.env.POLL_TYPE as PollType;
 
   const privote = await hre.ethers.getContract("Privote", deployer);
   const initialVoiceCreditProxy = await hre.ethers.getContract("ConstantInitialVoiceCreditProxy", deployer);
@@ -30,7 +32,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     contractAddresses = JSON.parse(fileData);
   }
 
-  let networkName = getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME));
+  let networkName = getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME), pollType);
 
   // Update the entry for the current network
   contractAddresses[networkName] = {

@@ -7,6 +7,7 @@ import type { IVerifyingKeyStruct } from "maci-contracts";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { getAuthType, getNetworkName } from "../utils";
+import { PollType } from "../utils/types";
 import {
   intStateTreeDepth,
   messageBatchDepth,
@@ -29,7 +30,7 @@ const storage = ContractStorage.getInstance();
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
-
+  const pollType = process.env.POLL_TYPE as PollType;
   await hre.deployments.deploy("VkRegistry", {
     from: deployer,
     args: [],
@@ -68,7 +69,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     id: EContracts.VkRegistry,
     contract: vkRegistry,
     args: [],
-    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
+    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME), pollType),
   });
 };
 

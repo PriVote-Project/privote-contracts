@@ -4,18 +4,15 @@ import { ContractStorage, Deployment, TreeMerger, EContracts, type IMergeParams 
 
 import type { AccQueue, MACI, Poll } from "maci-contracts";
 
-import { AuthType } from "../utils/types";
+import { validateAuthType, validatePollType } from "../utils";
+import { AuthType, PollType } from "../utils/types";
 
 export interface IMergeParamsExtended extends IMergeParams {
+  pollType: PollType;
   authType: AuthType;
   maciContractAddress?: string;
 }
 
-const validateAuthType = (authType: AuthType) => {
-  if (authType !== "free" && authType !== "anon") {
-    throw new Error(`Unrecognized auth type: ${authType}`);
-  }
-};
 const DEFAULT_SR_QUEUE_OPS = 4;
 
 /**
@@ -25,14 +22,16 @@ task("merge", "Merge signups")
   .addParam("poll", "The poll id", undefined, types.string)
   .addOptionalParam("queueOps", "The number of queue operations to perform", DEFAULT_SR_QUEUE_OPS, types.int)
   .addParam("authType", "The authentication type", undefined, types.string)
+  .addParam("pollType", "The poll type", undefined, types.string)
   .addOptionalParam("maciContractAddress", "MACI contract address", undefined, types.string)
   .addOptionalParam("prove", "Run prove command after merging", false, types.boolean)
   .setAction(
     async (
-      { poll, queueOps = DEFAULT_SR_QUEUE_OPS, authType, maciContractAddress, prove }: IMergeParamsExtended,
+      { poll, queueOps = DEFAULT_SR_QUEUE_OPS, authType, pollType, maciContractAddress, prove }: IMergeParamsExtended,
       hre,
     ) => {
       validateAuthType(authType);
+      validatePollType(pollType);
       const deployment = Deployment.getInstance({ hre });
       const storage = ContractStorage.getInstance();
 
@@ -40,9 +39,9 @@ task("merge", "Merge signups")
 
       const deployer = await deployment.getDeployer();
 
-      console.log(`${hre.network.name}_${authType}`);
+      console.log(`${hre.network.name}_${authType}_${pollType}`);
       maciContractAddress =
-        maciContractAddress ?? storage.mustGetAddress(EContracts.MACI, `${hre.network.name}_${authType}`);
+        maciContractAddress ?? storage.mustGetAddress(EContracts.MACI, `${hre.network.name}_${authType}_${pollType}`);
       console.log(`MACI contract address: ${maciContractAddress}`);
       const maciContract = await deployment.getContract<MACI>({ name: EContracts.MACI, address: maciContractAddress });
       console.log(`MACI contract at ${await maciContract.getAddress()}`);

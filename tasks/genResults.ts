@@ -9,6 +9,7 @@ task("genResults", "Generate results")
   .addParam("outputDir", "Output directory for proofs", undefined, types.string)
   .addParam("coordinatorPrivateKey", "Coordinator maci private key", undefined, types.string)
   .addParam("authType", "The authentication type", undefined, types.string)
+  .addParam("pollType", "The poll type", undefined, types.string)
   .addOptionalParam("maciContractAddress", "MACI contract address", undefined, types.string)
   .addOptionalParam("useQuadraticVoting", "Use quadratic voting", false, types.boolean)
   .addOptionalParam("rapidsnark", "Rapidsnark binary path", undefined, types.string)
@@ -27,6 +28,7 @@ task("genResults", "Generate results")
         poll,
         coordinatorPrivateKey,
         authType,
+        pollType,
         maciContractAddress,
         useQuadraticVoting,
         stateFile,
@@ -45,6 +47,7 @@ task("genResults", "Generate results")
         poll,
         maciContractAddress,
         authType,
+        pollType,
       };
 
       // run merge tasks
@@ -55,6 +58,7 @@ task("genResults", "Generate results")
         poll,
         coordinatorPrivateKey,
         authType,
+        pollType,
         maciContractAddress,
         useQuadraticVoting,
         stateFile,

@@ -3,6 +3,7 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { InitialVoiceCreditProxyContractName, stateTreeDepth } from "../constants";
 import { genEmptyBallotRoots, ContractStorage, EContracts, type SignUpGatekeeper } from "maci-contracts";
 import { getNetworkName, getAuthType } from "../utils";
+import { PollType } from "../utils/types";
 
 import { Privote } from "../typechain-types";
 
@@ -10,6 +11,7 @@ const storage = ContractStorage.getInstance();
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
+  const pollType = process.env.POLL_TYPE as PollType;
   let GatekeeperContractName = process.env.GATEKEEPER_CONTRACT_NAME;
   if (GatekeeperContractName == null) {
     GatekeeperContractName = "FreeForAllGatekeeper";
@@ -72,7 +74,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
       stake,
       threshold,
     ],
-    network: getNetworkName(hre.network.name, getAuthType(GatekeeperContractName)),
+    network: getNetworkName(hre.network.name, getAuthType(GatekeeperContractName), pollType),
   });
 };
 

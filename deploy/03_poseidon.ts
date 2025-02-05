@@ -3,6 +3,7 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { ContractStorage, EContracts } from "maci-contracts";
 
 import { getAuthType, getNetworkName } from "../utils";
+import { PollType } from "../utils/types";
 
 const storage = ContractStorage.getInstance();
 
@@ -36,7 +37,9 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
   const poseidonT6 = await deployPoseidenContract("PoseidonT6", hre);
   console.log(`The poseidonT6 is deployed at ${await poseidonT6.getAddress()}`);
 
-  const networkName = getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME));
+  const pollType = process.env.POLL_TYPE as PollType;
+
+  const networkName = getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME), pollType);
 
   await storage.register({
     id: EContracts.PoseidonT3,

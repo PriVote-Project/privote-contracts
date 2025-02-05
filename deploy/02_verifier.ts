@@ -4,12 +4,14 @@ import { VerifierContractName } from "../constants";
 import { ContractStorage, EContracts } from "maci-contracts";
 
 import { getAuthType, getNetworkName } from "../utils";
+import { PollType } from "../utils/types";
 import type { Verifier } from "../typechain-types";
 
 const storage = ContractStorage.getInstance();
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
+  const pollType = process.env.POLL_TYPE as PollType;
 
   await hre.deployments.deploy(VerifierContractName, {
     from: deployer,
@@ -25,7 +27,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     id: EContracts.Verifier,
     contract: verifier,
     args: [],
-    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
+    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME), pollType),
   });
 };
 

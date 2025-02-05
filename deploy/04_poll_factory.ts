@@ -3,12 +3,14 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { ContractStorage, EContracts } from "maci-contracts";
 
 import { getNetworkName, getAuthType } from "../utils";
+import { PollType } from "../utils/types";
 import type { PollFactory } from "../typechain-types";
 
 const storage = ContractStorage.getInstance();
 
 const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
+  const pollType = process.env.POLL_TYPE as PollType;
 
   const poseidonT3 = await hre.ethers.getContract("PoseidonT3", deployer);
   const poseidonT4 = await hre.ethers.getContract("PoseidonT4", deployer);
@@ -36,7 +38,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     id: EContracts.PollFactory,
     contract: pollFactory,
     args: [],
-    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME)),
+    network: getNetworkName(hre.network.name, getAuthType(process.env.GATEKEEPER_CONTRACT_NAME), pollType),
   });
 };
 

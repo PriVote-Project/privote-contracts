@@ -4,20 +4,13 @@ import { task, types } from "hardhat/config";
 
 import fs from "fs";
 
-import type {
-  VkRegistry,
-  Verifier,
-  MACI,
-  Poll,
-  MessageProcessor,
-  Tally,
-  Proof,
-  ISubmitOnChainParams,
-  AccQueue,
-} from "maci-contracts";
+import type { VkRegistry, Verifier, MACI, Poll, MessageProcessor, Tally, Proof, AccQueue } from "maci-contracts";
+
+import { ISubmitOnChainParams } from "maci-contracts/build/tasks/helpers/types";
 
 import { ContractStorage, Deployment, EContracts, TallyData, Prover } from "maci-contracts";
-import { AuthType } from "../utils/types";
+import { validateAuthType, validatePollType } from "../utils";
+import { AuthType, PollType } from "../utils/types";
 
 /**
  * Interface that represents read proofs arguments
@@ -29,15 +22,10 @@ interface IReadProofsArgs {
 }
 
 export interface ISubmitOnChainParamsExtended extends ISubmitOnChainParams {
+  pollType: PollType;
   authType: AuthType;
   maciContractAddress?: string;
 }
-
-const validateAuthType = (authType: AuthType) => {
-  if (authType !== "free" && authType !== "anon") {
-    throw new Error(`Unrecognized auth type: ${authType}`);
-  }
-};
 
 /**
  * Read and parse proofs
@@ -61,9 +49,15 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
   .addParam("outputDir", "Output directory for proofs", undefined, types.string)
   .addParam("tallyFile", "The file to store the tally proof", undefined, types.string)
   .addParam("authType", "The authentication type", undefined, types.string)
+  .addParam("pollType", "The poll type", undefined, types.string)
   .addOptionalParam("maciContractAddress", "MACI contract address", undefined, types.string)
   .setAction(
-    async ({ outputDir, poll, tallyFile, authType, maciContractAddress }: ISubmitOnChainParamsExtended, hre) => {
+    async (
+      { outputDir, poll, tallyFile, authType, pollType, maciContractAddress }: ISubmitOnChainParamsExtended,
+      hre,
+    ) => {
+      validateAuthType(authType);
+      validatePollType(pollType);
       const deployment = Deployment.getInstance();
       deployment.setHre(hre);
       deployment.setContractNames(EContracts);
@@ -87,9 +81,16 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
       console.log("Start balance: ", Number(startBalance / 10n ** 12n) / 1e6);
 
       maciContractAddress =
-        maciContractAddress ?? storage.mustGetAddress(EContracts.MACI, `${network.name}_${authType}`);
-      const vkRegistryContractAddress = storage.mustGetAddress(EContracts.VkRegistry, `${network.name}_${authType}`);
-      const verifierContractAddress = storage.mustGetAddress(EContracts.Verifier, `${network.name}_${authType}`);
+        maciContractAddress ?? storage.mustGetAddress(EContracts.MACI, `${network.name}_${authType}_${pollType}`);
+      const vkRegistryContractAddress = storage.mustGetAddress(
+        EContracts.VkRegistry,
+        `${network.name}_${authType}_${pollType}`,
+      );
+      const verifierContractAddress = storage.mustGetAddress(
+        EContracts.Verifier,
+        `${network.name}_${authType}_${pollType}`,
+      );
+      console.log(vkRegistryContractAddress, verifierContractAddress);
       const [maciContract, vkRegistryContract, verifierContract] = await Promise.all([
         deployment.getContract<MACI>({
           name: EContracts.MACI,

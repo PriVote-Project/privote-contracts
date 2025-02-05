@@ -6,25 +6,21 @@ import fs from "fs";
 
 import type { MACI, Poll, AccQueue } from "maci-contracts";
 
-import { pinToIPFS } from "../utils/upload";
-import { AuthType } from "../utils/types";
+import { validateAuthType, validatePollType } from "../utils";
+import { AuthType, PollType } from "../utils/types";
 
 export interface IProveParamsExtended extends IProveParams {
+  pollType: PollType;
   authType: AuthType;
   maciContractAddress?: string;
 }
-
-const validateAuthType = (authType: AuthType) => {
-  if (authType !== "free" && authType !== "anon") {
-    throw new Error(`Unrecognized auth type: ${authType}`);
-  }
-};
 
 task("prove", "Command to generate proofs")
   .addParam("poll", "The poll id", undefined, types.string)
   .addParam("outputDir", "Output directory for proofs", undefined, types.string)
   .addParam("coordinatorPrivateKey", "Coordinator maci private key", undefined, types.string)
   .addParam("authType", "The authentication type", undefined, types.string)
+  .addParam("pollType", "The poll type", undefined, types.string)
   .addOptionalParam("maciContractAddress", "MACI contract address", undefined, types.string)
   .addOptionalParam("useQuadraticVoting", "Use quadratic voting", false, types.boolean)
   .addOptionalParam("rapidsnark", "Rapidsnark binary path", undefined, types.string)
@@ -43,6 +39,7 @@ task("prove", "Command to generate proofs")
         poll,
         coordinatorPrivateKey,
         authType,
+        pollType,
         maciContractAddress,
         useQuadraticVoting,
         stateFile,
@@ -58,6 +55,7 @@ task("prove", "Command to generate proofs")
       hre,
     ) => {
       validateAuthType(authType);
+      validatePollType(pollType);
       const deployment = Deployment.getInstance();
       deployment.setHre(hre);
       const storage = ContractStorage.getInstance();
@@ -80,7 +78,7 @@ task("prove", "Command to generate proofs")
       console.log("Start balance: ", Number(startBalance / 10n ** 12n) / 1e6);
 
       maciContractAddress =
-        maciContractAddress ?? storage.mustGetAddress(EContracts.MACI, `${network.name}_${authType}`);
+        maciContractAddress ?? storage.mustGetAddress(EContracts.MACI, `${network.name}_${authType}_${pollType}`);
       const maciContract = await deployment.getContract<MACI>({ name: EContracts.MACI, address: maciContractAddress });
 
       const pollContracts = await maciContract.polls(poll);
@@ -164,17 +162,7 @@ task("prove", "Command to generate proofs")
       });
 
       await proofGenerator.generateMpProofs();
-      await proofGenerator.generateTallyProofs(network).then(async ({ proofs, tallyData }) => {
-        try {
-          const cid = await pinToIPFS(tallyData);
-          console.log(`Tally CID: ${cid}`);
-
-          return proofs;
-        } catch (error) {
-          console.error("Failed to pin tally data on IPFS : ", error);
-          throw error;
-        }
-      });
+      await proofGenerator.generateTallyProofs(network).then(async ({ proofs, tallyData }) => tallyData);
 
       const endBalance = await signer.provider.getBalance(signer);
 
