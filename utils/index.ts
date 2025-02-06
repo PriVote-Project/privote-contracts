@@ -1,7 +1,7 @@
 import { AuthType, PollType } from "./types";
 
 export const getNetworkName = (network: string, authType: AuthType, pollType: PollType) => {
-  return `${network}_${authType}_${pollType}`;
+  return `${network}_${authType}_${pollType ?? PollType.SINGLE}`;
 };
 
 export const getAuthType = (gateKeeperContractName?: string) => {

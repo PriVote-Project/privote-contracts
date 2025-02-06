@@ -1,6 +1,7 @@
 import { task, types } from "hardhat/config";
 
 import { IMergeParamsExtended } from "./merge";
+import { AuthType, PollType } from "../utils/types";
 
 const MAX_BLOCKS_PER_BATCH = 100000;
 
@@ -8,8 +9,8 @@ task("genResults", "Generate results")
   .addParam("poll", "The poll id", undefined, types.string)
   .addParam("outputDir", "Output directory for proofs", undefined, types.string)
   .addParam("coordinatorPrivateKey", "Coordinator maci private key", undefined, types.string)
-  .addParam("authType", "The authentication type", undefined, types.string)
-  .addParam("pollType", "The poll type", undefined, types.string)
+  .addOptionalParam("authType", "The authentication type", AuthType.FREE, types.string)
+  .addOptionalParam("pollType", "The poll type", PollType.SINGLE, types.string)
   .addOptionalParam("maciContractAddress", "MACI contract address", undefined, types.string)
   .addOptionalParam("useQuadraticVoting", "Use quadratic voting", false, types.boolean)
   .addOptionalParam("rapidsnark", "Rapidsnark binary path", undefined, types.string)

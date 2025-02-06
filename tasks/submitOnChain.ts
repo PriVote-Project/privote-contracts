@@ -49,8 +49,8 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
   .addParam("poll", "The poll id", undefined, types.string)
   .addParam("outputDir", "Output directory for proofs", undefined, types.string)
   .addParam("tallyFile", "The file to store the tally proof", undefined, types.string)
-  .addParam("authType", "The authentication type", undefined, types.string)
-  .addParam("pollType", "The poll type", undefined, types.string)
+  .addOptionalParam("authType", "The authentication type", AuthType.FREE, types.string)
+  .addOptionalParam("pollType", "The poll type", PollType.SINGLE, types.string)
   .addOptionalParam("maciContractAddress", "MACI contract address", undefined, types.string)
   .setAction(
     async (
@@ -93,8 +93,8 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
       );
       console.log(vkRegistryContractAddress, verifierContractAddress);
       const [maciContract, vkRegistryContract, verifierContract] = await Promise.all([
-        deployment.getContract<MACI>({
-          name: EContracts.MACI,
+        deployment.getContract<Privote>({
+          name: "Privote" as EContracts,
           address: maciContractAddress,
         }),
         deployment.getContract<VkRegistry>({ name: EContracts.VkRegistry, address: vkRegistryContractAddress }),
@@ -172,9 +172,8 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
 
       await prover.submitResults(tallyData);
 
-      // Create a Privote contract instance using the maciContract address and call setPollTallied
-      const privoteContract = (await hre.ethers.getContractAt("Privote", maciContractAddress)) as Privote;
-      await privoteContract.setPollTallied(poll);
+      // Set the poll tallied
+      await maciContract.setPollTallied(poll);
 
       const endBalance = await signer.provider.getBalance(signer);
 

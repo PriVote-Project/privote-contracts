@@ -21,8 +21,8 @@ const DEFAULT_SR_QUEUE_OPS = 4;
 task("merge", "Merge signups")
   .addParam("poll", "The poll id", undefined, types.string)
   .addOptionalParam("queueOps", "The number of queue operations to perform", DEFAULT_SR_QUEUE_OPS, types.int)
-  .addParam("authType", "The authentication type", undefined, types.string)
-  .addParam("pollType", "The poll type", undefined, types.string)
+  .addOptionalParam("authType", "The authentication type", AuthType.FREE, types.string)
+  .addOptionalParam("pollType", "The poll type", PollType.SINGLE, types.string)
   .addOptionalParam("maciContractAddress", "MACI contract address", undefined, types.string)
   .addOptionalParam("prove", "Run prove command after merging", false, types.boolean)
   .setAction(
