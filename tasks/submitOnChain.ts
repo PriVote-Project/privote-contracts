@@ -11,6 +11,7 @@ import { ISubmitOnChainParams } from "maci-contracts/build/tasks/helpers/types";
 import { ContractStorage, Deployment, EContracts, TallyData, Prover } from "maci-contracts";
 import { validateAuthType, validatePollType } from "../utils";
 import { AuthType, PollType } from "../utils/types";
+import { Privote } from "../typechain-types";
 
 /**
  * Interface that represents read proofs arguments
@@ -170,6 +171,10 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
       await prover.proveTally(data.tallyProofs);
 
       await prover.submitResults(tallyData);
+
+      // Create a Privote contract instance using the maciContract address and call setPollTallied
+      const privoteContract = (await hre.ethers.getContractAt("Privote", maciContractAddress)) as Privote;
+      await privoteContract.setPollTallied(poll);
 
       const endBalance = await signer.provider.getBalance(signer);
 

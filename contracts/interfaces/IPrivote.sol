@@ -19,11 +19,12 @@ interface IPrivote {
 		uint256 endTime;
 		uint256 numOfOptions;
 		string[] options;
-		string tallyJsonCID;
+		bool isTallied; // New field for tally status
 		MACI.PubKey coordinatorPubKey;
 		address pollDeployer;
 		uint256 slashThreshold;
 		string authType;
+		MACI.Mode isQv;
 	}
 
 	struct TreeDepths {
@@ -38,13 +39,13 @@ interface IPrivote {
 		MACI.PollContracts pollContracts,
 		string name,
 		string[] options,
+		bytes[] optionInfo,
 		string metadata,
 		uint256 startTime,
 		uint256 endTime,
 		string authType
 	);
 
-	event PollTallyCIDUpdated(uint256 indexed pollId, string tallyJsonCID);
 	event PollDeployerSlashed(address indexed pollDeployer, uint256 amount);
 
 	error PubKeyAlreadyRegistered();
@@ -66,6 +67,7 @@ interface IPrivote {
 	function createPoll(
 		string calldata _name,
 		string[] calldata _options,
+		bytes[] calldata _optionInfo, // New parameter added
 		string calldata _metadata,
 		uint256 _duration,
 		MACI.Mode isQv,
@@ -73,12 +75,7 @@ interface IPrivote {
 		string calldata authType
 	) external payable;
 
-	function getPollId(address _poll) external view returns (uint256 pollId);
-
-	function updatePollTallyCID(
-		uint256 _pollId,
-		string calldata _tallyJsonCID
-	) external;
+	function slashPollDeployer(uint256 _pollId) external;
 
 	function fetchPolls(
 		uint256 _page,
@@ -90,5 +87,6 @@ interface IPrivote {
 		uint256 _pollId
 	) external view returns (PollData memory poll_);
 
-	function slashPollDeployer(uint256 _pollId) external;
+	// New function to set the poll as tallied based on ITally checking.
+	function setPollTallied(uint256 _pollId) external;
 }

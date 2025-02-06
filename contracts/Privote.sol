@@ -25,7 +25,7 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		uint256 numOfOptions;
 		string[] options;
 		bytes[] optionInfo;
-		string tallyJsonCID;
+		bool isTallied; // New field for tally status
 		PubKey coordinatorPubKey;
 		address pollDeployer;
 		uint256 slashThreshold;
@@ -42,7 +42,6 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 	uint256 public slashThreshold;
 	uint256 public totalStaked;
 
-	mapping(address => uint256) public pollIds;
 	mapping(address => uint256) public stakes;
 
 	event PollCreated(
@@ -170,8 +169,6 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 
 		PollContracts memory pollContracts = MACI.polls[pollId];
 
-		pollIds[pollContracts.poll] = pollId;
-
 		// encode options to bytes for retrieval
 		bytes memory encodedOptions = abi.encode(_options);
 
@@ -189,9 +186,9 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 			pollContracts: pollContracts,
 			options: _options,
 			optionInfo: _optionInfo,
-			tallyJsonCID: "",
-			pollDeployer: msg.sender,
+			isTallied: false, // Set initial tally status to false
 			coordinatorPubKey: coordinatorPubKey,
+			pollDeployer: msg.sender,
 			slashThreshold: slashThreshold,
 			authType: authType,
 			isQv: isQv
@@ -249,21 +246,11 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		require(sent, "Owner withdraw failed");
 	}
 
-	function getPollId(address _poll) public view returns (uint256 pollId) {
-		if (pollIds[_poll] >= nextPollId) revert PollAddressDoesNotExist(_poll);
-		pollId = pollIds[_poll];
-	}
-
-	function updatePollTallyCID(
-		uint256 _pollId,
-		string calldata _tallyJsonCID
-	) public {
-		if (_polls[_pollId].pollDeployer != msg.sender) revert InvalidCaller();
-		if (_pollId >= nextPollId) revert PollDoesNotExist(_pollId);
+	function setPollTallied(uint256 _pollId) external {
 		PollData storage poll = _polls[_pollId];
-		poll.tallyJsonCID = _tallyJsonCID;
-
-		emit PollTallyCIDUpdated(_pollId, _tallyJsonCID);
+		ITally tally = ITally(poll.pollContracts.tally);
+		if (!tally.isTallied()) revert PollNotTallied();
+		poll.isTallied = true;
 	}
 
 	function fetchPolls(
