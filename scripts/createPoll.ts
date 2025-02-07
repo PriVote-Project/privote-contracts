@@ -4,6 +4,8 @@ import { Deployment, ContractStorage, EMode, EContracts } from "maci-contracts";
 import { Keypair, PubKey } from "maci-domainobjs";
 import { encodeOptionInfo } from "../utils/encode";
 import { info, logGreen, logMagenta, logYellow, success } from "../utils/theme";
+import { getPollType } from "../utils";
+import { ContractPollType } from "../utils/types";
 
 const pollOptions = [
   {
@@ -27,10 +29,13 @@ async function main() {
   const storage = ContractStorage.getInstance();
 
   // pollType, authType required to get maciContractAddress
-  const authType = "free";
-  const pollType = "single";
-  const maciContractAddress = storage.mustGetAddress(EContracts.MACI, `${hre.network.name}_${authType}_${pollType}`);
-  logYellow(false, `MACI contract address: ${maciContractAddress}`);
+  const authType = "free"; // free || anon
+  const contractPollType = ContractPollType.SINGLE_VOTE;
+
+  const maciContractAddress = storage.mustGetAddress(
+    EContracts.MACI,
+    `${hre.network.name}_${authType}_${getPollType(contractPollType)}`,
+  );
   const maciContract = await deployment.getContract<Privote>({
     name: "Privote" as EContracts,
     address: maciContractAddress,
@@ -41,8 +46,8 @@ async function main() {
   const pollDescription = "A poll to compare Github and Google";
   const stake = "10000000000000000";
   const duration = 150;
-  const polltype = {
-    pollType,
+  const metadata = {
+    pollType: contractPollType,
     maxVotePerPerson: 1,
     description: pollDescription,
   };
@@ -67,7 +72,7 @@ async function main() {
     title,
     pollOptions.map(v => v.title),
     encodedOptions || [],
-    JSON.stringify(polltype),
+    JSON.stringify(metadata),
     duration,
     mode,
     PubKey.deserialize(coordinatorPubKey).asContractParam() as {
