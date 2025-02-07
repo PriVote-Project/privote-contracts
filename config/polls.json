@@ -1,0 +1,52 @@
+{
+  "polls": [
+    {
+      "title": "Github vs Google",
+      "description": "A poll to compare Github and Google",
+      "stake": "10000000000000000",
+      "duration": 150,
+      "authType": "free",
+      "contractPollType": 1,
+      "maxVotePerPerson": 1,
+      "options": [
+        {
+          "title": "Google",
+          "cid": "0x",
+          "description": "Description for Google",
+          "link": "https://google.com"
+        },
+        {
+          "title": "Github",
+          "cid": "0x",
+          "description": "Description for Github",
+          "link": "https://github.com"
+        }
+      ],
+      "mode": 1
+    },
+    {
+      "title": "Best Programming Language",
+      "description": "Vote for your favorite programming language",
+      "stake": "10000000000000000",
+      "duration": 150,
+      "authType": "free",
+      "contractPollType": 1,
+      "maxVotePerPerson": 1,
+      "options": [
+        {
+          "title": "JavaScript",
+          "cid": "",
+          "description": "JavaScript programming language",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+        },
+        {
+          "title": "Golang",
+          "cid": "",
+          "description": "Golang programming language",
+          "link": "https://golang.org"
+        }
+      ],
+      "mode": 1
+    }
+  ]
+}

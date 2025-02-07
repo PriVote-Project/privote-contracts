@@ -3,24 +3,40 @@ import { Privote } from "../typechain-types";
 import { Deployment, ContractStorage, EMode, EContracts } from "maci-contracts";
 import { Keypair, PubKey } from "maci-domainobjs";
 import { encodeOptionInfo } from "../utils/encode";
-import { info, logGreen, logMagenta, logYellow, success } from "../utils/theme";
+import { info, logGreen, logMagenta, success } from "../utils/theme";
 import { getPollType } from "../utils";
 import { ContractPollType } from "../utils/types";
+import * as fs from "fs";
+import * as path from "path";
 
-const pollOptions = [
-  {
-    title: "Google",
-    cid: "",
-    description: "Description for Google",
-    link: "https://google.com",
-  },
-  {
-    title: "Github",
-    cid: "",
-    description: "Description for Github",
-    link: "https://github.com",
-  },
-];
+interface PollOption {
+  title: string;
+  cid: `0x${string}`;
+  description: string;
+  link: string;
+}
+
+interface Poll {
+  title: string;
+  description: string;
+  stake: string;
+  duration: number;
+  authType: string;
+  contractPollType: ContractPollType;
+  maxVotePerPerson: number;
+  options: PollOption[];
+  mode: EMode;
+}
+
+interface PollsConfig {
+  polls: Poll[];
+}
+
+interface PollDetails {
+  title: string;
+  pubKey: string;
+  privKey: string;
+}
 
 async function main() {
   const deployment = Deployment.getInstance({ hre: hre });
@@ -28,67 +44,80 @@ async function main() {
 
   const storage = ContractStorage.getInstance();
 
-  // pollType, authType required to get maciContractAddress
-  const authType = "free"; // free || anon
-  const contractPollType = ContractPollType.SINGLE_VOTE;
+  // Read polls configuration from JSON file
+  const pollsConfigPath = path.join(__dirname, "../config/polls.json");
+  if (!fs.existsSync(pollsConfigPath)) {
+    throw new Error(`File not found: ${pollsConfigPath}`);
+  }
+  const pollsConfig: PollsConfig = JSON.parse(fs.readFileSync(pollsConfigPath, "utf8"));
 
-  const maciContractAddress = storage.mustGetAddress(
-    EContracts.MACI,
-    `${hre.network.name}_${authType}_${getPollType(contractPollType)}`,
-  );
-  const maciContract = await deployment.getContract<Privote>({
-    name: "Privote" as EContracts,
-    address: maciContractAddress,
-  });
+  const pollDetails: Map<number, PollDetails> = new Map<number, PollDetails>();
+  const maciContracts: Map<string, Privote> = new Map<string, Privote>();
 
-  // Poll parameters (authType and pollType are defined above)
-  const title = "Github vs Google 2";
-  const pollDescription = "A poll to compare Github and Google";
-  const stake = "10000000000000000";
-  const duration = 150;
-  const metadata = {
-    pollType: contractPollType,
-    maxVotePerPerson: 1,
-    description: pollDescription,
-  };
-  const mode = EMode.NON_QV;
+  for (const poll of pollsConfig.polls) {
+    logMagenta(false, `Creating poll: ${poll.title}`);
 
-  const keypair = new Keypair();
-  const coordinatorPubKey = keypair.toJSON().pubKey;
-  const coordinatorPrivKey = keypair.toJSON().privKey;
+    const contractKey = `${hre.network.name}_${poll.authType}_${getPollType(poll.contractPollType)}`;
 
-  const encodedOptions = await Promise.all(
-    pollOptions.map(async option => {
-      return encodeOptionInfo({
-        cid: (option.cid || "0x") as `0x${string}`,
-        description: option.description,
-        link: option.link,
+    let maciContract: Privote;
+
+    if (maciContracts.has(contractKey)) {
+      maciContract = maciContracts.get(contractKey)!;
+    } else {
+      const maciContractAddress = storage.mustGetAddress(EContracts.MACI, contractKey);
+      maciContract = await deployment.getContract<Privote>({
+        name: "Privote" as EContracts,
+        address: maciContractAddress,
       });
-    }),
-  );
+      maciContracts.set(contractKey, maciContract);
+    }
 
-  // run the createPoll function with dummy data
-  const createPollTx = await maciContract.createPoll(
-    title,
-    pollOptions.map(v => v.title),
-    encodedOptions || [],
-    JSON.stringify(metadata),
-    duration,
-    mode,
-    PubKey.deserialize(coordinatorPubKey).asContractParam() as {
-      x: bigint;
-      y: bigint;
-    },
-    authType,
-    {
-      value: stake,
-    },
-  );
+    const metadata = {
+      pollType: poll.contractPollType,
+      maxVotePerPerson: poll.maxVotePerPerson,
+      description: poll.description,
+    };
 
-  await createPollTx.wait(1);
-  logMagenta(false, `Poll created with Coordinator PrivKey: ${coordinatorPrivKey}`);
-  logYellow(false, info("Keep the coordinator private key safe to publish poll results"));
-  logGreen(false, success("poll creation Successful!"));
+    const keypair = new Keypair();
+    const coordinatorPubKey = keypair.toJSON().pubKey;
+    const coordinatorPrivKey = keypair.toJSON().privKey;
+
+    // Encode poll options
+    const encodedOptions = poll.options.map(option => encodeOptionInfo(option));
+
+    const nextPollId = await maciContract.nextPollId();
+
+    const tx = await maciContract.createPoll(
+      poll.title,
+      poll.options.map(v => v.title),
+      encodedOptions,
+      JSON.stringify(metadata),
+      poll.duration,
+      poll.mode,
+      PubKey.deserialize(coordinatorPubKey).asContractParam() as {
+        x: bigint;
+        y: bigint;
+      },
+      poll.authType,
+      {
+        value: poll.stake,
+      },
+    );
+
+    await tx.wait();
+    pollDetails.set(Number(nextPollId), {
+      title: poll.title,
+      pubKey: coordinatorPubKey,
+      privKey: coordinatorPrivKey,
+    });
+    logGreen(false, success(`Successfully created poll: ${poll.title}`));
+  }
+
+  // log all the coordinator priv Keys and pub keys and also save pollDetails map in a json file
+  const pollDetailsPath = path.join(__dirname, "../config/pollDetails.json");
+  fs.writeFileSync(pollDetailsPath, JSON.stringify(Object.fromEntries(pollDetails), null, 2));
+
+  logGreen(false, info(`Saved poll details in ${pollDetailsPath}`));
 }
 
 main().catch(error => {
