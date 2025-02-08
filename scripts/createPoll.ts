@@ -51,7 +51,7 @@ async function main() {
   }
   const pollsConfig: PollsConfig = JSON.parse(fs.readFileSync(pollsConfigPath, "utf8"));
 
-  const pollDetails: Map<number, PollDetails> = new Map<number, PollDetails>();
+  const pollDetails: Map<string, PollDetails> = new Map<string, PollDetails>();
   const maciContracts: Map<string, Privote> = new Map<string, Privote>();
 
   for (const poll of pollsConfig.polls) {
@@ -105,7 +105,7 @@ async function main() {
     );
 
     await tx.wait();
-    pollDetails.set(Number(nextPollId), {
+    pollDetails.set(`${nextPollId}_${poll.authType}_${getPollType(poll.contractPollType)}`, {
       title: poll.title,
       pubKey: coordinatorPubKey,
       privKey: coordinatorPrivKey,
@@ -113,9 +113,14 @@ async function main() {
     logGreen(false, success(`Successfully created poll: ${poll.title}`));
   }
 
-  // log all the coordinator priv Keys and pub keys and also save pollDetails map in a json file
+  // Append new poll details to the existing file or create a new one if it doesn't exist
   const pollDetailsPath = path.join(__dirname, "../config/pollDetails.json");
-  fs.writeFileSync(pollDetailsPath, JSON.stringify(Object.fromEntries(pollDetails), null, 2));
+  let existingDetails = {};
+  if (fs.existsSync(pollDetailsPath)) {
+    existingDetails = JSON.parse(fs.readFileSync(pollDetailsPath, "utf8"));
+  }
+  const updatedDetails = { ...existingDetails, ...Object.fromEntries(pollDetails) };
+  fs.writeFileSync(pollDetailsPath, JSON.stringify(updatedDetails, null, 2));
 
   logGreen(false, info(`Saved poll details in ${pollDetailsPath}`));
 }
