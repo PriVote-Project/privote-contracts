@@ -1,5 +1,5 @@
 import { toUtf8Bytes, hexlify, toUtf8String } from "ethers";
-
+import CID from "cids";
 interface OptionInfo {
   cid: `0x${string}`;
   description?: string;
@@ -10,7 +10,7 @@ export function encodeOptionInfo(info: OptionInfo): string {
   // Create an object with version for future compatibility
   const data = {
     version: 2,
-    cid: info.cid,
+    cid: info.cid ? `0x${Buffer.from(new CID(info.cid).bytes).toString("hex")}` : "0x",
     description: info.description || "",
     link: info.link || "",
   };

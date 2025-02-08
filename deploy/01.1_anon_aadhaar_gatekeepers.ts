@@ -25,16 +25,18 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
       autoMine: true,
     });
     const testPubkeyHash = "15134874015316324267425466444584014077184337590635665158241104437045239495873";
+    const productionPublicKeyHash = "18063425702624337643644061197836918910810808173893535653269228433734128853484";
+
     // Deploy AnonAadhaar contract\
     const anonAadhaar = await hre.deployments.deploy(AnonAadhaarContractName, {
       from: deployer,
-      args: [anonAadhaarVerifier.address, testPubkeyHash],
+      args: [anonAadhaarVerifier.address, productionPublicKeyHash],
       log: true,
       autoMine: true,
     });
 
     console.log(`The AnonAadhaarVerifier is deployed at ${anonAadhaarVerifier.address}`);
-    console.log(`The AnonAadhaar is deployed at ${anonAadhaar.address}, with pubkey hash ${testPubkeyHash}`);
+    console.log(`The AnonAadhaar is deployed at ${anonAadhaar.address}, with pubkey hash ${productionPublicKeyHash}`);
 
     // Generate a random nullifier seed
     const nullifierSeed = "4534";

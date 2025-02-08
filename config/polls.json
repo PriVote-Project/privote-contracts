@@ -11,13 +11,13 @@
       "options": [
         {
           "title": "Google",
-          "cid": "0x",
+          "cid": "",
           "description": "Description for Google",
           "link": "https://google.com"
         },
         {
           "title": "Github",
-          "cid": "0x",
+          "cid": "",
           "description": "Description for Github",
           "link": "https://github.com"
         }

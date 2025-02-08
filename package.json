@@ -26,6 +26,7 @@
     "@chainlink/local": "^0.2.1",
     "@lighthouse-web3/sdk": "^0.3.7",
     "@typechain/ethers-v6": "^0.5.1",
+    "cids": "^1.1.9",
     "dotenv": "~16.0.3",
     "envfile": "~6.18.0",
     "ethers": "~6.13.5",
