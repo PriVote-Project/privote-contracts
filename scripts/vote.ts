@@ -3,7 +3,7 @@ import { Privote } from "../typechain-types";
 import * as maciContract from "../deployments/localhost/Privote.json";
 import pollAbi from "../artifacts/maci-contracts/contracts/Poll.sol/Poll.json";
 import { genRandomSalt } from "maci-crypto";
-import { Keypair, PCommand, PubKey } from "maci-domainobjs";
+import { Keypair, PCommand, PrivKey, PubKey } from "maci-domainobjs";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
@@ -18,13 +18,34 @@ async function main() {
   ]);
   const votes = [
     {
+      index: 0,
+      votes: 16,
+    },
+    {
       index: 1,
-      votes: 1,
+      votes: 25,
+    },
+    {
+      index: 2,
+      votes: 9,
+    },
+    {
+      index: 3,
+      votes: 16,
+    },
+    {
+      index: 15,
+      votes: 25,
+    },
+    {
+      index: 6,
+      votes: 9,
     },
   ];
 
   const encodedSignupData = "0x";
   const initialVoiceCreditProxyData = "0x";
+  // const privKey = new PrivKey(100023314972783722192540935260150521980653011218065624304953474703197587867465n);
   const newKey = new Keypair();
   const pubKey_x = newKey.pubKey.asContractParam().x.toString();
   const pubKey_y = newKey.pubKey.asContractParam().y.toString();
@@ -53,12 +74,34 @@ async function main() {
     ),
   );
 
-  const vote = await poll.publishMessage(
-    votesToMessage[0].message.asContractParam() as unknown as {
-      data: readonly [bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint];
-    },
-    votesToMessage[0].encKeyPair.pubKey.asContractParam() as unknown as { x: bigint; y: bigint },
-  );
+  let vote;
+  if (votesToMessage.length === 1) {
+    vote = await poll.publishMessage(
+      votesToMessage[0].message.asContractParam() as unknown as {
+        data: readonly [bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint];
+      },
+      votesToMessage[0].encKeyPair.pubKey.asContractParam() as unknown as {
+        x: bigint;
+        y: bigint;
+      },
+    );
+  } else {
+    vote = await poll.publishMessageBatch(
+      votesToMessage.map(
+        v =>
+          v.message.asContractParam() as unknown as {
+            data: readonly [bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint];
+          },
+      ),
+      votesToMessage.map(
+        v =>
+          v.encKeyPair.pubKey.asContractParam() as {
+            x: bigint;
+            y: bigint;
+          },
+      ),
+    );
+  }
   await vote.wait(1);
   console.log("voted for option");
 }

@@ -5,14 +5,13 @@ export const VerifierContractName = "Verifier";
 export const DestinationPrivoteContractName = "DestinationPrivote";
 export const sourcePrivoteContractName = "SourcePrivote";
 // zk registry config
-export const stateTreeDepth = 10;
-export const intStateTreeDepth = 1;
-export const messageTreeDepth = 2;
-export const voteOptionTreeDepth = 2;
-export const messageBatchDepth = 1;
+export const stateTreeDepth = 14;
+export const intStateTreeDepth = 5;
+export const messageTreeDepth = 9;
+export const messageTreeSubDepth = 2; //messageBatchDepth
+export const voteOptionTreeDepth = 3;
 
-export const processMessagesZkeyPath = "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test.0.zkey";
-export const processMessagesNonQvZkeyPath =
-  "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test.0.zkey";
-export const tallyVotesZkeyPath = "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test.0.zkey";
-export const tallyVotesNonQvZkeyPath = "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test.0.zkey";
+export const processMessagesZkeyPath = "./zkeys/ProcessMessages_14-9-2-3/processmessages_14-9-2-3.zkey";
+export const processMessagesNonQvZkeyPath = "./zkeys/ProcessMessagesNonQv_14-9-2-3/processmessagesnonqv_14-9-2-3.zkey";
+export const tallyVotesZkeyPath = "./zkeys/TallyVotes_14-5-3/tallyvotes_14-5-3.zkey";
+export const tallyVotesNonQvZkeyPath = "./zkeys/TallyVotesNonQv_14-5-3/tallyvotesnonqv_14-5-3.zkey";

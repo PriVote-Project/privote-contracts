@@ -2,7 +2,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import fs from "fs";
 import { Keypair } from "maci-domainobjs";
-
+import { intStateTreeDepth, messageTreeDepth, voteOptionTreeDepth, messageTreeSubDepth } from "../constants";
 import { Privote, Verifier, VkRegistry } from "../typechain-types";
 
 function fetchOrCreateKeyPair(filePath: string) {
@@ -35,10 +35,10 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
 
   const tx = await maci.setConfig(
     {
-      intStateTreeDepth: 1,
-      messageTreeSubDepth: 1,
-      messageTreeDepth: 2,
-      voteOptionTreeDepth: 2,
+      intStateTreeDepth: intStateTreeDepth,
+      messageTreeSubDepth: messageTreeSubDepth,
+      messageTreeDepth: messageTreeDepth,
+      voteOptionTreeDepth: voteOptionTreeDepth,
     },
     // coordinatorKeypair.pubKey.asContractParam(),
     await verifier.getAddress(),

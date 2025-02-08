@@ -10,7 +10,7 @@ import { getAuthType, getNetworkName } from "../utils";
 import { PollType } from "../utils/types";
 import {
   intStateTreeDepth,
-  messageBatchDepth,
+  messageTreeSubDepth,
   messageTreeDepth,
   processMessagesNonQvZkeyPath,
   processMessagesZkeyPath,
@@ -48,7 +48,7 @@ const deployContracts: DeployFunction = async function (hre: HardhatRuntimeEnvir
     extractVk(processMessagesNonQvZkeyPath),
   ]).then(vks => vks.map(vk => (vk ? VerifyingKey.fromObj(vk as any) : null)));
 
-  const messageBatchSize = 5 ** messageBatchDepth;
+  const messageBatchSize = 5 ** messageTreeSubDepth;
   const processVkParam = processVk!.asContractParam() as IVerifyingKeyStruct;
   const tallyVkParam = tallyVk!.asContractParam() as IVerifyingKeyStruct;
   const tallyVkNonQvParam = tallyVkNonQv!.asContractParam() as IVerifyingKeyStruct;

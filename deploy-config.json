@@ -35,73 +35,73 @@
       "groupId": 0
     },
     "MACI": {
-      "stateTreeDepth": 10,
+      "stateTreeDepth": 14,
       "gatekeeper": "FreeForAllGatekeeper"
     },
     "VkRegistry": {
-      "stateTreeDepth": 10,
-      "intStateTreeDepth": 1,
-      "messageTreeDepth": 2,
-      "voteOptionTreeDepth": 2,
-      "messageBatchDepth": 1,
+      "stateTreeDepth": 14,
+      "intStateTreeDepth": 5,
+      "messageTreeDepth": 9,
+      "voteOptionTreeDepth": 3,
+      "messageBatchDepth": 2,
       "zkeys": {
         "qv": {
-          "processMessagesZkey": "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test.0.zkey",
-          "tallyVotesZkey": "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test.0.zkey",
-          "processWasm": "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test_js/ProcessMessages_10-2-1-2_test.wasm",
-          "tallyWasm": "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test_js/TallyVotes_10-1-2_test.wasm"
+          "processMessagesZkey": "./zkeys/ProcessMessages_14-9-2-3/processmessages_14-9-2-3.zkey",
+          "tallyVotesZkey": "./zkeys/TallyVotes_14-5-3/tallyvotes_14-5-3.zkey",
+          "processWasm": "./zkeys/ProcessMessages_14-9-2-3/ProcessMessages_14-9-2-3_js/ProcessMessages_14-9-2-3.wasm",
+          "tallyWasm": "./zkeys/TallyVotes_14-5-3/TallyVotes_14-5-3_js/TallyVotes_14-5-3.wasm"
         },
         "nonQv": {
-          "processMessagesZkey": "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test.0.zkey",
-          "tallyVotesZkey": "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test.0.zkey",
-          "processWasm": "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test_js/ProcessMessagesNonQv_10-2-1-2_test.wasm",
-          "tallyWasm": "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test_js/TallyVotesNonQv_10-1-2_test.wasm"
+          "processMessagesZkey": "./zkeys/ProcessMessagesNonQv_14-9-2-3/processmessagesnonqv_14-9-2-3.zkey",
+          "tallyVotesZkey": "./zkeys/TallyVotesNonQv_14-5-3/tallyvotesnonqv_14-5-3.zkey",
+          "processWasm": "./zkeys/ProcessMessagesNonQv_14-9-2-3/ProcessMessagesNonQv_14-9-2-3_js/ProcessMessagesNonQv_14-9-2-3.wasm",
+          "tallyWasm": "./zkeys/TallyVotesNonQv_14-5-3/TallyVotesNonQv_14-5-3_js/TallyVotesNonQv_14-5-3.wasm"
         }
       }
     }
   },
   "holesky": {
     "VkRegistry": {
-      "stateTreeDepth": 10,
-      "intStateTreeDepth": 1,
-      "messageTreeDepth": 2,
-      "voteOptionTreeDepth": 2,
-      "messageBatchDepth": 1,
+      "stateTreeDepth": 14,
+      "intStateTreeDepth": 5,
+      "messageTreeDepth": 9,
+      "voteOptionTreeDepth": 3,
+      "messageBatchDepth": 2,
       "zkeys": {
         "qv": {
-          "processMessagesZkey": "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test.0.zkey",
-          "tallyVotesZkey": "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test.0.zkey",
-          "processWasm": "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test_js/ProcessMessages_10-2-1-2_test.wasm",
-          "tallyWasm": "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test_js/TallyVotes_10-1-2_test.wasm"
+          "processMessagesZkey": "./zkeys/ProcessMessages_14-9-2-3/processmessages_14-9-2-3.zkey",
+          "tallyVotesZkey": "./zkeys/TallyVotes_14-5-3/tallyvotes_14-5-3.zkey",
+          "processWasm": "./zkeys/ProcessMessages_14-9-2-3/ProcessMessages_14-9-2-3_js/ProcessMessages_14-9-2-3.wasm",
+          "tallyWasm": "./zkeys/TallyVotes_14-5-3/TallyVotes_14-5-3_js/TallyVotes_14-5-3.wasm"
         },
         "nonQv": {
-          "processMessagesZkey": "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test.0.zkey",
-          "tallyVotesZkey": "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test.0.zkey",
-          "processWasm": "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test_js/ProcessMessagesNonQv_10-2-1-2_test.wasm",
-          "tallyWasm": "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test_js/TallyVotesNonQv_10-1-2_test.wasm"
+          "processMessagesZkey": "./zkeys/ProcessMessagesNonQv_14-9-2-3/processmessagesnonqv_14-9-2-3.zkey",
+          "tallyVotesZkey": "./zkeys/TallyVotesNonQv_14-5-3/tallyvotesnonqv_14-5-3.zkey",
+          "processWasm": "./zkeys/ProcessMessagesNonQv_14-9-2-3/ProcessMessagesNonQv_14-9-2-3_js/ProcessMessagesNonQv_14-9-2-3.wasm",
+          "tallyWasm": "./zkeys/TallyVotesNonQv_14-5-3/TallyVotesNonQv_14-5-3_js/TallyVotesNonQv_14-5-3.wasm"
         }
       }
     }
   },
   "sepolia": {
     "VkRegistry": {
-      "stateTreeDepth": 10,
-      "intStateTreeDepth": 1,
-      "messageTreeDepth": 2,
-      "voteOptionTreeDepth": 2,
-      "messageBatchDepth": 1,
+      "stateTreeDepth": 14,
+      "intStateTreeDepth": 5,
+      "messageTreeDepth": 9,
+      "voteOptionTreeDepth": 3,
+      "messageBatchDepth": 2,
       "zkeys": {
         "qv": {
-          "processMessagesZkey": "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test.0.zkey",
-          "tallyVotesZkey": "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test.0.zkey",
-          "processWasm": "./zkeys/ProcessMessages_10-2-1-2_test/ProcessMessages_10-2-1-2_test_js/ProcessMessages_10-2-1-2_test.wasm",
-          "tallyWasm": "./zkeys/TallyVotes_10-1-2_test/TallyVotes_10-1-2_test_js/TallyVotes_10-1-2_test.wasm"
+          "processMessagesZkey": "./zkeys/ProcessMessages_14-9-2-3/processmessages_14-9-2-3.zkey",
+          "tallyVotesZkey": "./zkeys/TallyVotes_14-5-3/tallyvotes_14-5-3.zkey",
+          "processWasm": "./zkeys/ProcessMessages_14-9-2-3/ProcessMessages_14-9-2-3_js/ProcessMessages_14-9-2-3.wasm",
+          "tallyWasm": "./zkeys/TallyVotes_14-5-3/TallyVotes_14-5-3_js/TallyVotes_14-5-3.wasm"
         },
         "nonQv": {
-          "processMessagesZkey": "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test.0.zkey",
-          "tallyVotesZkey": "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test.0.zkey",
-          "processWasm": "./zkeys/ProcessMessagesNonQv_10-2-1-2_test/ProcessMessagesNonQv_10-2-1-2_test_js/ProcessMessagesNonQv_10-2-1-2_test.wasm",
-          "tallyWasm": "./zkeys/TallyVotesNonQv_10-1-2_test/TallyVotesNonQv_10-1-2_test_js/TallyVotesNonQv_10-1-2_test.wasm"
+          "processMessagesZkey": "./zkeys/ProcessMessagesNonQv_14-9-2-3/processmessagesnonqv_14-9-2-3.zkey",
+          "tallyVotesZkey": "./zkeys/TallyVotesNonQv_14-5-3/tallyvotesnonqv_14-5-3.zkey",
+          "processWasm": "./zkeys/ProcessMessagesNonQv_14-9-2-3/ProcessMessagesNonQv_14-9-2-3_js/ProcessMessagesNonQv_14-9-2-3.wasm",
+          "tallyWasm": "./zkeys/TallyVotesNonQv_14-5-3/TallyVotesNonQv_14-5-3_js/TallyVotesNonQv_14-5-3.wasm"
         }
       }
     }
