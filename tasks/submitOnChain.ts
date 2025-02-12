@@ -38,10 +38,16 @@ async function readProofs({ files, folder, type }: IReadProofsArgs): Promise<Pro
   return Promise.all(
     files
       .filter(f => f.startsWith(`${type}_`) && f.endsWith(".json"))
-      .sort()
+      .sort((a, b) => {
+        // Extract numbers from filenames (e.g., "process_10.json" -> 10)
+        const numA = parseInt(a.match(/\d+/)?.[0] ?? "0", 10);
+        const numB = parseInt(b.match(/\d+/)?.[0] ?? "0", 10);
+        return numA - numB;
+      })
       .map(async file => fs.promises.readFile(`${folder}/${file}`, "utf8").then(result => JSON.parse(result) as Proof)),
   );
 }
+
 /**
  * Prove hardhat task for submitting proofs on-chain as well as uploading tally results
  */
