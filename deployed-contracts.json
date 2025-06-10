@@ -700,5 +700,131 @@
         "count": 1
       }
     }
+  },
+  "localhost_free_multi": {
+    "instance": {
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3": {
+        "id": "ConstantInitialVoiceCreditProxy",
+        "verify": {
+          "args": "[\"100\"]"
+        }
+      },
+      "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512": {
+        "id": "FreeForAllGatekeeper",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0": {
+        "id": "Verifier",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9": {
+        "id": "PoseidonT3",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9": {
+        "id": "PoseidonT4",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707": {
+        "id": "PoseidonT5",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x0165878A594ca255338adfa4d48449f69242Eb8F": {
+        "id": "PoseidonT6",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853": {
+        "id": "PollFactory",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6": {
+        "id": "MessageProcessorFactory",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318": {
+        "id": "TallyFactory",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x610178dA211FEF7D417bC0e6FeD39F05609AD788": {
+        "id": "MACI",
+        "verify": {
+          "args": "[\"0xa513E6E4b8f2a923D98304ec87F64353C4D5C853\",\"0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6\",\"0x8A791620dd6260079BF849Dc5567aDC3F2FdC318\",\"0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512\",\"0x5FbDB2315678afecb367f032d93F642f64180aa3\",14,[\"10308863629788455260704114511206948419734522911868369522065170317043305183826\",\"15638739021185187188102975938431888963456846511635661527443326021687795891950\",\"2881453089660950474651054122995901965405144719081991993059633221387893015995\",\"12493973375564475576522276362572267105610392684775593820450263906986447069771\",\"681764572878032401682084991233323592871239508639381808618717128728252960349\"],\"1000000000000000\",\"1000000000000\"]"
+        }
+      },
+      "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0": {
+        "id": "VkRegistry",
+        "verify": {
+          "args": "[]"
+        }
+      }
+    },
+    "named": {
+      "ConstantInitialVoiceCreditProxy": {
+        "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        "count": 1
+      },
+      "FreeForAllGatekeeper": {
+        "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+        "count": 1
+      },
+      "Verifier": {
+        "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+        "count": 1
+      },
+      "PoseidonT3": {
+        "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+        "count": 1
+      },
+      "PoseidonT4": {
+        "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        "count": 1
+      },
+      "PoseidonT5": {
+        "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+        "count": 1
+      },
+      "PoseidonT6": {
+        "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+        "count": 1
+      },
+      "PollFactory": {
+        "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+        "count": 1
+      },
+      "MessageProcessorFactory": {
+        "address": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+        "count": 1
+      },
+      "TallyFactory": {
+        "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+        "count": 1
+      },
+      "MACI": {
+        "address": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+        "count": 1
+      },
+      "VkRegistry": {
+        "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+        "count": 1
+      }
+    }
   }
 }
