@@ -15,10 +15,20 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 import "hardhat-artifactor";
 import { task, subtask } from "hardhat/config";
-import "./tasks/merge";
-import "./tasks/prove";
-import "./tasks/genResults";
-import "./tasks/submitOnChain";
+// import "./tasks/merge";
+// import "./tasks/prove";
+// import "./tasks/genResults";
+// import "./tasks/submitOnChain";
+import "./tasks/deploy";
+import "./tasks/runner/benchmarks";
+import "./tasks/runner/deployFull";
+import "./tasks/runner/deployPoll";
+import "./tasks/runner/encodeErrors";
+import "./tasks/runner/merge";
+import "./tasks/runner/prove";
+import "./tasks/runner/signup";
+import "./tasks/runner/submitOnChain";
+
 /**
  * Allow to copy a directory from source to target
  * @param source - the source directory
@@ -49,22 +59,34 @@ function copyDirectory(source: string, target: string): void {
 
 // Define a subtask to copy artifacts
 subtask("copy-maci-artifacts", async (_, { config }) => {
-  const sourceDir = path.resolve(__dirname, "node_modules/maci-contracts/build/artifacts/contracts/");
-  const destDir = path.resolve(config.paths.artifacts, "maci-contracts", "contracts");
+  const sourceDir = path.resolve(__dirname, "node_modules/@maci-protocol/contracts/build/artifacts/contracts/");
+  const destDir = path.resolve(config.paths.artifacts, "@maci-protocol/contracts", "contracts");
 
   copyDirectory(sourceDir, destDir);
+});
+
+// Define a subtask to copy excubiae artifacts
+subtask("copy-excubiae-artifacts", async (_, { config }) => {
+  const sourceDir = path.resolve(__dirname, "node_modules/@excubiae/contracts/build/artifacts/contracts/");
+  const destDir = path.resolve(config.paths.artifacts, "@excubiae/contracts", "contracts");
+
+  if (fs.existsSync(sourceDir)) {
+    copyDirectory(sourceDir, destDir);
+  }
 });
 
 // Override the existing compile task
 task("compile", async (args, hre, runSuper) => {
   // Before compilation move over artifacts
   await hre.run("copy-maci-artifacts");
+  await hre.run("copy-excubiae-artifacts");
 
   // Run the original compile task
   await runSuper(args);
 
-  // After compilation, run the subtask to copy MACI artifacts
+  // After compilation, run the subtask to copy artifacts
   await hre.run("copy-maci-artifacts");
+  await hre.run("copy-excubiae-artifacts");
 });
 
 // If not set, it uses ours Alchemy's default API key.
@@ -78,7 +100,7 @@ const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.20",
+    version: "0.8.28",
     settings: {
       optimizer: {
         enabled: true,

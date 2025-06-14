@@ -1,197 +1,160 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.28;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-import { MACI } from "maci-contracts/contracts/MACI.sol";
-import { IPollFactory } from "maci-contracts/contracts/interfaces/IPollFactory.sol";
-import { IMessageProcessorFactory } from "maci-contracts/contracts/interfaces/IMPFactory.sol";
-import { ITallyFactory } from "maci-contracts/contracts/interfaces/ITallyFactory.sol";
-import { SignUpGatekeeper } from "maci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol";
-import { InitialVoiceCreditProxy } from "maci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
+import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import { MACI } from "@maci-protocol/contracts/contracts/MACI.sol";
+import { IMACI } from "@maci-protocol/contracts/contracts/interfaces/IMACI.sol";
+import { IPollFactory } from "@maci-protocol/contracts/contracts/interfaces/IPollFactory.sol";
+import { IMessageProcessorFactory } from "@maci-protocol/contracts/contracts/interfaces/IMessageProcessorFactory.sol";
+import { ITallyFactory } from "@maci-protocol/contracts/contracts/interfaces/ITallyFactory.sol";
+import { IBasePolicy } from "@excubiae/contracts/contracts/interfaces/IBasePolicy.sol";
 import { ITally } from "./interfaces/ITally.sol";
-import { ReentrancyGuard } from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /// @title Privote - A Private Voting Protocol
-/// @notice Allows userss to deploy multiple private polls according to their needs
+/// @notice Allows users to deploy multiple private polls according to their needs
 contract Privote is MACI, Ownable, ReentrancyGuard {
+	// Poll data structure
 	struct PollData {
 		uint256 id;
 		string name;
-		bytes encodedOptions;
 		string metadata;
-		Privote.PollContracts pollContracts;
 		uint256 startTime;
 		uint256 endTime;
-		uint256 numOfOptions;
 		string[] options;
 		bytes[] optionInfo;
-		bool isTallied; // New field for tally status
-		PubKey coordinatorPubKey;
+		PublicKey coordinatorPubKey;
 		address pollDeployer;
-		uint256 slashThreshold;
-		string authType;
-		Mode isQv;
+		Mode mode;
+		address policy;
+		PollContracts pollContracts;
 	}
 
-	mapping(uint256 => PollData) internal _polls;
+	mapping(uint256 => PollData) public _polls;
 
 	TreeDepths public treeDepths;
 	address public verifier;
 	address public vkRegistry;
-	uint256 public stake;
-	uint256 public slashThreshold;
-	uint256 public totalStaked;
-
-	mapping(address => uint256) public stakes;
+	uint8 public messageBatchSize;
 
 	event PollCreated(
 		uint256 indexed pollId,
 		address indexed creator,
-		Privote.PollContracts pollContracts,
+		PollContracts pollContracts,
 		string name,
 		string[] options,
 		bytes[] optionInfo,
 		string metadata,
 		uint256 startTime,
 		uint256 endTime,
-		string authType
+		address policy
 	);
 
-	event PollTallyCIDUpdated(uint256 indexed pollId, string tallyJsonCID);
-	event PollDeployerSlashed(address indexed pollDeployer, uint256 amount);
-	// pubkey.x => pubkey.y => uint40
-	// user would have to subtract one from this value while using this to vote for particular PubKey
-	mapping(uint256 => mapping(uint256 => uint40)) public pubKeyToStateIndex;
-
-	error PubKeyAlreadyRegistered();
-	error PollAddressDoesNotExist(address _poll);
-	error InvalidCaller();
-	error StakeAmountMismatch();
-	error NotPollDeployer();
 	error PollNotTallied();
-	error SlashThresholdNotReached();
-	error PollAlreadyTallied();
-	error InsufficientStake();
-	error NoStakeToWithdraw();
-	error NoExcessBalance();
+	error StartTimeMustBeInFuture();
+	error EndTimeMustBeAfterStartTime();
 
 	constructor(
 		IPollFactory _pollFactory,
 		IMessageProcessorFactory _messageProcessorFactory,
 		ITallyFactory _tallyFactory,
-		SignUpGatekeeper _signUpGatekeeper,
-		InitialVoiceCreditProxy _initialVoiceCreditProxy,
+		IBasePolicy _signUpPolicy,
 		uint8 _stateTreeDepth,
-		uint256[5] memory _emptyBallotRoots,
-		uint256 _stake,
-		uint256 _slashThreshold
+		uint256[5] memory _emptyBallotRoots
 	)
 		MACI(
 			_pollFactory,
 			_messageProcessorFactory,
 			_tallyFactory,
-			_signUpGatekeeper,
-			_initialVoiceCreditProxy,
+			_signUpPolicy,
 			_stateTreeDepth,
 			_emptyBallotRoots
 		)
-	{
-		stake = _stake;
-		slashThreshold = _slashThreshold;
-	}
+		Ownable(msg.sender)
+	{}
 
+	/// @notice Set configuration for poll deployment
+	/// @param _treeDepths The depths of the Merkle trees
+	/// @param _verifier The verifier contract address
+	/// @param _vkRegistry The verifying keys registry contract address
+	/// @param _messageBatchSize The message batch size for the poll
 	function setConfig(
 		TreeDepths memory _treeDepths,
 		address _verifier,
-		address _vkRegistry
+		address _vkRegistry,
+		uint8 _messageBatchSize
 	) public onlyOwner {
 		treeDepths = _treeDepths;
 		verifier = _verifier;
 		vkRegistry = _vkRegistry;
+		messageBatchSize = _messageBatchSize;
 	}
 
-	/// @notice Allows any eligible user sign up. The sign-up gatekeeper should prevent
-	/// double sign-ups or ineligible users from doing so.  This function will
-	/// only succeed if the sign-up deadline has not passed. It also enqueues a
-	/// fresh state leaf into the state AccQueue.
-	/// @param _pubKey The user's desired public key.
-	/// @param _signUpGatekeeperData Data to pass to the sign-up gatekeeper's
-	///     register() function. For instance, the POAPGatekeeper or
-	///     SignUpTokenGatekeeper requires this value to be the ABI-encoded
-	///     token ID.
-	/// @param _initialVoiceCreditProxyData Data to pass to the
-	///     InitialVoiceCreditProxy, which allows it to determine how many voice
-	///     credits this user should have.
-	function signUp(
-		PubKey memory _pubKey,
-		bytes memory _signUpGatekeeperData,
-		bytes memory _initialVoiceCreditProxyData
-	) public override {
-		// check if the pubkey is already registered
-		if (pubKeyToStateIndex[_pubKey.x][_pubKey.y] != 0)
-			revert PubKeyAlreadyRegistered();
-
-		super.signUp(
-			_pubKey,
-			_signUpGatekeeperData,
-			_initialVoiceCreditProxyData
-		);
-
-		pubKeyToStateIndex[_pubKey.x][_pubKey.y] = lazyIMTData.numberOfLeaves;
-	}
-
+	/// @notice Create a new poll
+	/// @param _name The name of the poll
+	/// @param _options The options of the poll
+	/// @param _optionInfo The info of the options
+	/// @param _metadata The metadata of the poll
+	/// @param _startTime The start time of the poll
+	/// @param _endTime The end time of the poll
+	/// @param _mode The mode of the poll
+	/// @param _coordinatorPubKey The coordinator public key
+	/// @param _policy The gatekeeping policy of the poll
+	/// @param _initialVoiceCreditProxy The initial voice credit proxy
+	/// @param _relayers The relayers of the poll
 	function createPoll(
 		string calldata _name,
 		string[] calldata _options,
 		bytes[] calldata _optionInfo,
 		string calldata _metadata,
-		uint256 _duration,
-		Mode isQv,
-		PubKey memory coordinatorPubKey,
-		string calldata authType
-	) public payable {
-		// TODO: check if the number of options are more than limit
-		if (msg.value < stake) revert StakeAmountMismatch();
-
-		stakes[msg.sender] += stake;
-		totalStaked += stake;
+		uint256 _startTime,
+		uint256 _endTime,
+		Mode _mode,
+		PublicKey memory _coordinatorPubKey,
+		address _policy,
+		address _initialVoiceCreditProxy,
+		address[] memory _relayers
+	) public {
+		// if (_startTime < block.timestamp) {
+		// 	revert StartTimeMustBeInFuture();
+		// }
+		// if (_endTime <= _startTime) {
+		// 	revert EndTimeMustBeAfterStartTime();
+		// }
 
 		uint256 pollId = nextPollId;
+		uint256 voteOptions = _options.length;
 
-		deployPoll(
-			_duration,
-			treeDepths,
-			coordinatorPubKey,
-			verifier,
-			vkRegistry,
-			isQv
-		);
+		IMACI.DeployPollArgs memory args = IMACI.DeployPollArgs({
+			startDate: _startTime,
+			endDate: _endTime,
+			treeDepths: treeDepths,
+			messageBatchSize: messageBatchSize,
+			coordinatorPublicKey: _coordinatorPubKey,
+			verifier: verifier,
+			verifyingKeysRegistry: vkRegistry,
+			mode: _mode,
+			policy: _policy,
+			initialVoiceCreditProxy: _initialVoiceCreditProxy,
+			relayers: _relayers,
+			voteOptions: voteOptions
+		});
 
-		PollContracts memory pollContracts = MACI.polls[pollId];
+		PollContracts memory pollContracts = super.deployPoll(args);
 
-		// encode options to bytes for retrieval
-		bytes memory encodedOptions = abi.encode(_options);
-
-		uint256 endTime = block.timestamp + _duration;
-
-		// create poll
 		_polls[pollId] = PollData({
 			id: pollId,
 			name: _name,
-			encodedOptions: encodedOptions,
-			numOfOptions: _options.length,
 			metadata: _metadata,
-			startTime: block.timestamp,
-			endTime: endTime,
-			pollContracts: pollContracts,
+			startTime: _startTime,
+			endTime: _endTime,
 			options: _options,
 			optionInfo: _optionInfo,
-			isTallied: false, // Set initial tally status to false
-			coordinatorPubKey: coordinatorPubKey,
+			coordinatorPubKey: _coordinatorPubKey,
 			pollDeployer: msg.sender,
-			slashThreshold: slashThreshold,
-			authType: authType,
-			isQv: isQv
+			mode: _mode,
+			policy: _policy,
+			pollContracts: pollContracts
 		});
 
 		emit PollCreated(
@@ -202,55 +165,23 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 			_options,
 			_optionInfo,
 			_metadata,
-			block.timestamp,
-			endTime,
-			authType
+			_startTime,
+			_endTime,
+			_policy
 		);
 	}
 
-	function slashPollDeployer(uint256 _pollId) public {
-		PollData storage poll = _polls[_pollId];
-		if (block.timestamp <= poll.endTime + poll.slashThreshold)
-			revert SlashThresholdNotReached();
-		if (ITally(poll.pollContracts.tally).isTallied())
-			revert PollAlreadyTallied();
-		uint256 stakeToSlash = stake;
-		if (stakes[poll.pollDeployer] < stakeToSlash)
-			revert InsufficientStake();
-
-		stakes[poll.pollDeployer] -= stakeToSlash;
-		totalStaked -= stakeToSlash;
-
-		emit PollDeployerSlashed(poll.pollDeployer, stakeToSlash);
-	}
-
-	function withdrawStake(uint256 _pollId) external nonReentrant {
-		PollData storage poll = _polls[_pollId];
-		if (poll.pollDeployer != msg.sender) revert NotPollDeployer();
-		if (!ITally(poll.pollContracts.tally).isTallied())
-			revert PollNotTallied();
-		uint256 amount = stakes[msg.sender];
-		if (amount == 0) revert NoStakeToWithdraw();
-
-		stakes[msg.sender] = 0;
-		totalStaked -= amount;
-		(bool sent, ) = msg.sender.call{ value: amount }("");
-		require(sent, "Withdraw failed");
-	}
-
-	function withdrawExcessBalance() external onlyOwner {
-		uint256 excess = address(this).balance - totalStaked;
-		if (excess <= 0) revert NoExcessBalance();
-
-		(bool sent, ) = msg.sender.call{ value: excess }("");
-		require(sent, "Owner withdraw failed");
-	}
-
-	function setPollTallied(uint256 _pollId) external {
-		PollData storage poll = _polls[_pollId];
-		ITally tally = ITally(poll.pollContracts.tally);
-		if (!tally.isTallied()) revert PollNotTallied();
-		poll.isTallied = true;
+	/// @notice Allows any eligible user to sign up. The sign-up policy should prevent
+	/// double sign-ups or ineligible users from doing so.
+	/// @param _publicKey The user's public key.
+	/// @param _signUpPolicyData Data to pass to the sign-up policy's
+	///     enforce() function to verify the user's eligibility.
+	function signUp(
+		PublicKey memory _publicKey,
+		bytes memory _signUpPolicyData
+	) public override {
+		// Call the parent MACI signUp function which already emits SignUp event
+		super.signUp(_publicKey, _signUpPolicyData);
 	}
 
 	function fetchPolls(
@@ -349,8 +280,8 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		uint256 len = tally.totalTallyResults();
 		results = new uint256[](len);
 		for (uint256 i = 0; i < len; i++) {
-			(uint256 value, ) = tally.tallyResults(i);
-			results[i] = value;
+			ITally.TallyResult memory result = tally.tallyResults(i);
+			results[i] = result.value;
 		}
 	}
 
