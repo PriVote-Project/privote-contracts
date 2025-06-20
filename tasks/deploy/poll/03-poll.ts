@@ -49,8 +49,31 @@ deployment.deployTask(EDeploySteps.Poll, "Deploy poll").then((task) =>
     const pollId = await privoteContract.nextPollId();
 
     const coordinatorPublicKey = deployment.getDeployConfigField<string>(EContracts.Poll, "coordinatorPublicKey");
-    const pollStartTimestamp = deployment.getDeployConfigField<number>(EContracts.Poll, "pollStartDate");
-    const pollEndTimestamp = deployment.getDeployConfigField<number>(EContracts.Poll, "pollEndDate");
+    let pollStartTimestamp = deployment.getDeployConfigField<number>(EContracts.Poll, "pollStartDate");
+    let pollEndTimestamp = deployment.getDeployConfigField<number>(EContracts.Poll, "pollEndDate");
+    
+    // Check if both timestamps are 0, then use duration-based timing
+    if (pollStartTimestamp === 0 && pollEndTimestamp === 0) {
+      const duration = deployment.getDeployConfigField<number>(EContracts.Poll, "duration");
+      if (!duration || duration <= 0) {
+        throw new Error("Duration must be a positive number when both pollStartDate and pollEndDate are 0");
+      }
+      
+      // Set start time to current timestamp + 10 seconds
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      pollStartTimestamp = currentTimestamp + 10;
+      pollEndTimestamp = pollStartTimestamp + duration;
+      
+      console.log(`Using duration-based timing:`);
+      console.log(`  Current time: ${new Date(currentTimestamp * 1000).toISOString()}`);
+      console.log(`  Poll start: ${new Date(pollStartTimestamp * 1000).toISOString()} (current + 10s)`);
+      console.log(`  Poll end: ${new Date(pollEndTimestamp * 1000).toISOString()} (start + ${duration}s)`);
+      console.log(`  Duration: ${duration} seconds`);
+    } else {
+      console.log(`Using configured timestamps:`);
+      console.log(`  Poll start: ${new Date(pollStartTimestamp * 1000).toISOString()}`);
+      console.log(`  Poll end: ${new Date(pollEndTimestamp * 1000).toISOString()}`);
+    }
     const tallyProcessingStateTreeDepth = deployment.getDeployConfigField<number>(
       EContracts.VerifyingKeysRegistry,
       "tallyProcessingStateTreeDepth",

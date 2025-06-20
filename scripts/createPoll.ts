@@ -87,7 +87,7 @@ async function main() {
 
     const nextPollId = await maciContract.nextPollId();
 
-    const tx = await maciContract.createPoll(
+    const tx = await maciContract.deployPoll(
       poll.title,
       poll.options.map(v => v.title),
       encodedOptions,

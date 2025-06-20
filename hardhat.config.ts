@@ -24,10 +24,13 @@ import "./tasks/runner/benchmarks";
 import "./tasks/runner/deployFull";
 import "./tasks/runner/deployPoll";
 import "./tasks/runner/encodeErrors";
+import "./tasks/runner/joinPoll";
 import "./tasks/runner/merge";
 import "./tasks/runner/prove";
 import "./tasks/runner/signup";
 import "./tasks/runner/submitOnChain";
+import "./tasks/runner/vote";
+import "./tasks/runner/encodeErrors";
 
 /**
  * Allow to copy a directory from source to target

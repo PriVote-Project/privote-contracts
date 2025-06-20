@@ -2,12 +2,13 @@
 import { ZeroAddress } from "ethers";
 import { task, types } from "hardhat/config";
 
-import type { MACI, Poll } from "../../typechain-types";
+import type { MACI, Poll, Privote } from "../../typechain-types";
 
 import { info, logMagenta } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 import { TreeMerger } from "@maci-protocol/contracts";
 import { EContracts, type IMergeParams } from "@maci-protocol/contracts";
+import { CustomEContracts } from "../helpers/constants";
 
 /**
  * Command to merge signups of a MACI contract
@@ -22,9 +23,11 @@ task("merge", "Merge signups")
 
     const deployer = await deployment.getDeployer();
 
-    const maciContract = await deployment.getContract<MACI>({ name: EContracts.MACI });
+    const privoteContract = await deployment.getContract<Privote>({ 
+      name: CustomEContracts.Privote as any 
+    });
 
-    const pollContracts = await maciContract.polls(poll);
+    const pollContracts = await privoteContract.polls(poll);
 
     if (pollContracts.poll === ZeroAddress) {
       throw new Error(`No poll ${poll} found`);

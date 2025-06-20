@@ -5,7 +5,7 @@ import { task, types } from "hardhat/config";
 import fs from "fs";
 
 import type { Proof } from "@maci-protocol/contracts";
-import type { VerifyingKeysRegistry, Verifier, MACI, Poll, MessageProcessor, Tally } from "../../typechain-types";
+import type { VerifyingKeysRegistry, Verifier, MACI, Poll, MessageProcessor, Tally, Privote } from "../../typechain-types";
 
 import { logMagenta, info } from "@maci-protocol/contracts";
 import { readProofs } from "@maci-protocol/contracts";
@@ -14,6 +14,7 @@ import { Deployment } from "@maci-protocol/contracts";
 import { Prover } from "@maci-protocol/contracts";
 import { EContracts, TallyData } from "@maci-protocol/contracts";
 import { type ISubmitOnChainParams } from "@maci-protocol/contracts/build/tasks/helpers/types";
+import { CustomEContracts } from "../helpers/constants";
 
 /**
  * Prove hardhat task for submitting proofs on-chain as well as uploading tally results
@@ -45,17 +46,20 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
 
     logMagenta({ text: info(`Start balance: ${Number(startBalance / 10n ** 12n) / 1e6}`) });
 
-    const maciContractAddress = storage.mustGetAddress(EContracts.MACI, network.name);
-    const [maciContract, verifyingKeysRegistryContract, verifierContract] = await Promise.all([
-      deployment.getContract<MACI>({
-        name: EContracts.MACI,
-        address: maciContractAddress,
+    const privoteContractAddress = storage.getAddress(CustomEContracts.Privote, network.name);
+    if (!privoteContractAddress) {
+      throw new Error("Privote contract not found");
+    }
+    const [privoteContract, verifyingKeysRegistryContract, verifierContract] = await Promise.all([
+      deployment.getContract<Privote>({
+        name: CustomEContracts.Privote as any,
+        address: privoteContractAddress,
       }),
       deployment.getContract<VerifyingKeysRegistry>({ name: EContracts.VerifyingKeysRegistry }),
       deployment.getContract<Verifier>({ name: EContracts.Verifier }),
     ]);
 
-    const pollContracts = await maciContract.polls(poll);
+    const pollContracts = await privoteContract.polls(poll);
     const pollContract = await deployment.getContract<Poll>({
       name: EContracts.Poll,
       address: pollContracts.poll,
@@ -92,7 +96,7 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
     data.tallyProofs = await readProofs({ files, folder: outputDir, type: "tally" });
 
     const prover = new Prover({
-      maciContract,
+      maciContract: privoteContract,
       messageProcessorContract,
       pollContract,
       verifyingKeysRegistryContract,

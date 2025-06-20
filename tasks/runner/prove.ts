@@ -7,13 +7,14 @@ import { task, types } from "hardhat/config";
 import fs from "fs";
 
 import type { Proof } from "@maci-protocol/contracts";
-import type { MACI, Poll } from "../../typechain-types";
+import type { MACI, Poll, Privote } from "../../typechain-types";
 
 import { logMagenta, info } from "@maci-protocol/contracts";
 import { ContractStorage } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 import { ProofGenerator } from "@maci-protocol/contracts";
 import { EContracts, type IProveParams } from "@maci-protocol/contracts";
+import { CustomEContracts } from "../helpers/constants";
 
 /**
  * Prove hardhat task for generating off-chain proofs and sending them on-chain
@@ -82,10 +83,16 @@ task("prove", "Command to generate proofs")
 
       logMagenta({ text: info(`Start balance: ${Number(startBalance / 10n ** 12n) / 1e6}`) });
 
-      const maciContractAddress = storage.mustGetAddress(EContracts.MACI, network.name);
-      const maciContract = await deployment.getContract<MACI>({ name: EContracts.MACI, address: maciContractAddress });
+      const privoteContractAddress = storage.getAddress(CustomEContracts.Privote, network.name);
+      if (!privoteContractAddress) {
+        throw new Error("Privote contract not found");
+      }
+      const privoteContract = await deployment.getContract<Privote>({ 
+        name: CustomEContracts.Privote as any, 
+        address: privoteContractAddress 
+      });
 
-      const pollContracts = await maciContract.polls(poll);
+      const pollContracts = await privoteContract.polls(poll);
       const pollContract = await deployment.getContract<Poll>({
         name: EContracts.Poll,
         address: pollContracts.poll,
@@ -98,7 +105,7 @@ task("prove", "Command to generate proofs")
       }
 
       const maciState = await ProofGenerator.prepareState({
-        maciContract,
+        maciContract: privoteContract,
         pollContract,
         maciPrivateKey,
         coordinatorKeypair,
@@ -154,7 +161,7 @@ task("prove", "Command to generate proofs")
 
       const proofGenerator = new ProofGenerator({
         poll: foundPoll,
-        maciContractAddress,
+        maciContractAddress: privoteContractAddress,
         tallyContractAddress: pollContracts.tally,
         rapidsnark,
         tally: {
