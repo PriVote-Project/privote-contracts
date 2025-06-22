@@ -12,44 +12,58 @@
     },
     "ERC20Policy": {
       "deploy": false,
-      "token": "0x0000000000000000000000000000000000000000",
-      "threshold": 1
+      "token": "0x8464135c8F25Da09e49BC8782676a84730C318bC",
+      "threshold": 101,
+      "signupDataHex": "0x"
     },
     "FreeForAllPolicy": {
-      "deploy": true
+      "deploy": true,
+      "signupDataHex": "0x"
     },
     "ERC20VotesPolicy": {
       "deploy": false,
-      "token": "0x0000000000000000000000000000000000000000",
-      "threshold": 1,
-      "snapshotBlock": 1
+      "token": "0x8464135c8F25Da09e49BC8782676a84730C318bC",
+      "threshold": 11,
+      "snapshotBlock": 45,
+      "signupDataHex": "0x"
     },
     "MerkleProofPolicy": {
       "deploy": false,
-      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0"
+      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0",
+      "signupDataHex": "0x"
     },
     "EASPolicy": {
       "deploy": false,
       "easAddress": "0xC2679fBD37d54388Ce493F1DB75320D236e1815e",
       "schema": "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-      "attester": "the-attester-address"
+      "attester": "the-attester-address",
+      "signupDataHex": "0x"
     },
     "GitcoinPassportPolicy": {
       "deploy": false,
       "decoderAddress": "0xe53C60F8069C2f0c3a84F9B3DB5cf56f3100ba56",
-      "passingScore": 5
+      "passingScore": 5,
+      "signupDataHex": "0x"
     },
     "ZupassPolicy": {
       "deploy": false,
       "signer1": "13908133709081944902758389525983124100292637002438232157513257158004852609027",
       "signer2": "7654374482676219729919246464135900991450848628968334062174564799457623790084",
       "eventId": "69c0caaa-c65d-5345-a20c-867774f18c67",
-      "zupassVerifier": "0x2272cdb3596617886d0F48524DA486044E0376d6"
+      "zupassVerifier": "0x2272cdb3596617886d0F48524DA486044E0376d6",
+      "signupDataHex": "0x"
     },
     "SemaphorePolicy": {
       "deploy": false,
       "semaphoreContract": "0x0A09FB3f63c13F1C54F2fA41AFB1e7a98cffc774",
-      "groupId": 0
+      "groupId": 0,
+      "signupDataHex": "0x"
+    },
+    "AnonAadhaarPolicy": {
+      "verifierAddress": "",
+      "nullifierSeed": "636033",
+      "pubkeyHash": "15134874015316324267425466444584014077184337590635665158241104437045239495873",
+      "signupDataHex": "0x000000000000000000000000000000000000000000000000000000000009b4811efcce2ae52ab148cf047611b68919cb204d743f86ec760620db28e41b3c936b0000000000000000000000000000000000000000000000000000000066ede95800000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001bedd23dc6346267c3644f73368d84d89cfb1b8a55c334922a649e1588b790781750ec0049d4f31bc67ef6236aeba4d3c20d904195ece0292daa474a1b965d6611333e22b06a0c4ca8ec657e1dd90cba60f37e2eb787fd49711f3b4047f07bb212804368bd2dd4905a2b69f58e5e2f808aa98ade31a89d67780a16a078182073231aa6650da67555801bbedb5bfab6600080f5788e447b3ded7a3237a259e7182c9ed6653021bbe2d67c06ee4c69bc2fcf516189a8d70a39ced7d9b45397d2fb06a62be3b429ec5eebbaafb13b286df8356ee5107368aa734e7d2bb20b510970014192b4fd679674d41dc4b1365b5f8fceae1ab84e9351485b1d71272c773e73"
     },
     "MACI": {
       "stateTreeDepth": 10,
@@ -94,7 +108,7 @@
       "metadata": "This is just a test poll",
       "pollStartDate": 0,
       "pollEndDate": 0,
-      "duration": 50,
+      "duration": 500,
       "coordinatorPublicKey": "macipk.afec0cff00d1e254be6a769fcc7b7a151fbc8e5f58cfae5ed8da7ec1f04a227d",
       "mode": 0,
       "policy": "FreeForAllPolicy",
@@ -128,43 +142,51 @@
     "ERC20Policy": {
       "deploy": false,
       "token": "0x0000000000000000000000000000000000000000",
-      "threshold": 1
+      "threshold": 1,
+      "signupDataHex": "0x"
     },
     "FreeForAllPolicy": {
-      "deploy": true
+      "deploy": true,
+      "signupDataHex": "0x"
     },
     "ERC20VotesPolicy": {
       "deploy": false,
       "token": "0x0000000000000000000000000000000000000000",
       "threshold": 1,
-      "snapshotBlock": 1
+      "snapshotBlock": 1,
+      "signupDataHex": "0x"
     },
     "MerkleProofPolicy": {
       "deploy": false,
-      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0"
+      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0",
+      "signupDataHex": "0x"
     },
     "EASPolicy": {
       "deploy": false,
       "easAddress": "0xC2679fBD37d54388Ce493F1DB75320D236e1815e",
       "schema": "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-      "attester": "the-attester-address"
+      "attester": "the-attester-address",
+      "signupDataHex": "0x"
     },
     "GitcoinPassportPolicy": {
       "deploy": false,
       "decoderAddress": "0xe53C60F8069C2f0c3a84F9B3DB5cf56f3100ba56",
-      "passingScore": 5
+      "passingScore": 5,
+      "signupDataHex": "0x"
     },
     "ZupassPolicy": {
       "deploy": false,
       "signer1": "13908133709081944902758389525983124100292637002438232157513257158004852609027",
       "signer2": "7654374482676219729919246464135900991450848628968334062174564799457623790084",
       "eventId": "69c0caaa-c65d-5345-a20c-867774f18c67",
-      "zupassVerifier": "0x2272cdb3596617886d0F48524DA486044E0376d6"
+      "zupassVerifier": "0x2272cdb3596617886d0F48524DA486044E0376d6",
+      "signupDataHex": "0x"
     },
     "SemaphorePolicy": {
       "deploy": false,
       "semaphoreContract": "0x0A09FB3f63c13F1C54F2fA41AFB1e7a98cffc774",
-      "groupId": 0
+      "groupId": 0,
+      "signupDataHex": "0x"
     },
     "MACI": {
       "stateTreeDepth": 10,

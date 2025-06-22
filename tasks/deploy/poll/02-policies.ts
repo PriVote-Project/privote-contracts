@@ -19,6 +19,8 @@ import type {
   SemaphorePolicyFactory,
   ZupassCheckerFactory,
   ZupassPolicyFactory,
+  AnonAadhaarCheckerFactory,
+  AnonAadhaarPolicyFactory,
 } from "../../../typechain-types";
 
 import { info, logGreen } from "@maci-protocol/contracts";
@@ -58,9 +60,10 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       deployHatsSignupPolicy,
       getDeployedPolicyProxyFactories,
       deployERC20VotesPolicy,
+      deployAnonAadhaarPolicy,
     } = await import("@maci-protocol/contracts");
     // reqd import
-    const { deployERC20Policy } = await import("@maci-protocol/contracts/build/ts/deploy");
+    const { deployERC20Policy  } = await import("@maci-protocol/contracts/build/ts/deploy");
 
     const privoteContract = await deployment.getContract<Privote>({ name: CustomEContracts.Privote as any });
     const pollId = await privoteContract.nextPollId();
@@ -90,6 +93,11 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       `poll-${pollId}`,
     );
     const erc20PolicyContractAddress = storage.getAddress(EPolicies.ERC20, hre.network.name, `poll-${pollId}`);
+    const anonAadhaarPolicyContractAddress = storage.getAddress(
+      EPolicies.AnonAadhaar,
+      hre.network.name,
+      `poll-${pollId}`,
+    );
 
     const policyToDeploy =
       deployment.getDeployConfigField<EContracts | null>(EContracts.Poll, "policy") || EContracts.FreeForAllPolicy;
@@ -103,6 +111,7 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
     const skipDeployMerkleProofPolicy = policyToDeploy !== EContracts.MerkleProofPolicy;
     const skipDeployERC20VotesPolicy = policyToDeploy !== EContracts.ERC20VotesPolicy;
     const skipDeployERC20Policy = policyToDeploy !== EContracts.ERC20Policy;
+    const skipDeployAnonAadhaarPolicy = policyToDeploy !== EContracts.AnonAadhaarPolicy;
     const hasPolicyAddress = [
       freeForAllPolicyContractAddress,
       easPolicyContractAddress,
@@ -113,6 +122,7 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       merkleProofPolicyContractAddress,
       erc20VotesPolicyContractAddress,
       erc20PolicyContractAddress,
+      anonAadhaarPolicyContractAddress,
     ].some(Boolean);
 
     const isSkipable = [
@@ -125,6 +135,7 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       skipDeployMerkleProofPolicy,
       skipDeployERC20VotesPolicy,
       skipDeployERC20Policy,
+      skipDeployAnonAadhaarPolicy,
     ].some((skip) => !skip);
 
     const canSkipDeploy = incremental && hasPolicyAddress && isSkipable;
@@ -746,6 +757,107 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
           id: ECheckerFactories.ERC20,
           contract: erc20CheckerFactoryContract,
           name: ECheckerFactories.ERC20,
+          key: `poll-${pollId}`,
+          args: [],
+          network: hre.network.name,
+        }),
+      ]);
+    }
+
+    if (!skipDeployAnonAadhaarPolicy) {
+      const nullifierSeed = deployment.getDeployConfigField<string>(
+        EContracts.AnonAadhaarPolicy,
+        "nullifierSeed",
+        true,
+      );
+
+      let verifierAddress = deployment.getDeployConfigField<string | undefined>(
+        EContracts.AnonAadhaarPolicy,
+        "verifierAddress",
+      );
+      // If verifierAddress is not provided, deploy the AnonAadhaar contracts
+      if (!verifierAddress) {
+        const pubkeyHash = deployment.getDeployConfigField<string>(
+          EContracts.AnonAadhaarPolicy,
+          "pubkeyHash",
+          true,
+        );
+        
+        // Deploy AnonAadhaarVerifier (Groth16 verifier) using consistent deployment pattern
+        const anonAadhaarGroth16VerifierContract = await deployment.deployContract({
+          name: "AnonAadhaarVerifier",
+          signer: deployer,
+        });
+        const groth16VerifierAddress = await anonAadhaarGroth16VerifierContract.getAddress();
+        
+        // Deploy AnonAadhaar contract (main verifier that takes verifier + pubkey hash)
+        // For contracts with constructor arguments, use ethers factory approach
+        const anonAadhaarContractFactory = await hre.ethers.getContractFactory("AnonAadhaar", {
+          signer: deployer,
+        });
+        const anonAadhaarContract = await anonAadhaarContractFactory.deploy(groth16VerifierAddress, pubkeyHash);
+        await anonAadhaarContract.waitForDeployment();
+        verifierAddress = await anonAadhaarContract.getAddress();
+      }
+
+      const factories = await getDeployedPolicyProxyFactories<AnonAadhaarCheckerFactory, AnonAadhaarPolicyFactory>({
+        policy: EPolicyFactories.AnonAadhaar,
+        checker: ECheckerFactories.AnonAadhaar,
+        network: hre.network.name,
+        signer: deployer,
+      });
+
+      const [
+        anonAadhaarPolicyContract,
+        anonAadhaarCheckerContract,
+        anonAadhaarPolicyFactoryContract,
+        anonAadhaarCheckerFactoryContract,
+      ] = await deployAnonAadhaarPolicy(
+        {
+          verifierAddress,
+          nullifierSeed,
+        },
+        factories,
+        deployer,
+        true,
+      );
+
+      const [policyContractImplementation, checkerContractImplementation] = await Promise.all([
+        anonAadhaarPolicyFactoryContract.IMPLEMENTATION(),
+        anonAadhaarCheckerFactoryContract.IMPLEMENTATION(),
+      ]);
+
+      await Promise.all([
+        storage.register({
+          id: EPolicies.AnonAadhaar,
+          contract: anonAadhaarPolicyContract,
+          name: EPolicies.AnonAadhaar,
+          key: `poll-${pollId}`,
+          implementation: policyContractImplementation,
+          args: [],
+          network: hre.network.name,
+        }),
+        storage.register({
+          id: ECheckers.AnonAadhaar,
+          contract: anonAadhaarCheckerContract,
+          name: ECheckers.AnonAadhaar,
+          key: `poll-${pollId}`,
+          implementation: checkerContractImplementation,
+          args: [],
+          network: hre.network.name,
+        }),
+        storage.register({
+          id: EPolicyFactories.AnonAadhaar,
+          contract: anonAadhaarPolicyFactoryContract,
+          name: EPolicyFactories.AnonAadhaar,
+          key: `poll-${pollId}`,
+          args: [],
+          network: hre.network.name,
+        }),
+        storage.register({
+          id: ECheckerFactories.AnonAadhaar,
+          contract: anonAadhaarCheckerFactoryContract,
+          name: ECheckerFactories.AnonAadhaar,
           key: `poll-${pollId}`,
           args: [],
           network: hre.network.name,

@@ -35,6 +35,67 @@ function loadSignupConfig(): SignupConfig {
 }
 
 /**
+ * Get policy signup data based on poll's policy contract
+ */
+async function getPolicySignupData(
+  pollContract: any,
+  deployment: Deployment,
+  hre: any
+): Promise<string> {
+  try {
+    // Get the policy contract from poll's extContracts
+    const policyAddress = await pollContract.extContracts().then((extContracts: any) => extContracts.policy);
+    // Get policy contract instance
+    const policyContract = await hre.ethers.getContractAt("IBasePolicy", policyAddress);
+    
+    // Call trait() to get the policy type
+    const policyTrait = await policyContract.trait();
+    
+    console.log(info(`Policy trait detected: ${policyTrait}`));
+
+    // Map trait to EContracts enum by appending "Policy"
+    const policyContractName = `${policyTrait}Policy` as keyof typeof EContracts;
+    
+    // Check if this is a valid policy contract name
+    if (!(policyContractName in EContracts)) {
+      logYellow({ text: `Unknown policy trait: ${policyTrait}, falling back to FreeForAll behavior` });
+      return "0x";
+    }
+    
+    const policyEnum = EContracts[policyContractName];
+    console.log(policyEnum);
+    // Handle FreeForAll policy - no data needed
+    if (policyEnum === EContracts.FreeForAllPolicy) {
+      console.log(info("Using FreeForAllPolicy - no signup data required"));
+      return "0x";
+    }
+    
+    // Try to get signupDataHex from deployment config
+    try {
+      const signupDataHex = deployment.getDeployConfigField<string>(
+        policyEnum,
+        "signupDataHex"
+      );
+      
+      if (signupDataHex) {
+        console.log(info(`Using signup data from config for ${policyContractName}: ${signupDataHex}`));
+        return signupDataHex;
+      }
+    } catch (error) {
+      logYellow({ text: `No signupDataHex field found for ${policyContractName}: ${(error as Error).message}` });
+    }
+    
+    // Fallback to "0x" if no specific data found
+    logYellow({ text: `No signup data configured for ${policyContractName}, using default "0x"` });
+    return "0x";
+    
+  } catch (error) {
+    logYellow({ text: `Error determining policy signup data: ${(error as Error).message}, using default "0x"` });
+    return "0x";
+  }
+}
+
+/**
  * Join poll task
  */
 task("join-poll", "Join a poll using MACI keypair")
@@ -79,6 +140,17 @@ task("join-poll", "Join a poll using MACI keypair")
       
       console.log(info(`Using Privote contract at: ${privoteContractAddress}`));
       
+      // Get Privote contract instance to fetch poll data
+      const privoteContract = await hre.ethers.getContractAt("Privote", privoteContractAddress);
+      const pollData = await privoteContract.fetchPoll(poll);
+      const pollContractAddress = pollData.pollContracts.poll;
+      
+      // Get Poll contract instance
+      const pollContract = await hre.ethers.getContractAt("Poll", pollContractAddress);
+      
+      // Get policy-specific signup data
+      const sgDataArg = await getPolicySignupData(pollContract, deployment, hre);
+      
       // Get deployment configuration for zkey paths
       const pollJoiningZkey = deployment.getDeployConfigField<string>(
         EContracts.VerifyingKeysRegistry,
@@ -104,22 +176,22 @@ task("join-poll", "Join a poll using MACI keypair")
       
       console.log(info(`Joining poll ${poll} with account ${account}...`));
       
-              // Call joinPoll from SDK
-        const result = await joinPoll({
-          maciAddress: privoteContractAddress,
-          privateKey,
-          pollId: BigInt(poll),
-          signer,
-          startBlock: effectiveStartBlock,
-          blocksPerBatch,
-          pollJoiningZkey,
-          useWasm,
-          rapidsnark,
-          pollWitnessGenerator,
-          pollWasm,
-          sgDataArg: "0x", // FreeForAll policy data
-          ivcpDataArg: "0x", // Constant proxy data
-        });
+      // Call joinPoll from SDK
+      const result = await joinPoll({
+        maciAddress: privoteContractAddress,
+        privateKey,
+        pollId: BigInt(poll),
+        signer,
+        startBlock: effectiveStartBlock,
+        blocksPerBatch,
+        pollJoiningZkey,
+        useWasm,
+        rapidsnark,
+        pollWitnessGenerator,
+        pollWasm,
+        sgDataArg, // Dynamic policy data instead of hardcoded "0x"
+        ivcpDataArg: "0x", // Constant proxy data
+      });
       
       logGreen({ text: `✅ Successfully joined poll!` });
       logGreen({ text: `   Poll ID: ${poll}` });
@@ -128,6 +200,7 @@ task("join-poll", "Join a poll using MACI keypair")
       logGreen({ text: `   Voice Credits: ${result.voiceCredits}` });
       logGreen({ text: `   Nullifier: ${result.nullifier}` });
       logGreen({ text: `   Transaction Hash: ${result.hash}` });
+      logGreen({ text: `   Signup Data Used: ${sgDataArg}` });
       
     } catch (error) {
       logRed({ text: `❌ Join poll failed: ${(error as Error).message}` });
