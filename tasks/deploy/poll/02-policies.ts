@@ -23,7 +23,7 @@ import type {
   AnonAadhaarPolicyFactory,
 } from "../../../typechain-types";
 
-import { info, logGreen } from "@maci-protocol/contracts";
+import { info, logGreen, TokenPolicyFactory, TokenCheckerFactory } from "@maci-protocol/contracts";
 import { Privote } from "../../../typechain-types";
 import { EDeploySteps } from "@maci-protocol/contracts";
 import { ContractStorage } from "@maci-protocol/contracts";
@@ -60,6 +60,7 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       deployERC20VotesPolicy,
       deployAnonAadhaarPolicy,
       deployERC20Policy,
+      deploySignupTokenPolicy,
     } = await import("@maci-protocol/contracts");
 
     const privoteContract = await deployment.getContract<Privote>({ name: CustomEContracts.Privote as any });
@@ -95,6 +96,11 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       hre.network.name,
       `poll-${pollId}`,
     );
+    const tokenPolicyContractAddress = storage.getAddress(
+      EPolicies.Token,
+      hre.network.name,
+      `poll-${pollId}`,
+    );
 
     const policyToDeploy =
       deployment.getDeployConfigField<EContracts | null>(EContracts.Poll, "policy") || EContracts.FreeForAllPolicy;
@@ -109,6 +115,7 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
     const skipDeployERC20VotesPolicy = policyToDeploy !== EContracts.ERC20VotesPolicy;
     const skipDeployERC20Policy = policyToDeploy !== EContracts.ERC20Policy;
     const skipDeployAnonAadhaarPolicy = policyToDeploy !== EContracts.AnonAadhaarPolicy;
+    const skipDeployTokenPolicy = policyToDeploy !== EContracts.TokenPolicy;
     const hasPolicyAddress = [
       freeForAllPolicyContractAddress,
       easPolicyContractAddress,
@@ -120,6 +127,7 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       erc20VotesPolicyContractAddress,
       erc20PolicyContractAddress,
       anonAadhaarPolicyContractAddress,
+      tokenPolicyContractAddress,
     ].some(Boolean);
 
     const isSkipable = [
@@ -133,6 +141,7 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       skipDeployERC20VotesPolicy,
       skipDeployERC20Policy,
       skipDeployAnonAadhaarPolicy,
+      skipDeployTokenPolicy,
     ].some((skip) => !skip);
 
     const canSkipDeploy = incremental && hasPolicyAddress && isSkipable;
@@ -855,6 +864,67 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
           id: ECheckerFactories.AnonAadhaar,
           contract: anonAadhaarCheckerFactoryContract,
           name: ECheckerFactories.AnonAadhaar,
+          key: `poll-${pollId}`,
+          args: [],
+          network: hre.network.name,
+        }),
+      ]);
+    }
+
+    if (!skipDeployTokenPolicy) {
+      const token = deployment.getDeployConfigField<string>(EContracts.TokenPolicy, "token", true);
+
+      const factories = await getDeployedPolicyProxyFactories<TokenCheckerFactory, TokenPolicyFactory>({
+        policy: EPolicyFactories.Token,
+        checker: ECheckerFactories.Token,
+        network: hre.network.name,
+        signer: deployer,
+      });
+
+      // Use the deploySignupTokenPolicy function with correct parameters
+      const [tokenPolicyContract, tokenCheckerContract, tokenPolicyFactoryContract, tokenCheckerFactoryContract] = await deploySignupTokenPolicy(
+        { token },
+        factories,
+        deployer,
+        true,
+      );
+
+      const [policyContractImplementation, checkerContractImplementation] = await Promise.all([
+        tokenPolicyFactoryContract.IMPLEMENTATION(),
+        tokenCheckerFactoryContract.IMPLEMENTATION(),
+      ]);
+
+      await Promise.all([
+        storage.register({
+          id: EPolicies.Token,
+          contract: tokenPolicyContract,
+          name: EPolicies.Token,
+          key: `poll-${pollId}`,
+          implementation: policyContractImplementation,
+          args: [],
+          network: hre.network.name,
+        }),
+        storage.register({
+          id: ECheckers.Token,
+          contract: tokenCheckerContract,
+          name: ECheckers.Token,
+          key: `poll-${pollId}`,
+          implementation: checkerContractImplementation,
+          args: [],
+          network: hre.network.name,
+        }),
+        storage.register({
+          id: EPolicyFactories.Token,
+          contract: tokenPolicyFactoryContract,
+          name: EPolicyFactories.Token,
+          key: `poll-${pollId}`,
+          args: [],
+          network: hre.network.name,
+        }),
+        storage.register({
+          id: ECheckerFactories.Token,
+          contract: tokenCheckerFactoryContract,
+          name: ECheckerFactories.Token,
           key: `poll-${pollId}`,
           args: [],
           network: hre.network.name,

@@ -13,7 +13,7 @@ import { Deployment } from "@maci-protocol/contracts";
  * Generate policy data task
  */
 task("generate-policy-data", "Generate signup data for different policy types")
-  .addParam("policy", "Policy type (FreeForAll, MerkleProof, EAS, ERC20, ERC20Votes, Semaphore, GitcoinPassport, Zupass, Hats, AnonAadhaar)", undefined, types.string)
+  .addParam("policy", "Policy type (FreeForAll, MerkleProof, EAS, ERC20, ERC20Votes, Semaphore, GitcoinPassport, Zupass, Hats, AnonAadhaar, Token)", undefined, types.string)
   .addFlag("updateConfig", "Update the deploy-config.json file with generated data")
   .setAction(async ({ 
     policy, 
@@ -107,6 +107,7 @@ task("show-policy-examples", "Show example signup data for all policy types")
          console.log("npx hardhat generate-policy-data --policy MerkleProof --update-config");
      console.log("npx hardhat generate-policy-data --policy EAS --update-config");
      console.log("npx hardhat generate-policy-data --policy AnonAadhaar --update-config");
+     console.log("npx hardhat generate-policy-data --policy Token --update-config");
     
     console.log("\n" + info("Supported policy types:"));
     console.log("- FreeForAll (no signup data required)");
@@ -119,6 +120,10 @@ task("show-policy-examples", "Show example signup data for all policy types")
     console.log("- Zupass (Zupass event verification)");
     console.log("- Hats (Hats Protocol membership)");
     console.log("- AnonAadhaar (Anonymous Aadhaar verification)");
+    console.log("- Token (ERC721/NFT token ownership)");
+    
+    console.log("\n" + info("Special commands:"));
+    console.log("- generate-all-policy-data: Generate data for all policy types");
   }); 
 
 /**

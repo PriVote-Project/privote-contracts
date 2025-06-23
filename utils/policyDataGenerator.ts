@@ -172,6 +172,21 @@ export function generateHatsData(): string {
 }
 
 /**
+ * Generate signup data for TokenPolicy (ERC721/NFT)
+ * Uses only token ID parameter
+ * @returns Encoded token ID
+ */
+export function generateTokenData(): string {
+  const tokenId = BigInt(2);
+  
+  const abiCoder = new ethers.AbiCoder();
+  return abiCoder.encode(
+    ["uint256"],
+    [tokenId]
+  );
+}
+
+/**
  * Generate signup data for AnonAadhaarPolicy
  * Uses predefined Anon Aadhaar proof data
  * @returns Encoded Anon Aadhaar proof
@@ -242,6 +257,9 @@ export function generateSignupDataForPolicy(policyTrait: string): string {
     case "AnonAadhaar":
       return generateAnonAadhaarData();
     
+    case "Token":
+      return generateTokenData();
+    
     default:
       console.warn(`Unknown policy trait: ${policyTrait}, returning empty data`);
       return "0x";
@@ -261,5 +279,6 @@ export const EXAMPLE_POLICY_DATA = {
   GitcoinPassport: generateGitcoinPassportData(),
   Zupass: generateZupassData(),
   Hats: generateHatsData(),
-  AnonAadhaar: generateAnonAadhaarData()
+  AnonAadhaar: generateAnonAadhaarData(),
+  Token: generateTokenData()
 };
