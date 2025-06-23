@@ -26,17 +26,15 @@ import type {
 import { info, logGreen } from "@maci-protocol/contracts";
 import { Privote } from "../../../typechain-types";
 import { EDeploySteps } from "@maci-protocol/contracts";
-// reqd import
-import { ESupportedChains } from "@maci-protocol/contracts/build/tasks/helpers/constants";
 import { ContractStorage } from "@maci-protocol/contracts";
-import { Deployment } from "@maci-protocol/contracts";
+import { Deployment, IDeployParams } from "@maci-protocol/contracts";
 import {
   ECheckerFactories,
   ECheckers,
   EContracts,
   EPolicyFactories,
   EPolicies,
-  IDeployParams,
+  ESupportedChains,
 } from "@maci-protocol/contracts";
 import { CustomEContracts } from "../../helpers/constants";
 const deployment = Deployment.getInstance();
@@ -61,9 +59,8 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
       getDeployedPolicyProxyFactories,
       deployERC20VotesPolicy,
       deployAnonAadhaarPolicy,
+      deployERC20Policy,
     } = await import("@maci-protocol/contracts");
-    // reqd import
-    const { deployERC20Policy  } = await import("@maci-protocol/contracts/build/ts/deploy");
 
     const privoteContract = await deployment.getContract<Privote>({ name: CustomEContracts.Privote as any });
     const pollId = await privoteContract.nextPollId();

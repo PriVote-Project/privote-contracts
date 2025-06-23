@@ -1,12 +1,9 @@
 /* eslint-disable no-console */
 import { task } from "hardhat/config";
-// reqd import
-import type { IStorageInstanceEntry, IVerifyFullArgs } from "@maci-protocol/contracts/build/tasks/helpers/types";
+import type { IStorageInstanceEntry, IVerifyFullArgs } from "@maci-protocol/contracts";
 
 import { logGreen, logMagenta, logYellow, warning } from "@maci-protocol/contracts";
-import { ContractStorage } from "@maci-protocol/contracts";
-// reqd import
-import { ContractVerifier } from "@maci-protocol/contracts/build/tasks/helpers/ContractVerifier";
+import { ContractStorage, ContractVerifier } from "@maci-protocol/contracts";
 
 /**
  * Main verification task which runs hardhat-etherscan task for all the deployed contract.

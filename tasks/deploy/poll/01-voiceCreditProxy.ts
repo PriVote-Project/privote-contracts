@@ -27,9 +27,8 @@ deployment.deployTask(EDeploySteps.InitialVoiceCreditProxy, "Deploy initial voic
     deployment.setHre(hre);
     const deployer = await deployment.getDeployer();
     
-    const { deployConstantInitialVoiceCreditProxy } = await import("@maci-protocol/contracts");
-    // reqd import
-    const { deployERC20VotesInitialVoiceCreditProxy } = await import("@maci-protocol/contracts/build/ts/deploy");
+    const { deployConstantInitialVoiceCreditProxy, deployERC20VotesInitialVoiceCreditProxy } = await import("@maci-protocol/contracts");
+
 
     const voiceCreditProxyType = deployment.getDeployConfigField(EContracts.Poll, "initialVoiceCreditProxy");
 
@@ -69,7 +68,6 @@ deployment.deployTask(EDeploySteps.InitialVoiceCreditProxy, "Deploy initial voic
             signer: deployer,
           })
         : undefined;
-
       const [constantInitialVoiceCreditProxyContract, constantInitialVoiceCreditProxyContractFactory] =
         await deployConstantInitialVoiceCreditProxy({ amount }, deployer, constantProxyFactory, true);
 

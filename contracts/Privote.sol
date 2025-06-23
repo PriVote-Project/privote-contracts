@@ -9,7 +9,7 @@ import { IPollFactory } from "@maci-protocol/contracts/contracts/interfaces/IPol
 import { IMessageProcessorFactory } from "@maci-protocol/contracts/contracts/interfaces/IMessageProcessorFactory.sol";
 import { ITallyFactory } from "@maci-protocol/contracts/contracts/interfaces/ITallyFactory.sol";
 import { IBasePolicy } from "@excubiae/contracts/contracts/interfaces/IBasePolicy.sol";
-import { ITally } from "./interfaces/ITally.sol";
+import { ITally } from "@maci-protocol/contracts/contracts/interfaces/ITally.sol";
 
 /// @title Privote - A Private Voting Protocol
 /// @notice Allows users to deploy multiple private polls according to their needs
@@ -280,7 +280,7 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		uint256 len = tally.totalTallyResults();
 		results = new uint256[](len);
 		for (uint256 i = 0; i < len; i++) {
-			ITally.TallyResult memory result = tally.tallyResults(i);
+			ITally.TallyResult memory result = tally.getTallyResults(i);
 			results[i] = result.value;
 		}
 	}

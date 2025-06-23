@@ -2,12 +2,9 @@ import type { Privote, IBasePolicy } from "../../../typechain-types";
 
 import { generateEmptyBallotRoots } from "@maci-protocol/contracts";
 import { info, logGreen } from "@maci-protocol/contracts";
-import { EDeploySteps } from "@maci-protocol/contracts";
-// reqd import
-import { FULL_POLICY_NAMES } from "@maci-protocol/contracts/build/tasks/helpers/constants";
 import { ContractStorage } from "@maci-protocol/contracts";
-import { Deployment } from "@maci-protocol/contracts";
-import { EContracts, IDeployParams } from "@maci-protocol/contracts";
+import { Deployment, IDeployParams } from "@maci-protocol/contracts";
+import { EContracts, FULL_POLICY_NAMES } from "@maci-protocol/contracts";
 import { CustomEContracts, CustomEDeploySteps } from "../../helpers/constants";
 
 const deployment = Deployment.getInstance();
@@ -43,7 +40,7 @@ deployment.deployTask(CustomEDeploySteps.Privote, "Deploy Privote contract").the
       "@maci-protocol/contracts/contracts/crypto/PoseidonT6.sol:PoseidonT6": poseidonT6ContractAddress,
     };
 
-    const privoteContractFactory = await hre.ethers.getContractFactory("Privote", {
+    const privoteContractFactory = await hre.ethers.getContractFactory(CustomEContracts.Privote, {
       signer: deployer,
       libraries,
     });

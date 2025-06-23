@@ -4,9 +4,8 @@ import fs from "fs";
 import path from "path";
 
 import { Keypair, PrivateKey, PublicKey } from "@maci-protocol/domainobjs";
-import { ContractStorage, EContracts, Deployment } from "@maci-protocol/contracts";
+import { ContractStorage, EContracts, FULL_POLICY_NAMES, Deployment } from "@maci-protocol/contracts";
 import { info, logGreen, logRed, logYellow } from "@maci-protocol/contracts";
-import { FULL_POLICY_NAMES } from "@maci-protocol/contracts/build/tasks/helpers/constants";
 import { CustomEContracts } from "../helpers/constants";
 import { Privote } from "../../typechain-types";
 

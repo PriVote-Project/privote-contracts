@@ -8,11 +8,9 @@ import type { Privote, Poll, IBasePolicy, PollFactory, VerifyingKeysRegistry } f
 
 import { extractVerifyingKey } from "@maci-protocol/contracts";
 import { EDeploySteps } from "@maci-protocol/contracts";
-// reqd import
-import { FULL_POLICY_NAMES } from "@maci-protocol/contracts/build/tasks/helpers/constants";
 import { ContractStorage } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
-import { EContracts } from "@maci-protocol/contracts";
+import { EContracts, FULL_POLICY_NAMES } from "@maci-protocol/contracts";
 import { CustomEContracts } from "../../helpers/constants";
 
 const deployment = Deployment.getInstance();
