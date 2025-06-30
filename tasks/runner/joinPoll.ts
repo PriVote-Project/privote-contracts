@@ -142,8 +142,8 @@ task("join-poll", "Join a poll using MACI keypair")
       
       // Get Privote contract instance to fetch poll data
       const privoteContract = await hre.ethers.getContractAt("Privote", privoteContractAddress);
-      const pollData = await privoteContract.fetchPoll(poll);
-      const pollContractAddress = pollData.pollContracts.poll;
+      const pollData = await privoteContract.polls(poll);
+      const pollContractAddress = pollData.poll;
       
       // Get Poll contract instance
       const pollContract = await hre.ethers.getContractAt("Poll", pollContractAddress);

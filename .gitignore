@@ -24,3 +24,6 @@ deployments/
 archive/
 out-dir/
 **/pollDetails.json
+info.txt
+signup-config.json
+test-proofs/

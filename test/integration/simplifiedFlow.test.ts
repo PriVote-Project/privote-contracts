@@ -143,10 +143,10 @@ describe("Simplified MACI Voting Flow Test", function () {
         address: privoteAddress
       });
       
-      const pollData = await privoteContract.fetchPoll(pollId);
+      const pollData = await privoteContract.polls(pollId);
       const pollContract = await deployment.getContract({
         name: EContracts.Poll,
-        address: pollData.pollContracts.poll,
+        address: pollData.poll,
       });
       
       // Get poll end time
@@ -254,10 +254,10 @@ describe("Simplified MACI Voting Flow Test", function () {
         address: privoteAddress
       });
       
-      const pollData = await privoteContract.fetchPoll(pollId);
+      const pollData = await privoteContract.polls(pollId);
       const tallyContract = await deployment.getContract({
         name: EContracts.Tally,
-        address: pollData.pollContracts.tally,
+        address: pollData.tally,
       });
       
       const pollMode = await tallyContract.mode();

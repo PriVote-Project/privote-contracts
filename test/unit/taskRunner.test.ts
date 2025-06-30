@@ -156,8 +156,8 @@ describe("MACI Task Runners Unit Tests", function () {
           address: privoteAddress
         });
         
-        const pollData = await privoteContract.fetchPoll(pollId);
-        expect(pollData.pollContracts.poll).to.not.equal(ethers.ZeroAddress);
+        const pollData = await privoteContract.polls(pollId);
+        expect(pollData.poll).to.not.equal(ethers.ZeroAddress);
         
         console.log("✅ Merge task preparation verified");
       } catch (error) {

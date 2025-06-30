@@ -27,7 +27,6 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		address pollDeployer;
 		Mode mode;
 		address policy;
-		PollContracts pollContracts;
 	}
 
 	mapping(uint256 => PollData) public _polls;
@@ -114,7 +113,7 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		address _policy,
 		address _initialVoiceCreditProxy,
 		address[] memory _relayers
-	) public {
+	) public returns (PollContracts memory pollContracts) {
 		// if (_startTime < block.timestamp) {
 		// 	revert StartTimeMustBeInFuture();
 		// }
@@ -140,7 +139,7 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 			voteOptions: voteOptions
 		});
 
-		PollContracts memory pollContracts = super.deployPoll(args);
+		pollContracts = super.deployPoll(args);
 
 		_polls[pollId] = PollData({
 			id: pollId,
@@ -153,8 +152,7 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 			coordinatorPubKey: _coordinatorPubKey,
 			pollDeployer: msg.sender,
 			mode: _mode,
-			policy: _policy,
-			pollContracts: pollContracts
+			policy: _policy
 		});
 
 		emit PollCreated(
@@ -274,8 +272,8 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		uint256 _pollId
 	) external view returns (uint256[] memory results) {
 		if (_pollId >= nextPollId) revert PollDoesNotExist(_pollId);
-		PollData storage poll = _polls[_pollId];
-		ITally tally = ITally(poll.pollContracts.tally);
+		PollContracts memory pollContracts = polls[_pollId];
+		ITally tally = ITally(pollContracts.tally);
 		if (!tally.isTallied()) revert PollNotTallied();
 		uint256 len = tally.totalTallyResults();
 		results = new uint256[](len);

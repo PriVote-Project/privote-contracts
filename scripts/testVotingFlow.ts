@@ -209,10 +209,10 @@ class VotingFlowTester {
       address: privoteAddress
     });
     
-    const pollData = await privoteContract.fetchPoll(this.pollId);
+    const pollData = await privoteContract.polls(this.pollId);
     const pollContract = await this.deployment.getContract({
       name: EContracts.Poll,
-      address: pollData.pollContracts.poll,
+      address: pollData.poll,
     });
     
     // Check if poll has ended
@@ -300,10 +300,10 @@ class VotingFlowTester {
       address: privoteAddress
     });
     
-    const pollData = await privoteContract.fetchPoll(this.pollId);
+    const pollData = await privoteContract.polls(this.pollId);
     const tallyContract = await this.deployment.getContract({
       name: EContracts.Tally,
-      address: pollData.pollContracts.tally,
+      address: pollData.tally,
     });
     
     const pollMode = await tallyContract.mode();

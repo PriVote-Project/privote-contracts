@@ -20,6 +20,14 @@ deployment.deployTask(CustomEDeploySteps.Privote, "Deploy Privote contract").the
     deployment.setHre(hre);
     const deployer = await deployment.getDeployer();
 
+    // Check if we should deploy PrivoteWrapper instead of Privote
+    const deployWrapper = (global as any).DEPLOY_WRAPPER || false;
+    
+    if (deployWrapper) {
+      logGreen({ text: info(`Skipping Privote deployment - PrivoteWrapper will be deployed instead`) });
+      return;
+    }
+
     const privoteContractAddress = storage.getAddress(CustomEContracts.Privote, hre.network.name);
 
     if (incremental && privoteContractAddress) {

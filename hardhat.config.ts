@@ -32,6 +32,7 @@ import "./tasks/runner/submitOnChain";
 import "./tasks/runner/vote";
 import "./tasks/runner/encodeErrors";
 import "./tasks/runner/generatePolicyData";
+import "./tasks/runner/deployPollWrapper";
 
 /**
  * Allow to copy a directory from source to target

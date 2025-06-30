@@ -14,11 +14,15 @@ task("deploy-full", "Deploy environment")
   .addFlag("incremental", "Incremental deployment")
   .addFlag("strict", "Fail on warnings")
   .addFlag("verify", "Verify contracts at Etherscan")
+  .addFlag("wrapper", "Deploy PrivoteWrapper instead of basic Privote")
   .addOptionalParam("skip", "Skip steps with less or equal index", 0, types.int)
-  .setAction(async ({ incremental, strict, verify, skip = 0 }: IDeployParams, hre) => {
+  .setAction(async ({ incremental, strict, verify, wrapper, skip = 0 }: IDeployParams & { wrapper?: boolean }, hre) => {
     const deployment = Deployment.getInstance({ hre });
 
     deployment.setHre(hre);
+    
+    // Set deployment mode in global context
+    (global as any).DEPLOY_WRAPPER = wrapper || false;
 
     const deployer = await deployment.getDeployer();
     const startBalance = await deployer.provider!.getBalance(deployer);

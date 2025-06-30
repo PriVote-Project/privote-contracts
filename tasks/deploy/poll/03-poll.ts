@@ -192,10 +192,10 @@ deployment.deployTask(EDeploySteps.Poll, "Deploy poll").then((task) =>
       throw new Error("Deploy poll transaction is failed");
     }
 
-    const pollData = await privoteContract.fetchPoll(pollId);
-    const pollContractAddress = pollData.pollContracts.poll;
-    const messageProcessorContractAddress = pollData.pollContracts.messageProcessor;
-    const tallyContractAddress = pollData.pollContracts.tally;
+    const pollData = await privoteContract.polls(pollId);
+    const pollContractAddress = pollData.poll;
+    const messageProcessorContractAddress = pollData.messageProcessor;
+    const tallyContractAddress = pollData.tally;
 
     const pollContract = await deployment.getContract<Poll>({ name: EContracts.Poll, address: pollContractAddress });
 
