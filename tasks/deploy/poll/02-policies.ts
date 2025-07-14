@@ -791,14 +791,14 @@ deployment.deployTask(EDeploySteps.PollPolicy, "Deploy Poll policies").then((tas
         
         // Deploy AnonAadhaarVerifier (Groth16 verifier) using consistent deployment pattern
         const anonAadhaarGroth16VerifierContract = await deployment.deployContract({
-          name: "AnonAadhaarVerifier",
+          name: "AnonAadhaarGroth16Verifier",
           signer: deployer,
         });
         const groth16VerifierAddress = await anonAadhaarGroth16VerifierContract.getAddress();
         
         // Deploy AnonAadhaar contract (main verifier that takes verifier + pubkey hash)
         // For contracts with constructor arguments, use ethers factory approach
-        const anonAadhaarContractFactory = await hre.ethers.getContractFactory("AnonAadhaar", {
+        const anonAadhaarContractFactory = await hre.ethers.getContractFactory("AnonAadhaarVerifier", {
           signer: deployer,
         });
         const anonAadhaarContract = await anonAadhaarContractFactory.deploy(groth16VerifierAddress, pubkeyHash);

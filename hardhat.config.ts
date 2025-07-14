@@ -31,8 +31,10 @@ import "./tasks/runner/signup";
 import "./tasks/runner/submitOnChain";
 import "./tasks/runner/vote";
 import "./tasks/runner/encodeErrors";
-import "./tasks/runner/generatePolicyData";
 import "./tasks/runner/deployPollWrapper";
+
+// Import all policy tasks
+import "./tasks/policy";
 
 /**
  * Allow to copy a directory from source to target
@@ -105,15 +107,31 @@ const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.28",
-    settings: {
-      optimizer: {
-        enabled: true,
-        // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
-        runs: 200,
+    compilers: [
+      {
+        version: "0.8.27",
+        settings: {
+          optimizer: {
+            enabled: true,
+            // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
+            runs: 200,
+          },
+          viaIR: true,
+        },
       },
-      viaIR: true,
-    },
+      {
+        version: "0.8.28",
+        settings: {
+          optimizer: {
+            enabled: true,
+            // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
+            runs: 200,
+          },
+          viaIR: true,
+        },
+      },
+    ],
+    
   },
   defaultNetwork: "localhost",
   namedAccounts: {

@@ -61,3 +61,17 @@ export const FACTORIES_CONFIG = [
   { policy: EPolicyFactories.FreeForAll, checker: ECheckerFactories.FreeForAll, name: "FreeForAll" }
 ] as const;
 
+
+
+export const policyTasks = [
+  { policy: "MerkleProof", task: "generate-merkle-proof-data" },
+  { policy: "EAS", task: "generate-eas-data" },
+  { policy: "ERC20", task: "generate-erc20-data" },
+  { policy: "ERC20Votes", task: "generate-erc20-votes-data" },
+  { policy: "Token", task: "generate-token-data" },
+  { policy: "Semaphore", task: "generate-semaphore-data" },
+  { policy: "GitcoinPassport", task: "generate-gitcoin-passport-data" },
+  { policy: "Zupass", task: "generate-zupass-data" },
+  { policy: "Hats", task: "generate-hats-data" },
+  { policy: "AnonAadhaar", task: "generate-anon-aadhaar-data" },
+];
