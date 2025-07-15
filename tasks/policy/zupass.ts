@@ -2,9 +2,6 @@
 import { task, types } from "hardhat/config";
 import fs from "fs";
 import path from "path";
-import { 
-  generateZupassData,
-} from "../../utils/policyDataGenerator";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 
@@ -30,8 +27,8 @@ task("generate-zupass-data", "Generate signup data for Zupass policy")
         logYellow({ text: "ℹ️  This task generates data for existing Zupass deployments" });
       }
       
-      // Generate the signup data using hardcoded values
-      const signupData = generateZupassData();
+      // TODO: Generate the signup data
+      const signupData = "0x";
       
       logGreen({ text: `✅ Zupass signup data generated successfully!` });
       console.log(info(`Data: ${signupData}`));

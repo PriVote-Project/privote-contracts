@@ -2,9 +2,6 @@
 import { task, types } from "hardhat/config";
 import fs from "fs";
 import path from "path";
-import { 
-  generateHatsData,
-} from "../../utils/policyDataGenerator";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 
@@ -30,8 +27,8 @@ task("generate-hats-data", "Generate signup data for Hats policy")
         logYellow({ text: "ℹ️  This task generates data for existing Hats deployments" });
       }
       
-      // Generate the signup data using hardcoded values
-      const signupData = generateHatsData();
+      // TODO: Generate the signup data
+      const signupData = "0x";
       
       logGreen({ text: `✅ Hats signup data generated successfully!` });
       console.log(info(`Data: ${signupData}`));

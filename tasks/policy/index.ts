@@ -3,7 +3,7 @@
  */
 
 // Import all policy task files
-import "./merkleProof";
+import "./merkleProof/merkleProof.ts";
 import "./erc20";
 import "./erc20Votes";
 import "./token";

@@ -2,9 +2,6 @@
 import { task, types } from "hardhat/config";
 import fs from "fs";
 import path from "path";
-import { 
-  generateERC20Data,
-} from "../../utils/policyDataGenerator";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 

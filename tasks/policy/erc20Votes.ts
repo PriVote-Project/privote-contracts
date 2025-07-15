@@ -2,9 +2,6 @@
 import { task, types } from "hardhat/config";
 import fs from "fs";
 import path from "path";
-import { 
-  generateERC20VotesData,
-} from "../../utils/policyDataGenerator";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 
@@ -46,8 +43,8 @@ task("generate-erc20-votes-data", "Generate signup data for ERC20Votes policy")
         logYellow({ text: "⚠️  Note: For production, use an ERC20Votes compatible token" });
       }
       
-      // Generate the signup data using hardcoded values
-      const signupData = generateERC20VotesData();
+      // TODO: Generate the signup data
+      const signupData = "0x";
       
       logGreen({ text: `✅ ERC20Votes signup data generated successfully!` });
       console.log(info(`Data: ${signupData}`));

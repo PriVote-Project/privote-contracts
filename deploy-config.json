@@ -29,8 +29,8 @@
     },
     "MerkleProofPolicy": {
       "deploy": false,
-      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0",
-      "signupDataHex": "0x"
+      "root": "0x0548845532e20163d626e767b171816a20d7fc27b38d1543e06f13050f4084e0",
+      "signupDataHex": "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002895fcfca45b761f42d85849ce9d8b111905c7417e64dcc0738a7abbae89ad17eddaa93f15dd99b40f2955e44729a8065a94c5867725193607d5f1e46d5ec1e67"
     },
     "EASPolicy": {
       "deploy": false,
@@ -119,7 +119,7 @@
       "duration": 500,
       "coordinatorPublicKey": "macipk.afec0cff00d1e254be6a769fcc7b7a151fbc8e5f58cfae5ed8da7ec1f04a227d",
       "mode": 0,
-      "policy": "TokenPolicy",
+      "policy": "MerkleProofPolicy",
       "relayers": "0x0000000000000000000000000000000000000000",
       "initialVoiceCreditProxy": "ConstantInitialVoiceCreditProxy",
       "voteOptions": 3,

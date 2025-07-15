@@ -2,9 +2,6 @@
 import { task, types } from "hardhat/config";
 import fs from "fs";
 import path from "path";
-import { 
-  generateEASData,
-} from "../../utils/policyDataGenerator";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 
@@ -171,9 +168,8 @@ task("generate-eas-data", "Generate signup data for EAS policy")
         
         console.log(info(`Using custom attestation ID: ${finalAttestationId}`));
       } else {
-        // Use hardcoded values for signup data
-        signupData = generateEASData();
-        console.log(info("Using hardcoded attestation data"));
+        // THROW ERROR
+        throw new Error("No attestation ID provided");
       }
       
       logGreen({ text: `✅ EAS signup data generated successfully!` });

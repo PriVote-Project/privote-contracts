@@ -2,9 +2,6 @@
 import { task, types } from "hardhat/config";
 import fs from "fs";
 import path from "path";
-import { 
-  generateGitcoinPassportData,
-} from "../../utils/policyDataGenerator";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 
@@ -25,13 +22,13 @@ task("generate-gitcoin-passport-data", "Generate signup data for GitcoinPassport
       
       // Deploy supporting contracts if flag is provided
       if (deploy) {
-        console.log(info("🚀 Deploying supporting contracts..."));
+        console.log(info("TODO: Deploy supporting contracts..."));
         logYellow({ text: "ℹ️  GitcoinPassport policy requires external passport decoder contract" });
         logYellow({ text: "ℹ️  This task generates data for existing GitcoinPassport deployments" });
       }
       
-      // Generate the signup data using hardcoded values
-      const signupData = generateGitcoinPassportData();
+      // No signup data needed for GitcoinPassport
+      const signupData = "0x";
       
       logGreen({ text: `✅ GitcoinPassport signup data generated successfully!` });
       console.log(info(`Data: ${signupData}`));
