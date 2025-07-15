@@ -1,8 +1,48 @@
 # PriVote Contracts
 
-## Generating Poll Results
+A private voting protocol built on MACI (Minimal Anti-Collusion Infrastructure) that allows users to deploy multiple private polls according to their needs in just few clicks.
 
-### Step 1: Clone and Setup
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Environment Setup](#environment-setup)
+- [Configuration](#configuration)
+  - [Deploy Configuration](#deploy-configuration)
+  - [Poll Configuration Options](#poll-configuration-options)
+  - [Account Configuration](#account-configuration)
+- [Basic Voting Flow](#basic-voting-flow)
+  - [Step 1: Deploy Full Setup](#step-1-deploy-full-setup)
+  - [Step 2: Deploy Poll](#step-2-deploy-poll)
+  - [Step 3: Create User Account](#step-3-create-user-account)
+  - [Step 4: Join Poll](#step-4-join-poll)
+  - [Step 5: Cast Votes](#step-5-cast-votes)
+  - [Step 6: Generate Results (After Poll Ends)](#step-6-generate-results-after-poll-ends)
+- [Policy Configuration and Evidence Generation](#policy-configuration-and-evidence-generation)
+  - [Manual Policy Configuration in deploy-config.json](#manual-policy-configuration-in-deploy-configjson)
+  - [Generate Account Evidence](#generate-account-evidence)
+  - [Optional: Deploy Test Contracts](#optional-deploy-test-contracts)
+- [Account Management](#account-management)
+  - [Create Account Config (Optional)](#create-account-config-optional)
+  - [Default Account Behavior](#default-account-behavior)
+- [Quick Start (Automated Flow)](#quick-start-automated-flow)
+- [Dynamic Policy Configuration](#dynamic-policy-configuration)
+- [Policy-Specific Notes](#policy-specific-notes)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
+- [Note](#note)
+
+## Features
+
+- Deploy multiple private voting polls
+- Support for various authentication policies
+- Anonymous voting with privacy guarantees
+- Customizable voting options and metadata
+- Dynamic policy configuration with automatic signup data handling
+- Seamless integration with privote-frontend
+
+## Installation
 
 ```bash
 # Clone the repository
@@ -18,170 +58,447 @@ yarn install
 yarn download-zkeys
 ```
 
-### Step 2: Environment Setup
+## Environment Setup
 
 Create a `.env` file in the root directory using `.env.example` as a template. The following environment variables are required:
 
 - `INFURA_API_KEY`: Your Infura API key
 - `DEPLOYER_PRIVATE_KEY`: Private key of the deployer account
-- `ETHERSCAN_API_KEY`: Your Etherscan API key for contract verification
-- `LH_API_KEY`: Lighthouse API key for pinning poll results on IPFS
+- `ETHERSCAN_API_KEY`: Your Etherscan API key for contract verification (optional)
 
-### Step 3: Generate Results
+## Configuration
 
-To generate poll results, use the following command:
+### Deploy Configuration
 
-```bash
-yarn hardhat genResults --poll <poll-id> \
-  --auth-type <auth-type> \
-  --use-quadratic-voting false \
-  --output-dir ./proofs \
-  --tally-file ./tally.json \
-  --coordinator-private-key <private-key>
-```
+All deployment and poll settings are managed through `deploy-config.json`. This file controls:
 
-Replace the following parameters:
+- **Policy Configuration**: Which authentication policies to deploy and their settings
+- **MACI Settings**: State tree depth, message batch size, voting mode  
+- **Poll Configuration**: Duration, vote options, coordinator keys, and **policy selection**
 
-- `<poll-id>`: The ID of the poll you want to generate results for
-- `<auth-type>`: The authentication type (either "free" or "anon")
-- `<private-key>`: Your coordinator's private key generated while creating the poll
+You can customize any poll configuration before deploying. The `policy` field in the Poll section determines which authentication policy the poll will use.
 
-#### Optional Parameters:
-
-- `--maci-contract-address`: MACI contract address
-- `--rapidsnark`: Rapidsnark binary path
-- `--process-witgen`: Process witgen binary path
-- `--tally-witgen`: Tally witgen binary path
-
-The generated results and proofs will be stored in the specified output directory.
-
-## Note
-
-Make sure all environment variables are properly set before running the tasks. The generated proofs will be used to verify the poll results on-chain while maintaining privacy.
-
-# Privote Contracts
-
-A private voting protocol built on MACI (Minimal Anti-Collusion Infrastructure) that allows users to deploy multiple private polls according to their needs.
-
-## Features
-
-- Deploy multiple private voting polls
-- Support for various authentication policies
-- Anonymous voting with privacy guarantees
-- Customizable voting options and metadata
-
-## Dynamic Policy Configuration
-
-The join-poll functionality now supports dynamic policy signup data configuration. Instead of hardcoding "0x" for all policies, the system:
-
-1. **Detects Policy Type**: Calls `getTrait()` on the poll's policy contract to determine the policy type
-2. **Maps to Configuration**: Maps the trait (e.g., "FreeForAll") to the policy contract name (e.g., "FreeForAllPolicy")
-3. **Fetches Signup Data**: Retrieves the `signupDataHex` field from the deployment configuration
-4. **Uses Policy-Specific Data**: Passes the appropriate data to the joinPoll function
-
-### Configuring Policy Signup Data
-
-In your `deploy-config.json`, add a `signupDataHex` field to each policy configuration:
-
+Example configuration structure:
 ```json
 {
   "hardhat": {
     "FreeForAllPolicy": {
-      "deploy": true,
-      "signupDataHex": "0x"
+      "deploy": true
     },
-    "EASPolicy": {
+    "ERC20Policy": {
       "deploy": false,
-      "easAddress": "0xC2679fBD37d54388Ce493F1DB75320D236e1815e",
-      "schema": "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-      "attester": "the-attester-address",
-      "signupDataHex": "0x1234567890abcdef..."
+      "token": "0x...",
+      "threshold": 100
     },
     "MerkleProofPolicy": {
       "deploy": false,
-      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0",
-      "signupDataHex": "0xabcdef1234567890..."
+      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0"
+    },
+    "MACI": {
+      "stateTreeDepth": 10,
+      "policy": "FreeForAllPolicy"
+    },
+    "Poll": {
+      "name": "My Custom Poll",
+      "metadata": "Description of my poll",
+      "pollStartDate": 0,
+      "pollEndDate": 0,
+      "duration": 600,
+      "coordinatorPublicKey": "macipk.afec0cff00d1e254be6a769fcc7b7a151fbc8e5f58cfae5ed8da7ec1f04a227d",
+      "mode": 0,
+      "policy": "MerkleProofPolicy",
+      "relayers": "0x0000000000000000000000000000000000000000",
+      "initialVoiceCreditProxy": "ConstantInitialVoiceCreditProxy",
+      "voteOptions": 3,
+      "stateTreeDepth": 10,
+      "options": [
+        "Option 1",
+        "Option 2", 
+        "Option 3"
+      ],
+      "optionInfo": [
+        "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "0x0000000000000000000000000000000000000000000000000000000000000002",
+        "0x0000000000000000000000000000000000000000000000000000000000000003"
+      ]
     }
   }
 }
 ```
 
-### Policy-Specific Signup Data Examples
+#### Poll Configuration Options
 
-- **FreeForAllPolicy**: No data needed, use `"0x"`
-- **EASPolicy**: Encoded attestation data or proof
-- **MerkleProofPolicy**: Merkle proof data for whitelist verification
-- **ERC20Policy**: Token balance proof or signature
-- **GitcoinPassportPolicy**: Passport verification data
-- **SemaphorePolicy**: Semaphore group membership proof
+You can customize these poll settings before deployment:
 
-### Usage
+- **`name`**: Display name for your poll
+- **`metadata`**: Description or additional information about the poll
+- **`duration`**: How long the poll runs (in seconds)
+- **`policy`**: Which authentication policy to use (e.g., "FreeForAllPolicy", "MerkleProofPolicy", "EASPolicy", etc.)
+- **`mode`**: Voting mode (0 = QV, 1 = Non-QV)
+- **`voteOptions`**: Number of voting options
+- **`options`**: Array of option names/descriptions
+- **`coordinatorPublicKey`**: MACI public key of the poll coordinator
+- **`initialVoiceCreditProxy`**: Voice credit allocation method
 
-When joining a poll, the system automatically:
+**Important**: The `policy` field determines which authentication policy users must satisfy to join the poll. Make sure the chosen policy is properly configured in the same config file.
+
+### Account Configuration
+
+User accounts and their policy evidence are stored in `account-config.json`. Each account has:
+
+- **MACI Keypair**: Deterministic private/public keys tied to the signer's address
+- **Policy Evidence**: Authentication data required by different policies (e.g., merkle proofs, attestation IDs)
+
+Example account configuration:
+```json
+{
+  "0": {
+    "signerAddress": "0x...",
+    "maciPrivateKey": "macisk...",
+    "maciPublicKey": "macipk...",
+    "MerkleProofPolicyEvidence": "0x...",
+    "EASPolicyEvidence": "0x...",
+    "TokenPolicyEvidence": "0x..."
+  },
+  "1": {
+    "signerAddress": "0x...",
+    "maciPrivateKey": "macisk...",
+    "maciPublicKey": "macipk...",
+    "EASPolicyEvidence": "0x..."
+  }
+}
+```
+
+**Note**: Account config is only needed for signup, joining polls, and voting. You can create and deploy polls without any account configuration.
+
+## Basic Voting Flow
+
+### Step 1: Deploy Full Setup
+
+Deploy all contracts including MACI, policies, and supporting infrastructure:
 
 ```bash
-npx hardhat join-poll --poll 0 --account 0 --network hardhat
+yarn hardhat deploy-full --network <network>
 ```
 
-The task will:
-1. Fetch the poll contract
-2. Detect the policy type via `getTrait()`
-3. Load the appropriate `signupDataHex` from config
-4. Use that data when calling the joinPoll SDK function
+### Step 2: Deploy Poll
 
-### Output Example
-
-```
-ℹ Policy trait detected: FreeForAll
-ℹ Using FreeForAllPolicy - no signup data required
-✅ Successfully joined poll!
-   Poll ID: 0
-   Account: 0
-   Poll State Index: 1
-   Voice Credits: 99
-   Nullifier: 123456789...
-   Transaction Hash: 0xabc123...
-   Signup Data Used: 0x
-```
-
-## Installation
+Create a new poll using the configuration from `deploy-config.json`:
 
 ```bash
-npm install
-# or
-yarn install
+yarn hardhat deploy-poll --network <network>
 ```
 
-## Setup
+### Step 3: Create User Account
 
-1. Copy the example deploy configuration:
+Generate a MACI keypair and register with the system:
+
 ```bash
-cp deploy-config-example.json deploy-config.json
+# Sign up to the Privote system (creates account config automatically)
+yarn hardhat signup --network <network>
 ```
 
-2. Configure your network settings and policy signup data in `deploy-config.json`
+This automatically:
+1. Creates account config if it doesn't exist (defaults to account 0)
+2. Generates a deterministic MACI keypair tied to the signer's address
+3. Stores account data in `account-config.json` 
+4. Registers the account with the Privote contract using appropriate policy evidence
 
-3. Deploy contracts:
+For multiple accounts:
 ```bash
-npx hardhat deploy --network <your-network>
+# Signup account 1
+yarn hardhat signup --account 1 --network <network>
+
+# Signup account 2  
+yarn hardhat signup --account 2 --network <network>
 ```
 
-## Usage
+### Step 4: Join Poll
 
-### Create Account
+Users must join the poll with their account:
+
 ```bash
-npx hardhat signup --network hardhat
+yarn hardhat join-poll --poll 0 --network <network>
 ```
 
-### Join Poll
+The system automatically:
+1. Detects the poll's policy type
+2. Retrieves the appropriate policy evidence from `account-config.json` (defaults to account 0)
+3. Uses the evidence to join the poll
+
+For multiple accounts:
 ```bash
-npx hardhat join-poll --poll 0 --account 0 --network hardhat
+yarn hardhat join-poll --poll 0 --account 1 --network <network>
 ```
 
-### Vote
+### Step 5: Cast Votes
+
+Vote on the poll options using your account:
+
 ```bash
-npx hardhat vote --poll 0 --account 0 --state-index 1 --vote-option 0 --network hardhat
+# Multiple votes (quadratic voting) - recommended
+yarn hardhat vote --poll 0 --votes "0:5,1:30" --network <network>
+
+# Single vote (if needed)
+yarn hardhat vote --poll 0 --state-index 1 --vote-option 0 --network <network>
 ```
+
+For multiple accounts:
+```bash
+yarn hardhat vote --poll 0 --account 1 --votes "0:10,1:15" --network <network>
+```
+
+### Step 6: Generate Results (After Poll Ends)
+
+Once the poll duration has ended, generate and verify results:
+
+#### 6.1: Merge Signups
+```bash
+yarn hardhat merge --poll <poll-id> --network <network>
+```
+
+#### 6.2: Generate and Submit Proofs
+```bash
+yarn hardhat prove --poll <poll-id> \
+  --output-dir ./out-dir/ \
+  --coordinator-private-key <coordinator-private-key> \
+  --tally-file ./out-dir/tally.json \
+  --submit-on-chain \
+  --network <network>
+```
+
+Replace the following parameters:
+
+- `<poll-id>`: The ID of the poll you want to generate results for
+- `<network>`: The network name (e.g., hardhat, sepolia, mainnet)
+- `<coordinator-private-key>`: Your coordinator's MACI private key generated while creating the poll
+
+#### Optional Parameters for Prove Command:
+
+- `--rapidsnark`: Rapidsnark binary path
+- `--message-processor-witness-generator`: MessageProcessor witness generator binary path
+- `--vote-tally-witness-generator`: VoteTally witness generator binary path
+- `--state-file`: File with serialized MACI state
+- `--start-block`: Block number to start fetching logs from
+- `--blocks-per-batch`: Number of blocks to fetch logs from
+- `--end-block`: Block number to stop fetching logs from
+
+## Policy Configuration and Evidence Generation
+
+For policies requiring specific authentication, you need to configure contract addresses and generate account evidence before signup.
+
+#### Manual Policy Configuration in deploy-config.json
+
+Most policies require you to configure contract addresses and parameters in `deploy-config.json` manually:
+
+**ERC20 Policy**: Add your token contract address and threshold:
+```json
+"ERC20Policy": {
+  "deploy": false,
+  "token": "0x...", // Your ERC20 token address
+  "threshold": 100  // Minimum token balance required
+}
+```
+
+**ERC20Votes Policy**: Add your token contract address and threshold:
+```json
+"ERC20VotesPolicy": {
+  "deploy": false,
+  "token": "0x...", // Your ERC20Votes token address
+  "threshold": 100, // Minimum token balance required
+  "snapshotBlock": 1 // Block number of snapshot
+}
+```
+
+**EAS Policy**: Configure your EAS deployment details:
+```json
+"EASPolicy": {
+  "deploy": false,
+  "easAddress": "0x...", // Your EAS contract address
+  "schema": "0x...", // Your schema ID
+  "attester": "0x..." // Trusted attester address
+}
+```
+
+**Token Policy**: Add your NFT contract address:
+```json
+"TokenPolicy": {
+  "deploy": false,
+  "token": "0x..." // Your ERC721 contract address
+}
+```
+
+**MerkleProof Policy**: Configure your merkle root:
+```json
+"MerkleProofPolicy": {
+  "deploy": false,
+  "root": "0x..." // Your merkle root
+}
+```
+
+**GitcoinPassport Policy**: Configure your Gitcoin Passport decoder:
+```json
+"GitcoinPassportPolicy": {
+  "deploy": false,
+  "decoderAddress": "0x...", // Your Gitcoin Passport decoder contract
+  "passingScore": 5 // Minimum score required to pass
+}
+```
+
+**AnonAadhaar Policy**: Configure your AnonAadhaar verifier:
+```json
+"AnonAadhaarPolicy": {
+  "deploy": false,
+  "verifierAddress": "0x...", // Your AnonAadhaar verifier contract
+  "nullifierSeed": "4534",
+  // this pubkeyhash is for testnet
+  "pubkeyHash": "15134874015316324267425466444584014077184337590635665158241104437045239495873"
+}
+```
+
+#### Generate Account Evidence
+
+Each account needs specific evidence for the configured policy. Policy evidence is stored in `account-config.json`:
+
+**MerkleProof Policy** (can generate both root and evidence):
+```bash
+# Generate merkle root and evidence for defaultaccount 0
+yarn hardhat generate-merkle-proof-data --create-tree --whitelist ./whitelist.json --update-config --network <network>
+
+# Generate evidence for current signer (account 0)
+yarn hardhat generate-merkle-proof-data --create-tree --update-config --network <network>
+
+# Generate evidence for different account
+yarn hardhat generate-merkle-proof-data --account 1 --update-config --network <network>
+```
+
+Create `whitelist.json` with addresses:
+```json
+[
+  "0x1234567890abcdef1234567890abcdef12345678",
+  "0xabcdef1234567890abcdef1234567890abcdef12",
+  "0x..."
+]
+```
+
+**EAS Policy**:
+```bash
+# Generate evidence with existing attestation for account 0
+yarn hardhat generate-eas-data --attestation-id 0x... --update-config --network <network>
+
+# Generate evidence for different account
+yarn hardhat generate-eas-data --attestation-id 0x... --account 1 --update-config --network <network>
+```
+
+**Token Policy**:
+```bash
+# Generate evidence with specific token ID for account 0
+yarn hardhat generate-token-data --token-id 5 --update-config --network <network>
+
+# Generate evidence for different account
+yarn hardhat generate-token-data --token-id 10 --account 1 --update-config --network <network>
+```
+
+**AnonAadhaar Policy**:
+```bash
+# AnonAadhaar
+yarn hardhat generate-anon-aadhaar-data --update-config --network <network>
+```
+
+
+
+#### Optional: Deploy Test Contracts
+
+For testing purposes, you can deploy mock contracts:
+
+```bash
+# Deploy test EAS ecosystem and generate evidence
+yarn hardhat generate-eas-data --deploy --create-simple-attestation --update-config --network <network>
+
+# Deploy test ERC20 token
+yarn hardhat generate-erc20-data --deploy --update-config --network <network>
+
+# Deploy test NFT and mint
+yarn hardhat generate-token-data --deploy --mint-nft --update-config --network <network>
+```
+
+## Account Management
+
+### Create Account Config (Optional)
+
+While `signup` automatically creates account configs, you can pre-create them manually:
+
+```bash
+# Create account config for account 0 (default signer)
+yarn hardhat create-account-config --network <network>
+
+# Create account config for account 1 (second signer)
+yarn hardhat create-account-config --account 1 --network <network>
+```
+
+This is useful for:
+- **Pre-generating MACI keypairs** before actual signup
+- **Batch account creation** for multiple users
+- **Account verification** to check signer addresses and keypairs
+
+The command generates:
+- **Deterministic MACI keypair** tied to the signer's Ethereum address
+- **Account configuration** stored in `account-config.json`
+- **Signer address verification** to ensure correct account mapping
+
+### Default Account Behavior
+
+Most tasks default to account 0 when no `--account` parameter is specified:
+- `signup` defaults to account 0
+- `join-poll` defaults to account 0  
+- `vote` defaults to account 0
+- Policy generation tasks default to account 0
+
+## Quick Start (Automated Flow)
+
+For testing, you can run the complete flow with:
+
+```bash
+# Edit run_voting_flow.sh to add --network <network> to each command
+./run_voting_flow.sh
+```
+
+Or run individual steps manually:
+```bash
+yarn hardhat deploy-full --network <network>
+yarn hardhat signup --network <network>
+yarn hardhat deploy-poll --network <network>
+yarn hardhat join-poll --poll 0 --network <network>
+yarn hardhat vote --poll 0 --votes "0:5,1:30" --network <network>
+
+# After poll ends:
+yarn hardhat merge --poll 0 --network <network>
+yarn hardhat prove --poll 0 --output-dir ./out-dir/ --coordinator-private-key <key> --tally-file ./out-dir/tally.json --submit-on-chain --network <network>
+```
+
+## Dynamic Policy Configuration
+
+The system supports dynamic policy evidence lookup per account. The process works as follows:
+
+1. **Detects Policy Type**: Calls `getTrait()` on the policy contract to determine the policy type
+2. **Maps to Evidence Field**: Maps the trait (e.g., "FreeForAll") to the evidence field (e.g., "FreeForAllPolicyEvidence")
+3. **Fetches Account Evidence**: Retrieves the policy evidence from the account's configuration in `account-config.json`
+4. **Uses Policy-Specific Data**: Passes the appropriate evidence to the signup/joinPoll functions
+
+If no evidence is found for a policy (except FreeForAll), the system suggests running the appropriate policy generation command.
+
+
+
+### Policy-Specific Notes
+
+- **FreeForAllPolicy**: No signup data required, anyone can join
+- **MerkleProofPolicy**: Requires whitelist and merkle proof generation
+- **EASPolicy**: Requires attestation from trusted attester
+- **ERC20Policy**: Requires minimum token balance
+- **TokenPolicy**: Requires ownership of specific NFT
+- **GitcoinPassportPolicy**: Requires valid Gitcoin Passport
+- **SemaphorePolicy**: Requires Semaphore group membership
+- **ZupassPolicy**: Requires valid Zupass verification
 
 ## Testing
 
@@ -203,3 +520,8 @@ yarn test
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Note
+
+Make sure all environment variables are properly set before running the tasks. The generated proofs will be used to verify the poll results on-chain while maintaining privacy.
+

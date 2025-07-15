@@ -70,12 +70,7 @@ async function generateDeterministicKeypair(
   hre: any
 ): Promise<{ privateKey: string; publicKey: string }> {
 
-  let message;
-  if (hre.network.name === "hardhat" || hre.network.name === "localhost") {
-    message = `Login to PriVote with address ${signerAddress}`;
-  } else {
-    message = `Login to https://www.privote.live`;
-  }
+  const message = `Login to https://www.privote.live`;
 
   try {
     // Sign the message
@@ -111,7 +106,7 @@ async function generateDeterministicKeypair(
  * Create account config task - generates deterministic MACI keypair for a given signer
  */
 task("create-account-config", "Create account config with deterministic MACI keypair for a signer")
-  .addParam("account", "Account index (signer order)", undefined, types.string)
+  .addOptionalParam("account", "Account index (signer order from hardhat-config, default: 0)", "0", types.string)
   .setAction(async ({ account }, hre) => {
     try {
       // Get all available signers
