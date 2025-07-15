@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
+import { updateAccountConfigWithPolicyEvidence } from "../runner/create-account-config";
 
 /**
  * Generate Hats policy data task
@@ -11,9 +12,11 @@ import { Deployment } from "@maci-protocol/contracts";
 task("generate-hats-data", "Generate signup data for Hats policy")
   .addFlag("deploy", "Deploy supporting contracts for the policy")
   .addFlag("updateConfig", "Update the deploy-config.json file with generated data")
+  .addOptionalParam("account", "Account index to save evidence to (saves to account-config.json, default: 0)", "0", types.string)
   .setAction(async ({ 
     deploy,
-    updateConfig
+    updateConfig,
+    account
   }, hre) => {
     try {
       console.log(info(`Generating signup data for Hats policy...`));
@@ -36,13 +39,14 @@ task("generate-hats-data", "Generate signup data for Hats policy")
       
       if (updateConfig) {
         await updateDeployConfig("Hats", signupData, deployedContracts, hre);
-        logGreen({ text: `✅ Deploy config updated with HatsPolicy signupDataHex` });
+        await updateAccountConfigWithPolicyEvidence(account, "Hats", signupData, hre);
+        logGreen({ text: `✅ Deploy and account config updated with HatsPolicy` });
       } else {
         console.log("\n" + info("To update deploy-config.json, run with --update-config"));
         console.log("\n" + info("Manual config entry:"));
         console.log(`"HatsPolicy": {`);
         console.log(`  "deploy": true,`);
-        console.log(`  "signupDataHex": "${signupData}",`);
+        console.log(`  "HatsPolicyEvidence": "${signupData}"`);
         console.log(`  "hatsContract": "0x0000000000000000000000000000000000000000"`);
         console.log(`}`);
       }
@@ -81,13 +85,10 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
       config[networkName][policyKey] = { deploy: false };
     }
     
-    // Update the signupDataHex field
-    config[networkName][policyKey].signupDataHex = signupData;
-    
     // Write back to file with proper formatting
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     
-    console.log(info(`Updated ${networkName}.${policyKey}.signupDataHex in deploy-config.json`));
+    console.log(info(`Updated ${networkName}.${policyKey} in deploy-config.json`));
     
   } catch (error) {
     throw new Error(`Error updating deploy config: ${(error as Error).message}`);

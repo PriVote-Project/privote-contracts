@@ -227,18 +227,18 @@ describe("MACI Task Runners Unit Tests", function () {
       console.log("✅ Deploy configuration validated");
     });
 
-    it("should validate signup configuration structure", async function () {
-      console.log("🧪 Validating signup configuration structure...");
+    it("should validate account configuration structure", async function () {
+      console.log("🧪 Validating account configuration structure...");
       
-      const signupConfigPath = path.resolve(__dirname, "../../signup-config.json");
+      const signupConfigPath = path.resolve(__dirname, "../../account-config.json");
       
       // Check if signup config exists (it might be created during tests)
       if (fs.existsSync(signupConfigPath)) {
         const signupConfig = JSON.parse(fs.readFileSync(signupConfigPath, "utf8"));
         expect(signupConfig).to.be.an("object");
-        console.log("✅ Signup configuration structure validated");
+        console.log("✅ Account configuration structure validated");
       } else {
-        console.log("ℹ️  Signup configuration not found (will be created during signup)");
+        console.log("ℹ️  Account configuration not found (will be created during signup)");
       }
     });
   });

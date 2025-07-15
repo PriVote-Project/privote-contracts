@@ -36,13 +36,13 @@ task("generate-zupass-data", "Generate signup data for Zupass policy")
       
       if (updateConfig) {
         await updateDeployConfig("Zupass", signupData, deployedContracts, hre);
-        logGreen({ text: `✅ Deploy config updated with ZupassPolicy signupDataHex` });
+        logGreen({ text: `✅ Deploy config updated with ZupassPolicy` });
       } else {
         console.log("\n" + info("To update deploy-config.json, run with --update-config"));
         console.log("\n" + info("Manual config entry:"));
         console.log(`"ZupassPolicy": {`);
         console.log(`  "deploy": true,`);
-        console.log(`  "signupDataHex": "${signupData}",`);
+        console.log(`  "ZupassPolicyEvidence": "${signupData}"`);
         console.log(`  "signer1": "13908133709081944902758389525983124100292637002438232157513257158004852609027",`);
         console.log(`  "signer2": "7654374482676219729919246464135900991450848628968334062174564799457623790084",`);
         console.log(`  "eventId": "69c0caaa-c65d-5345-a20c-867774f18c67",`);
@@ -84,13 +84,10 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
       config[networkName][policyKey] = { deploy: false };
     }
     
-    // Update the signupDataHex field
-    config[networkName][policyKey].signupDataHex = signupData;
-    
     // Write back to file with proper formatting
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     
-    console.log(info(`Updated ${networkName}.${policyKey}.signupDataHex in deploy-config.json`));
+    console.log(info(`Updated ${networkName}.${policyKey} in deploy-config.json`));
     
   } catch (error) {
     throw new Error(`Error updating deploy config: ${(error as Error).message}`);

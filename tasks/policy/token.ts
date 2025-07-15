@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
+import { updateAccountConfigWithPolicyEvidence } from "../runner/create-account-config";
 
 /**
  * Generate Token (ERC721) policy data task
@@ -13,11 +14,13 @@ task("generate-token-data", "Generate signup data for Token (ERC721) policy")
   .addFlag("updateConfig", "Update the deploy-config.json file with generated data")
   .addFlag("mintNft", "Mint an NFT from the configured token contract and use its token ID for signup data")
   .addOptionalParam("tokenId", "Specific token ID to use for signup data (overrides mint-nft)", undefined, types.int)
+  .addOptionalParam("account", "Account index to save evidence to (saves to account-config.json, default: 0)", "0", types.string)
   .setAction(async ({ 
     deploy,
     updateConfig,
     mintNft,
-    tokenId
+    tokenId,
+    account
   }, hre) => {
     try {
       console.log(info(`Generating signup data for Token (ERC721) policy...`));
@@ -122,22 +125,25 @@ task("generate-token-data", "Generate signup data for Token (ERC721) policy")
       logGreen({ text: `✅ Token (ERC721) signup data generated successfully!` });
       console.log(info(`Data: ${signupData}`));
       console.log(info(`Length: ${signupData.length} characters`));
+
       
       if (updateConfig) {
         await updateDeployConfig("Token", signupData, deployedContracts, hre);
-        logGreen({ text: `✅ Deploy config updated with TokenPolicy signupDataHex` });
+        await updateAccountConfigWithPolicyEvidence(account, "Token", signupData, hre);
+        logGreen({ text: `✅ Deploy and account config updated with TokenPolicy` });
       } else {
         console.log("\n" + info("To update deploy-config.json, run with --update-config"));
         console.log("\n" + info("Manual config entry:"));
         console.log(`"TokenPolicy": {`);
         console.log(`  "deploy": true,`);
-        console.log(`  "signupDataHex": "${signupData}",`);
+        console.log(`  "TokenPolicyEvidence": "${signupData}"`);
         console.log(`  "token": "${deployedContracts.token || '0x0000000000000000000000000000000000000000'}"`);
         console.log(`}`);
         console.log("\n" + info("Usage examples:"));
         console.log("npx hardhat generate-token-data --deploy --update-config");
         console.log("npx hardhat generate-token-data --mint-nft --update-config");
         console.log("npx hardhat generate-token-data --token-id 5 --update-config");
+        console.log("npx hardhat generate-token-data --account 0  # Save to account 0");
       }
       
     } catch (error) {
@@ -174,9 +180,6 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
       config[networkName][policyKey] = { deploy: false };
     }
     
-    // Update the signupDataHex field
-    config[networkName][policyKey].signupDataHex = signupData;
-    
     // Update deployed contract addresses if available
     if (deployedContracts.token) {
       config[networkName][policyKey].token = deployedContracts.token;
@@ -185,7 +188,7 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
     // Write back to file with proper formatting
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     
-    console.log(info(`Updated ${networkName}.${policyKey}.signupDataHex in deploy-config.json`));
+    console.log(info(`Updated ${networkName}.${policyKey} in deploy-config.json`));
     
     // Log deployed contract updates
     if (Object.keys(deployedContracts).length > 0) {

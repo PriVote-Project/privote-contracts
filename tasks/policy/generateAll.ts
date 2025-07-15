@@ -1,8 +1,5 @@
 /* eslint-disable no-console */
 import { task, types } from "hardhat/config";
-import { 
-  EXAMPLE_POLICY_DATA,
-} from "../../utils/policyDataGenerator";
 import { logGreen, info } from "@maci-protocol/contracts";
 import { policyTasks } from "../helpers/constants";
 

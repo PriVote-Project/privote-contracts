@@ -5,6 +5,7 @@ import path from "path";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import { logGreen, logYellow, info, logRed } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
+import { updateAccountConfigWithPolicyEvidence } from "../../runner/create-account-config";
 
 /**
  * Generate MerkleProof policy data task
@@ -15,12 +16,14 @@ task("generate-merkle-proof-data", "Generate signup data for MerkleProof policy"
   .addOptionalParam("whitelist", "Path to JSON file containing whitelisted addresses", undefined, types.string)
   .addOptionalParam("treeFile", "Path to the tree.json file", "./tree.json", types.string)
   .addOptionalParam("address", "Address to generate proof for (defaults to current signer)", undefined, types.string)
+  .addOptionalParam("account", "Account index to save evidence to (saves to account-config.json, default: 0)", "0", types.string)
   .setAction(async ({ 
     createTree,
     updateConfig,
     whitelist,
     treeFile,
-    address
+    address,
+    account
   }, hre) => {
     try {
       console.log(info(`Generating signup data for MerkleProof policy...`));
@@ -134,16 +137,18 @@ task("generate-merkle-proof-data", "Generate signup data for MerkleProof policy"
       console.log(info(`📦 Encoded data: ${signupData}`));
       console.log(info(`📏 Length: ${signupData.length} characters`));
       
+      
       // Step 3: Update config if requested
       if (updateConfig) {
         await updateDeployConfig("MerkleProof", signupData, { root: merkleRoot }, hre);
-        logGreen({ text: `✅ Deploy config updated with MerkleProofPolicy signupDataHex and root` });
+        await updateAccountConfigWithPolicyEvidence(account, "MerkleProof", signupData, hre);
+        logGreen({ text: `✅ Deploy and account config updated with MerkleProofPolicy and root` });
       } else {
         console.log("\n" + info("To update deploy-config.json, run with --update-config"));
         console.log("\n" + info("Manual config entry:"));
         console.log(`"MerkleProofPolicy": {`);
         console.log(`  "deploy": true,`);
-        console.log(`  "signupDataHex": "${signupData}",`);
+        console.log(`  "MerkleProofPolicyEvidence": "${signupData}"`);
         console.log(`  "root": "${merkleRoot}"`);
         console.log(`}`);
       }
@@ -158,6 +163,7 @@ task("generate-merkle-proof-data", "Generate signup data for MerkleProof policy"
       console.log("npx hardhat generate-merkle-proof-data --address 0x1234... --tree-file ./tree.json");
       console.log("\n# Use custom tree file location:");
       console.log("npx hardhat generate-merkle-proof-data --create-tree --tree-file ./custom-tree.json");
+      console.log("npx hardhat generate-merkle-proof-data --account 0  # Save to account 0");
       
     } catch (error) {
       logRed({ text: `❌ Error: ${(error as Error).message}` });
@@ -193,9 +199,6 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
       config[networkName][policyKey] = { deploy: false };
     }
     
-    // Update the signupDataHex field
-    config[networkName][policyKey].signupDataHex = signupData;
-    
     // Update merkle root if available
     if (deployedContracts.root) {
       config[networkName][policyKey].root = deployedContracts.root;
@@ -204,7 +207,7 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
     // Write back to file with proper formatting
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     
-    console.log(info(`Updated ${networkName}.${policyKey}.signupDataHex in deploy-config.json`));
+    console.log(info(`Updated ${networkName}.${policyKey} in deploy-config.json`));
     console.log(info(`Updated ${networkName}.${policyKey}.root in deploy-config.json`));
     
   } catch (error) {

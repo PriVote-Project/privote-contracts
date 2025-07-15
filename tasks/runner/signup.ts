@@ -1,187 +1,109 @@
 /* eslint-disable no-console */
 import { task, types } from "hardhat/config";
-import fs from "fs";
-import path from "path";
 
-import { Keypair, PrivateKey, PublicKey } from "@maci-protocol/domainobjs";
-import { ContractStorage, EContracts, FULL_POLICY_NAMES, Deployment } from "@maci-protocol/contracts";
+import { PublicKey } from "@maci-protocol/domainobjs";
+import { ContractStorage } from "@maci-protocol/contracts";
 import { info, logGreen, logRed, logYellow } from "@maci-protocol/contracts";
 import { CustomEContracts } from "../helpers/constants";
-import { Privote } from "../../typechain-types";
-
-interface SignupConfig {
-  [accountNumber: string]: {
-    privateKey: string;
-    publicKey: string;
-    signupPolicyData: string;
-  };
-}
-
-const SIGNUP_CONFIG_PATH = path.resolve(__dirname, "../../signup-config.json");
+import { loadAccountConfig } from "./create-account-config";
 
 /**
- * Load signup configuration from file
+ * Get policy data dynamically from Privote contract's signUpPolicy
  */
-function loadSignupConfig(): SignupConfig {
-  if (!fs.existsSync(SIGNUP_CONFIG_PATH)) {
-    return {};
-  }
-  
+async function getPolicyData(
+  privoteContract: any,
+  accountConfig: any,
+  hre: any
+): Promise<string> {
   try {
-    const content = fs.readFileSync(SIGNUP_CONFIG_PATH, "utf8");
-    return JSON.parse(content);
-  } catch (error) {
-    logRed({ text: `Error reading signup config: ${(error as Error).message}` });
-    return {};
-  }
-}
-
-/**
- * Save signup configuration to file
- */
-function saveSignupConfig(config: SignupConfig): void {
-  try {
-    fs.writeFileSync(SIGNUP_CONFIG_PATH, JSON.stringify(config, null, 2));
-    logGreen({ text: `Signup config saved to ${SIGNUP_CONFIG_PATH}` });
-  } catch (error) {
-    logRed({ text: `Error saving signup config: ${(error as Error).message}` });
-    throw error;
-  }
-}
-
-/**
- * Generate a new MACI keypair
- */
-function generateKeypair(): { privateKey: string; publicKey: string } {
-  const keypair = new Keypair();
-  return {
-    privateKey: keypair.privateKey.serialize(),
-    publicKey: keypair.publicKey.serialize(),
-  };
-}
-
-/**
- * Get policy data based on deploy configuration
- */
-async function getPolicyData(deployment: Deployment): Promise<string> {
-  try {
-    // Get the policy from MACI config, similar to poll.ts
-    const maciPolicy = deployment.getDeployConfigField<EContracts | null>(EContracts.MACI, "policy") || EContracts.FreeForAllPolicy;
+    // Get the signUpPolicy address from Privote contract
+    const policyAddress = await privoteContract.signUpPolicy();
     
-    // Check which policies are enabled (deploy: true) using FULL_POLICY_NAMES
-    const availablePolicies = Object.keys(FULL_POLICY_NAMES) as EContracts[];
+    // Get policy contract instance
+    const policyContract = await hre.ethers.getContractAt("IBasePolicy", policyAddress);
+    
+    // Call trait() to get the policy type
+    const policyTrait = await policyContract.trait();
+    
+    console.log(info(`Policy trait detected: ${policyTrait}`));
 
-    for (const policy of availablePolicies) {
-      const isEnabled = deployment.getDeployConfigField<boolean>(policy, "deploy");
-      
-      if (isEnabled === true) {
-        if (policy === EContracts.FreeForAllPolicy) {
-          console.log("ℹ️  Using FreeForAllPolicy - no policy data required");
-          return "0x";
-        } else {
-          logYellow({ text: `Policy ${policy} is enabled but policy data implementation is pending` });
-          // TODO: Implement policy-specific data generation
-          // For example:
-          // - ERC20Policy: could return encoded token balance proof
-          // - MerkleProofPolicy: could return merkle proof data
-          // - EASPolicy: could return attestation data
-          return "0x";
-        }
-      }
+    // Look for policy evidence in account config
+    const evidenceField = `${policyTrait}PolicyEvidence`;
+    const policyEvidence = accountConfig[evidenceField];
+    
+    if (policyEvidence) {
+      console.log(info(`Using ${policyTrait} policy evidence from account config: ${policyEvidence}`));
+      return policyEvidence;
     }
-
-    // Fallback to MACI policy if no explicit policy is enabled
-    if (maciPolicy === EContracts.FreeForAllPolicy) {
-      console.log("ℹ️  Using default FreeForAllPolicy from MACI config - no policy data required");
-      return "0x";
+    
+    // Default to "0x" if no evidence found
+    console.log(info(`No ${evidenceField} found in account config, using default "0x"`));
+    if (policyTrait !== "FreeForAll") {
+      logYellow({ text: `To generate evidence, run: npx hardhat generate-${policyTrait.toLowerCase()}-data --account <account> --update-config` });
     }
-
-    logYellow({ text: "No policy found enabled, using default policy data" });
     return "0x";
+    
   } catch (error) {
-    logYellow({ text: `Error reading deploy config: ${(error as Error).message}, using default policy data` });
+    logYellow({ text: `Error determining policy signup data: ${(error as Error).message}, using default "0x"` });
     return "0x";
   }
 }
 
 /**
- * Get next available account number
+ * Signup task for Privote contract with deterministic MACI keypairs tied to signer addresses
  */
-function getNextAccountNumber(config: SignupConfig): string {
-  let index = 0;
-  while (config[index.toString()]) {
-    index++;
-  }
-  return index.toString();
-}
-
-/**
- * Signup task for Privote contract
- */
-task("signup", "Sign up to Privote with a MACI keypair")
-  .addOptionalParam("account", "Account number to use (default: 0)", "0", types.string)
-  .addFlag("new", "Always generate a new keypair")
-  .setAction(async ({ account, new: generateNew }, hre) => {
+task("signup", "Sign up to Privote with a deterministic MACI keypair tied to signer address")
+  .addOptionalParam("account", "Account index (signer order, default: 0)", "0", types.string)
+  .setAction(async ({ account }, hre) => {
     const storage = ContractStorage.getInstance();
-    const deployment = Deployment.getInstance();
-    deployment.setHre(hre);
     
     try {
-      // Get Privote contract using deployment pattern similar to poll.ts
-      const privoteContractAddress = storage.getAddress(CustomEContracts.Privote, hre.network.name);
-      const privote = await deployment.getContract<Privote>({ 
-        name: CustomEContracts.Privote as any,
-        address: privoteContractAddress
-      });
+      // Check if account config exists, if not create it
+      let config = loadAccountConfig();
       
+      if (!config[account]) {
+        console.log(info(`Account ${account} not found in config. Creating account config...`));
+        await hre.run("create-account-config", { account });
+        config = loadAccountConfig(); // Reload after creation
+      }
+      
+      const accountConfig = config[account];
+      if (!accountConfig) {
+        throw new Error(`Failed to create account config for account ${account}`);
+      }
+      
+      console.log(info(`Using account ${account}: ${accountConfig.signerAddress}`));
+      
+      // Get Privote contract using direct contract instantiation to avoid type issues
+      const privoteContractAddress = storage.getAddress(CustomEContracts.Privote, hre.network.name);
+      if (!privoteContractAddress) {
+        throw new Error("Privote contract address not found");
+      }
+      
+      // Get the signer for this account
+      const signers = await hre.ethers.getSigners();
+      const accountIndex = parseInt(account);
+      
+      if (accountIndex >= signers.length) {
+        throw new Error(`Account index ${accountIndex} exceeds available signers (${signers.length}). Available indices: 0-${signers.length - 1}`);
+      }
+      
+      const signer = signers[accountIndex];
+      const privote = await hre.ethers.getContractAt(CustomEContracts.Privote, privoteContractAddress, signer);
       console.log(info(`Using Privote contract at: ${privoteContractAddress}`));
 
-      // Load existing config
-      let config = loadSignupConfig();
-      
-      let accountNumber = account;
-      let keypairData: { privateKey: string; publicKey: string };
-      
-      if (generateNew) {
-        // Generate new keypair and find next available account number
-        accountNumber = getNextAccountNumber(config);
-        keypairData = generateKeypair();
-        logGreen({ text: `Generated new keypair for account ${accountNumber}` });
-      } else if (config[accountNumber]) {
-        // Use existing keypair
-        keypairData = {
-          privateKey: config[accountNumber].privateKey,
-          publicKey: config[accountNumber].publicKey
-        };
-        console.log(`ℹ️  Using existing keypair for account ${accountNumber}`);
-      } else {
-        // Generate new keypair for specified account
-        keypairData = generateKeypair();
-        logGreen({ text: `Generated new keypair for account ${accountNumber}` });
-      }
-
-      // Get policy data using deployment instance
-      const signupPolicyData = await getPolicyData(deployment);
-      
-      // Update config
-      config[accountNumber] = {
-        privateKey: keypairData.privateKey,
-        publicKey: keypairData.publicKey,
-        signupPolicyData
-      };
-      
-      // Save config
-      saveSignupConfig(config);
-
       // Create PublicKey object for contract call
-      const publicKey = PublicKey.deserialize(keypairData.publicKey);
+      const publicKey = PublicKey.deserialize(accountConfig.maciPublicKey);
       const publicKeyStruct = publicKey.asContractParam();
 
-      console.log(info(`Signing up with public key: ${keypairData.publicKey}`));
-      console.log(info(`Using policy data: ${signupPolicyData}`));
+      // Get policy data dynamically from contract
+      const policyData = await getPolicyData(privote, accountConfig, hre);
 
-      // Call signup function
-      const tx = await privote.signUp(publicKeyStruct, signupPolicyData);
+      console.log(info(`📤 Signing up with MACI public key: ${accountConfig.maciPublicKey}`));
+      console.log(info(`🔒 Using policy data: ${policyData}`));
+
+      // Call signup function with the signer
+      const tx = await privote.signUp(publicKeyStruct, policyData);
       const receipt = await tx.wait();
 
       if (!receipt) {
@@ -189,8 +111,9 @@ task("signup", "Sign up to Privote with a MACI keypair")
       }
 
       logGreen({ text: `✅ Successfully signed up!` });
-      logGreen({ text: `   Account: account ${accountNumber}` });
-      logGreen({ text: `   Public Key: ${keypairData.publicKey}` });
+      logGreen({ text: `   Account Index: ${account}` });
+      logGreen({ text: `   Signer Address: ${accountConfig.signerAddress}` });
+      logGreen({ text: `   MACI Public Key: ${accountConfig.maciPublicKey}` });
       logGreen({ text: `   Transaction Hash: ${receipt.hash}` });
       logGreen({ text: `   Gas Used: ${receipt.gasUsed.toString()}` });
 

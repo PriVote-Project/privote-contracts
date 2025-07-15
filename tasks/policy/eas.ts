@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
+import { updateAccountConfigWithPolicyEvidence } from "../runner/create-account-config";
 
 /**
  * Generate EAS policy data task
@@ -14,12 +15,14 @@ task("generate-eas-data", "Generate signup data for EAS policy")
   .addFlag("createSimpleAttestation", "Create a simple attestation and use its ID for signup data")
   .addOptionalParam("attestationId", "Custom attestation ID (bytes32 hex format) to use for signup data", undefined, types.string)
   .addOptionalParam("attestValue", "Value to attest when creating simple attestation", 0, types.int)
+  .addOptionalParam("account", "Account index to save evidence to (saves to account-config.json, default: 0)", "0", types.string)
   .setAction(async ({ 
     deploy,
     updateConfig,
     createSimpleAttestation,
     attestationId,
-    attestValue
+    attestValue,
+    account
   }, hre) => {
     try {
       console.log(info(`Generating signup data for EAS policy...`));
@@ -176,15 +179,16 @@ task("generate-eas-data", "Generate signup data for EAS policy")
       console.log(info(`Data: ${signupData}`));
       console.log(info(`Length: ${signupData.length} characters`));
       
-      if (updateConfig) {
+        if (updateConfig) {
         await updateDeployConfig("EAS", signupData, deployedContracts, hre);
-        logGreen({ text: `✅ Deploy config updated with EASPolicy signupDataHex` });
+        await updateAccountConfigWithPolicyEvidence(account, "EAS", signupData, hre);
+        logGreen({ text: `✅ Deploy and account config updated with EASPolicy` });
       } else {
         console.log("\n" + info("To update deploy-config.json, run with --update-config"));
         console.log("\n" + info("Manual config entry:"));
         console.log(`"EASPolicy": {`);
         console.log(`  "deploy": true,`);
-        console.log(`  "signupDataHex": "${signupData}",`);
+        console.log(`  "EASPolicyEvidence": "${signupData}"`);
         console.log(`  "easAddress": "${deployedContracts.easAddress || '0xC2679fBD37d54388Ce493F1DB75320D236e1815e'}",`);
         console.log(`  "schema": "${deployedContracts.schema || '0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c'}",`);
         console.log(`  "attester": "${deployedContracts.attester || 'the-attester-address'}"`);
@@ -193,6 +197,7 @@ task("generate-eas-data", "Generate signup data for EAS policy")
         console.log("npx hardhat generate-eas-data --deploy --update-config");
         console.log("npx hardhat generate-eas-data --attestation-id 0x1234567890abcdef... --update-config");
         console.log("npx hardhat generate-eas-data --deploy --create-simple-attestation --attest-value 42 --update-config");
+        console.log("npx hardhat generate-eas-data --account 0  # Save to account 0");
       }
       
     } catch (error) {
@@ -228,10 +233,7 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
     if (!config[networkName][policyKey]) {
       config[networkName][policyKey] = { deploy: false };
     }
-    
-    // Update the signupDataHex field
-    config[networkName][policyKey].signupDataHex = signupData;
-    
+      
     // Update deployed contract addresses if available
     if (deployedContracts.token) {
       config[networkName][policyKey].token = deployedContracts.token;
@@ -252,7 +254,7 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
     // Write back to file with proper formatting
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     
-    console.log(info(`Updated ${networkName}.${policyKey}.signupDataHex in deploy-config.json`));
+    console.log(info(`Updated ${networkName}.${policyKey} in deploy-config.json`));
     
     // Log deployed contract updates
     if (Object.keys(deployedContracts).length > 0) {

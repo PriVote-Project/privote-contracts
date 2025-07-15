@@ -13,65 +13,55 @@
     "ERC20Policy": {
       "deploy": false,
       "token": "0x8464135c8F25Da09e49BC8782676a84730C318bC",
-      "threshold": 101,
-      "signupDataHex": "0x"
+      "threshold": 101
     },
     "FreeForAllPolicy": {
-      "deploy": true,
-      "signupDataHex": "0x"
+      "deploy": true
     },
     "ERC20VotesPolicy": {
       "deploy": false,
       "token": "0x8464135c8F25Da09e49BC8782676a84730C318bC",
       "threshold": 11,
-      "snapshotBlock": 45,
-      "signupDataHex": "0x"
+      "snapshotBlock": 45
     },
     "MerkleProofPolicy": {
       "deploy": false,
-      "root": "0x0548845532e20163d626e767b171816a20d7fc27b38d1543e06f13050f4084e0",
-      "signupDataHex": "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002895fcfca45b761f42d85849ce9d8b111905c7417e64dcc0738a7abbae89ad17eddaa93f15dd99b40f2955e44729a8065a94c5867725193607d5f1e46d5ec1e67"
+      "root": "0x0548845532e20163d626e767b171816a20d7fc27b38d1543e06f13050f4084e0"
     },
     "EASPolicy": {
       "deploy": false,
       "easAddress": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
       "schema": "0x3bd9214a99672167611d24e9c92db9a47392625176b673462f48c47af7086fc2",
       "attester": "0x948B3c65b89DF0B4894ABE91E6D02FE579834F8F",
-      "signupDataHex": "0x711870a017d573c974d5086c569b6125972b8d38dc5c315d0979f0ca8f5a7cd5",
       "schemaRegistry": "0x8464135c8F25Da09e49BC8782676a84730C318bC"
     },
     "GitcoinPassportPolicy": {
       "deploy": false,
       "decoderAddress": "0xe53C60F8069C2f0c3a84F9B3DB5cf56f3100ba56",
-      "passingScore": 5,
-      "signupDataHex": "0x"
+      "passingScore": 5
     },
     "ZupassPolicy": {
       "deploy": false,
       "signer1": "13908133709081944902758389525983124100292637002438232157513257158004852609027",
       "signer2": "7654374482676219729919246464135900991450848628968334062174564799457623790084",
       "eventId": "69c0caaa-c65d-5345-a20c-867774f18c67",
-      "zupassVerifier": "0x2272cdb3596617886d0F48524DA486044E0376d6",
-      "signupDataHex": "0x"
+      "zupassVerifier": "0x2272cdb3596617886d0F48524DA486044E0376d6"
     },
     "SemaphorePolicy": {
       "deploy": false,
       "semaphoreContract": "0x0A09FB3f63c13F1C54F2fA41AFB1e7a98cffc774",
-      "groupId": 0,
-      "signupDataHex": "0x"
+      "groupId": 0
     },
     "AnonAadhaarPolicy": {
       "deploy": false,
       "verifierAddress": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
       "nullifierSeed": "4534",
       "pubkeyHash": "15134874015316324267425466444584014077184337590635665158241104437045239495873",
-      "signupDataHex": "0x00000000000000000000000000000000000000000000000000000000000011b6165812005dacb6ce89986651e2dd1472543fe1608d3be0349e298b60be27e7590000000000000000000000000000000000000000000000000000000068583d9800000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002345f4cd435645a136d6024833c7b236c978151382db02c72340797570c4823c12375fbaf20e60e592769eb04ae9bf94e2aa03cebb26824d8cbf4dd9ee9c061310bc6adb1cde42b33f4915a12997992af46a00a385b16f687eacc73b6a3ce8dd26adbae8575cc68dff1a019f1445a754d7c9c64a9510ffdb764526ce37ee8fb020401b53f5d79d166560934d890d862fe95c2565ec9c50cf349857578808c9b622533ba1dc52b47b27a07f2e748d3cdfcae0c602260eea3a8004b887874638121c7d87b43c86621cf18829c1cd1a4ad2c403d2a2b8a492d76b9fbfcb6812235d18733c922b5b6681d33fcfff92293f852e0b0afd3f7790f13f0e321623a1ecf7",
       "groth16Verifier": "0x8464135c8F25Da09e49BC8782676a84730C318bC"
     },
     "TokenPolicy": {
       "deploy": false,
-      "token": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
-      "signupDataHex": "0x0000000000000000000000000000000000000000000000000000000000000001"
+      "token": "0x71C95911E9a5D330f4D621842EC243EE1343292e"
     },
     "MACI": {
       "stateTreeDepth": 10,
@@ -116,7 +106,7 @@
       "metadata": "This is just a test poll",
       "pollStartDate": 0,
       "pollEndDate": 0,
-      "duration": 500,
+      "duration": 50,
       "coordinatorPublicKey": "macipk.afec0cff00d1e254be6a769fcc7b7a151fbc8e5f58cfae5ed8da7ec1f04a227d",
       "mode": 0,
       "policy": "MerkleProofPolicy",
@@ -150,51 +140,43 @@
     "ERC20Policy": {
       "deploy": false,
       "token": "0x0000000000000000000000000000000000000000",
-      "threshold": 1,
-      "signupDataHex": "0x"
+      "threshold": 1
     },
     "FreeForAllPolicy": {
-      "deploy": true,
-      "signupDataHex": "0x"
+      "deploy": true
     },
     "ERC20VotesPolicy": {
       "deploy": false,
       "token": "0x0000000000000000000000000000000000000000",
       "threshold": 1,
-      "snapshotBlock": 1,
-      "signupDataHex": "0x"
+      "snapshotBlock": 1
     },
     "MerkleProofPolicy": {
       "deploy": false,
-      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0",
-      "signupDataHex": "0x"
+      "root": "0x2461fcc4c0965cb7f482dd28f1ca8057b7a62a35e8b7a86bb3ad6523f4bb21c0"
     },
     "EASPolicy": {
       "deploy": false,
       "easAddress": "0xC2679fBD37d54388Ce493F1DB75320D236e1815e",
       "schema": "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-      "attester": "the-attester-address",
-      "signupDataHex": "0x"
+      "attester": "the-attester-address"
     },
     "GitcoinPassportPolicy": {
       "deploy": false,
       "decoderAddress": "0xe53C60F8069C2f0c3a84F9B3DB5cf56f3100ba56",
-      "passingScore": 5,
-      "signupDataHex": "0x"
+      "passingScore": 5
     },
     "ZupassPolicy": {
       "deploy": false,
       "signer1": "13908133709081944902758389525983124100292637002438232157513257158004852609027",
       "signer2": "7654374482676219729919246464135900991450848628968334062174564799457623790084",
       "eventId": "69c0caaa-c65d-5345-a20c-867774f18c67",
-      "zupassVerifier": "0x2272cdb3596617886d0F48524DA486044E0376d6",
-      "signupDataHex": "0x"
+      "zupassVerifier": "0x2272cdb3596617886d0F48524DA486044E0376d6"
     },
     "SemaphorePolicy": {
       "deploy": false,
       "semaphoreContract": "0x0A09FB3f63c13F1C54F2fA41AFB1e7a98cffc774",
-      "groupId": 0,
-      "signupDataHex": "0x"
+      "groupId": 0
     },
     "MACI": {
       "stateTreeDepth": 10,

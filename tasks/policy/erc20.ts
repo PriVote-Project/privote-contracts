@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import { logGreen, logYellow, info } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
+import { updateAccountConfigWithPolicyEvidence } from "../runner/create-account-config";
 
 /**
  * Generate ERC20 policy data task
@@ -11,9 +12,11 @@ import { Deployment } from "@maci-protocol/contracts";
 task("generate-erc20-data", "Generate signup data for ERC20 policy")
   .addFlag("deploy", "Deploy supporting contracts for the policy")
   .addFlag("updateConfig", "Update the deploy-config.json file with generated data")
+  .addOptionalParam("account", "Account index to save evidence to (saves to account-config.json, default: 0)", "0", types.string)
   .setAction(async ({ 
     deploy,
-    updateConfig
+    updateConfig,
+    account
   }, hre) => {
     try {
       console.log(info(`Generating signup data for ERC20 policy...`));
@@ -50,13 +53,14 @@ task("generate-erc20-data", "Generate signup data for ERC20 policy")
       
       if (updateConfig) {
         await updateDeployConfig("ERC20", signupData, deployedContracts, hre);
-        logGreen({ text: `✅ Deploy config updated with ERC20Policy signupDataHex` });
+        await updateAccountConfigWithPolicyEvidence(account, "ERC20", signupData, hre);
+        logGreen({ text: `✅ Deploy and account config updated with ERC20Policy` });
       } else {
         console.log("\n" + info("To update deploy-config.json, run with --update-config"));
         console.log("\n" + info("Manual config entry:"));
         console.log(`"ERC20Policy": {`);
         console.log(`  "deploy": true,`);
-        console.log(`  "signupDataHex": "${signupData}",`);
+        console.log(`  "ERC20PolicyEvidence": "${signupData}"`);
         console.log(`  "token": "${deployedContracts.token || '0x0000000000000000000000000000000000000000'}",`);
         console.log(`  "threshold": 1`);
         console.log(`}`);
@@ -96,9 +100,6 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
       config[networkName][policyKey] = { deploy: false };
     }
     
-    // Update the signupDataHex field
-    config[networkName][policyKey].signupDataHex = signupData;
-    
     // Update deployed contract addresses if available
     if (deployedContracts.token) {
       config[networkName][policyKey].token = deployedContracts.token;
@@ -119,7 +120,7 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
     // Write back to file with proper formatting
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     
-    console.log(info(`Updated ${networkName}.${policyKey}.signupDataHex in deploy-config.json`));
+    console.log(info(`Updated ${networkName}.${policyKey} in deploy-config.json`));
     
     // Log deployed contract updates
     if (Object.keys(deployedContracts).length > 0) {

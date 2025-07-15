@@ -1,45 +1,18 @@
 /* eslint-disable no-console */
 import { task, types } from "hardhat/config";
-import fs from "fs";
-import path from "path";
 
 import { joinPoll } from "@maci-protocol/sdk";
 import { ContractStorage, EContracts, Deployment } from "@maci-protocol/contracts";
 import { info, logGreen, logRed, logYellow } from "@maci-protocol/contracts";
 import { CustomEContracts } from "../helpers/constants";
-
-interface SignupConfig {
-  [accountNumber: string]: {
-    privateKey: string;
-    publicKey: string;
-    signupPolicyData: string;
-  };
-}
-
-const SIGNUP_CONFIG_PATH = path.resolve(__dirname, "../../signup-config.json");
-
-/**
- * Load signup configuration from file
- */
-function loadSignupConfig(): SignupConfig {
-  if (!fs.existsSync(SIGNUP_CONFIG_PATH)) {
-    throw new Error(`Signup config file not found at ${SIGNUP_CONFIG_PATH}. Please run signup task first.`);
-  }
-  
-  try {
-    const content = fs.readFileSync(SIGNUP_CONFIG_PATH, "utf8");
-    return JSON.parse(content);
-  } catch (error) {
-    throw new Error(`Error reading signup config: ${(error as Error).message}`);
-  }
-}
+import { loadAccountConfig } from "./create-account-config";
 
 /**
  * Get policy signup data based on poll's policy contract
  */
 async function getPolicySignupData(
   pollContract: any,
-  deployment: Deployment,
+  accountConfig: any,
   hre: any
 ): Promise<string> {
   try {
@@ -53,40 +26,20 @@ async function getPolicySignupData(
     
     console.log(info(`Policy trait detected: ${policyTrait}`));
 
-    // Map trait to EContracts enum by appending "Policy"
-    const policyContractName = `${policyTrait}Policy` as keyof typeof EContracts;
+    // Look for policy evidence in account config
+    const evidenceField = `${policyTrait}PolicyEvidence`;
+    const policyEvidence = accountConfig[evidenceField];
     
-    // Check if this is a valid policy contract name
-    if (!(policyContractName in EContracts)) {
-      logYellow({ text: `Unknown policy trait: ${policyTrait}, falling back to FreeForAll behavior` });
-      return "0x";
+    if (policyEvidence) {
+      console.log(info(`Using ${policyTrait} policy evidence from account config: ${policyEvidence}`));
+      return policyEvidence;
     }
     
-    const policyEnum = EContracts[policyContractName];
-    console.log(policyEnum);
-    // Handle FreeForAll policy - no data needed
-    if (policyEnum === EContracts.FreeForAllPolicy) {
-      console.log(info("Using FreeForAllPolicy - no signup data required"));
-      return "0x";
+    // Default to "0x" if no evidence found
+    console.log(info(`No ${evidenceField} found in account config, using default "0x"`));
+    if (policyTrait !== "FreeForAll") {
+      logYellow({ text: `To generate evidence, run: npx hardhat generate-${policyTrait.toLowerCase()}-data --account <account> --update-config` });
     }
-    
-    // Try to get signupDataHex from deployment config
-    try {
-      const signupDataHex = deployment.getDeployConfigField<string>(
-        policyEnum,
-        "signupDataHex"
-      );
-      
-      if (signupDataHex) {
-        console.log(info(`Using signup data from config for ${policyContractName}: ${signupDataHex}`));
-        return signupDataHex;
-      }
-    } catch (error) {
-      logYellow({ text: `No signupDataHex field found for ${policyContractName}: ${(error as Error).message}` });
-    }
-    
-    // Fallback to "0x" if no specific data found
-    logYellow({ text: `No signup data configured for ${policyContractName}, using default "0x"` });
     return "0x";
     
   } catch (error) {
@@ -120,18 +73,24 @@ task("join-poll", "Join a poll using MACI keypair")
     deployment.setHre(hre);
     
     try {
-      // Load signup config to get user's private key
-      const config = loadSignupConfig();
+      // Check if account config exists, if not create it
+      let config = loadAccountConfig();
       
       if (!config[account]) {
-        throw new Error(`Account ${account} not found in signup config. Please run signup task first.`);
+        console.log(info(`Account ${account} not found in config. Creating account config...`));
+        await hre.run("create-account-config", { account });
+        config = loadAccountConfig(); // Reload after creation
       }
       
-      const { privateKey } = config[account];
+      const accountConfig = config[account];
+      if (!accountConfig) {
+        throw new Error(`Failed to create account config for account ${account}`);
+      }
+      
+      const { maciPrivateKey: privateKey } = accountConfig;
       
       // Get signer
       const signer = await deployment.getDeployer();
-      
       // Get Privote contract address
       const privoteContractAddress = storage.getAddress(CustomEContracts.Privote, hre.network.name);
       if (privoteContractAddress == undefined) {
@@ -141,7 +100,7 @@ task("join-poll", "Join a poll using MACI keypair")
       console.log(info(`Using Privote contract at: ${privoteContractAddress}`));
       
       // Get Privote contract instance to fetch poll data
-      const privoteContract = await hre.ethers.getContractAt("Privote", privoteContractAddress);
+      const privoteContract = await hre.ethers.getContractAt(CustomEContracts.Privote, privoteContractAddress);
       const pollData = await privoteContract.polls(poll);
       const pollContractAddress = pollData.poll;
       
@@ -149,7 +108,7 @@ task("join-poll", "Join a poll using MACI keypair")
       const pollContract = await hre.ethers.getContractAt("Poll", pollContractAddress);
       
       // Get policy-specific signup data
-      const sgDataArg = await getPolicySignupData(pollContract, deployment, hre);
+      const sgDataArg = await getPolicySignupData(pollContract, accountConfig, hre);
       
       // Get deployment configuration for zkey paths
       const pollJoiningZkey = deployment.getDeployConfigField<string>(

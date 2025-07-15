@@ -418,10 +418,10 @@ describe("Simplified MACI Voting Flow Test", function () {
       console.log("📁 Checking artifacts...");
       
       // Check if signup config was created
-      const signupConfigPath = path.resolve(__dirname, "../../signup-config.json");
-      if (fs.existsSync(signupConfigPath)) {
-        const config = JSON.parse(fs.readFileSync(signupConfigPath, "utf8"));
-        console.log(`✅ Signup config exists with ${Object.keys(config).length} users`);
+      const accountConfigPath = path.resolve(__dirname, "../../account-config.json");
+      if (fs.existsSync(accountConfigPath)) {
+        const config = JSON.parse(fs.readFileSync(accountConfigPath, "utf8"));
+        console.log(`✅ Account config exists with ${Object.keys(config).length} users`);
       }
       
       // Check if any proof files were created

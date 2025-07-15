@@ -22,28 +22,11 @@ task("generate-erc20-votes-data", "Generate signup data for ERC20Votes policy")
       
       // Deploy supporting contracts if flag is provided
       if (deploy) {
-        console.log(info("🚀 Deploying SimpleERC20 contract for ERC20Votes..."));
-        logYellow({ text: "ℹ️  Note: ERC20Votes requires a contract with voting capabilities. Using SimpleERC20 as base." });
-        
-        // Deploy SimpleERC20 contract (would need to be upgraded to support votes)
-        const SimpleERC20Factory = await hre.ethers.getContractFactory("SimpleERC20");
-        const simpleERC20 = await SimpleERC20Factory.deploy();
-        await simpleERC20.waitForDeployment();
-        const contractAddress = await simpleERC20.getAddress();
-        
-        deployedContracts.token = contractAddress;
-        
-        // Log deployment details
-        const name = await simpleERC20.name();
-        const symbol = await simpleERC20.symbol();
-        
-        logGreen({ text: `✅ SimpleERC20 deployed to: ${contractAddress}` });
-        console.log(info(`   Name: ${name}`));
-        console.log(info(`   Symbol: ${symbol}`));
-        logYellow({ text: "⚠️  Note: For production, use an ERC20Votes compatible token" });
+        console.log(info("TODO: Deploy supporting ERC20Votes compatible token..."));
+        console.log(info("Tip: use https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/governance/utils/Votes.sol as a base"));
       }
       
-      // TODO: Generate the signup data
+      // No signup data needed for ERC20Votes
       const signupData = "0x";
       
       logGreen({ text: `✅ ERC20Votes signup data generated successfully!` });
@@ -52,13 +35,13 @@ task("generate-erc20-votes-data", "Generate signup data for ERC20Votes policy")
       
       if (updateConfig) {
         await updateDeployConfig("ERC20Votes", signupData, deployedContracts, hre);
-        logGreen({ text: `✅ Deploy config updated with ERC20VotesPolicy signupDataHex` });
+        logGreen({ text: `✅ Deploy config updated with ERC20VotesPolicy` });
       } else {
         console.log("\n" + info("To update deploy-config.json, run with --update-config"));
         console.log("\n" + info("Manual config entry:"));
         console.log(`"ERC20VotesPolicy": {`);
         console.log(`  "deploy": true,`);
-        console.log(`  "signupDataHex": "${signupData}",`);
+        console.log(`  "ERC20VotesPolicyEvidence": "${signupData}"`);
         console.log(`  "token": "${deployedContracts.token || '0x0000000000000000000000000000000000000000'}",`);
         console.log(`  "threshold": 1,`);
         console.log(`  "snapshotBlock": 1`);
@@ -99,9 +82,6 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
       config[networkName][policyKey] = { deploy: false };
     }
     
-    // Update the signupDataHex field
-    config[networkName][policyKey].signupDataHex = signupData;
-    
     // Update deployed contract addresses if available
     if (deployedContracts.token) {
       config[networkName][policyKey].token = deployedContracts.token;
@@ -110,7 +90,7 @@ async function updateDeployConfig(policy: string, signupData: string, deployedCo
     // Write back to file with proper formatting
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     
-    console.log(info(`Updated ${networkName}.${policyKey}.signupDataHex in deploy-config.json`));
+    console.log(info(`Updated ${networkName}.${policyKey} in deploy-config.json`));
     
     // Log deployed contract updates
     if (Object.keys(deployedContracts).length > 0) {

@@ -1,45 +1,18 @@
 /* eslint-disable no-console */
 import { task, types } from "hardhat/config";
-import fs from "fs";
-import path from "path";
 
 import { VoteCommand } from "@maci-protocol/domainobjs";
 import { Keypair, PrivateKey, PublicKey, Message } from "@maci-protocol/domainobjs";
 import { ContractStorage, EContracts, Deployment } from "@maci-protocol/contracts";
 import { info, logGreen, logRed, logYellow } from "@maci-protocol/contracts";
 import { CustomEContracts } from "../helpers/constants";
+import { loadAccountConfig } from "./create-account-config";
 
 import type { MACI, Poll, Privote } from "../../typechain-types";
-
-interface SignupConfig {
-  [accountNumber: string]: {
-    privateKey: string;
-    publicKey: string;
-    signupPolicyData: string;
-  };
-}
 
 interface VoteParams {
   optionIndex: number;
   weight: number;
-}
-
-const SIGNUP_CONFIG_PATH = path.resolve(__dirname, "../../signup-config.json");
-
-/**
- * Load signup configuration from file
- */
-function loadSignupConfig(): SignupConfig {
-  if (!fs.existsSync(SIGNUP_CONFIG_PATH)) {
-    throw new Error(`Signup config file not found at ${SIGNUP_CONFIG_PATH}. Please run signup task first.`);
-  }
-  
-  try {
-    const content = fs.readFileSync(SIGNUP_CONFIG_PATH, "utf8");
-    return JSON.parse(content);
-  } catch (error) {
-    throw new Error(`Error reading signup config: ${(error as Error).message}`);
-  }
 }
 
 /**
@@ -89,14 +62,21 @@ task("vote", "Submit votes to a poll")
     deployment.setHre(hre);
     
     try {
-      // Load signup config to get user's private key
-      const config = loadSignupConfig();
+      // Check if account config exists, if not create it
+      let config = loadAccountConfig();
       
       if (!config[account]) {
-        throw new Error(`Account ${account} not found in signup config. Please run signup task first.`);
+        console.log(info(`Account ${account} not found in config. Creating account config...`));
+        await hre.run("create-account-config", { account });
+        config = loadAccountConfig(); // Reload after creation
       }
       
-      const { privateKey, publicKey } = config[account];
+      const accountConfig = config[account];
+      if (!accountConfig) {
+        throw new Error(`Failed to create account config for account ${account}`);
+      }
+      
+      const { maciPrivateKey: privateKey, maciPublicKey: publicKey } = accountConfig;
       
       // Parse vote parameters
       const voteParams = parseVoteParams(votes);
@@ -114,10 +94,7 @@ task("vote", "Submit votes to a poll")
          throw new Error("Privote contract not found");
        }
        
-       const privoteContract = await deployment.getContract<Privote>({ 
-         name: CustomEContracts.Privote as any,
-         address: privoteContractAddress
-       });
+       const privoteContract = await hre.ethers.getContractAt(CustomEContracts.Privote, privoteContractAddress);
        
        console.log(info(`Using Privote contract at: ${privoteContractAddress}`));
        console.log(info(`Voting in poll ${poll} with account ${account}...`));

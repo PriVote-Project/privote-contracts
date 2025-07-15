@@ -1,0 +1,8 @@
+{
+  "0": {
+    "signerAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "maciPrivateKey": "macisk.3151c45bcfcf4e73cfd769f201fe88283ca03d12857ff705dfea6bf124e71b93",
+    "maciPublicKey": "macipk.1a0550e08e522c910d1b44d12bb5277215ec466878cddfa68d8eab9cf38bd3e4",
+    "ERC20PolicyEvidence": "0x"
+  }
+}
