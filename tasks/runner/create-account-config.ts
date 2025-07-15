@@ -74,7 +74,7 @@ async function generateDeterministicKeypair(
   if (hre.network.name === "hardhat" || hre.network.name === "localhost") {
     message = `Login to PriVote with address ${signerAddress}`;
   } else {
-    message = `Login to https://privote.live`;
+    message = `Login to https://www.privote.live`;
   }
 
   try {
@@ -83,8 +83,8 @@ async function generateDeterministicKeypair(
     
     // Use the signature hash as seed for the private key
     // We'll hash the signature to get a 32-byte value
-    const signatureHash = await hre.ethers.solidityPackedKeccak256(["string"], [signature]);
-    
+    const signatureHash = await hre.ethers.keccak256(signature);
+
     // Convert to BigInt for MACI PrivateKey constructor
     const privateKeyBigInt = BigInt(signatureHash);
     
