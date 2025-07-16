@@ -16,6 +16,10 @@ import { ProofGenerator } from "@maci-protocol/contracts";
 import { EContracts, type IProveParams } from "@maci-protocol/contracts";
 import { CustomEContracts } from "../helpers/constants";
 
+interface IProveParamsExtended extends IProveParams {
+  submitOnChain: boolean;
+}
+
 /**
  * Prove hardhat task for generating off-chain proofs and sending them on-chain
  */
@@ -61,7 +65,7 @@ task("prove", "Command to generate proofs")
         transactionHash,
         ipfsMessageBackupFiles,
         submitOnChain,
-      }: IProveParams,
+      }: IProveParamsExtended,
       hre,
     ) => {
       const deployment = Deployment.getInstance();
