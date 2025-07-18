@@ -25,6 +25,12 @@ A private voting protocol built on MACI (Minimal Anti-Collusion Infrastructure) 
 - [Account Management](#account-management)
   - [Create Account Config (Optional)](#create-account-config-optional)
   - [Default Account Behavior](#default-account-behavior)
+- [PrivoteWrapper (Advanced)](#privotewrapper-advanced)
+  - [PrivoteWrapper vs Basic Privote](#privotewrapper-vs-basic-privote)
+  - [PrivoteWrapper Deployment](#privotewrapper-deployment)
+  - [PrivoteWrapper Poll Creation](#privotewrapper-poll-creation)
+  - [PrivoteWrapper Benefits](#privotewrapper-benefits)
+  - [When to Use PrivoteWrapper](#when-to-use-privotewrapper)
 - [Quick Start (Automated Flow)](#quick-start-automated-flow)
 - [Dynamic Policy Configuration](#dynamic-policy-configuration)
 - [Policy-Specific Notes](#policy-specific-notes)
@@ -141,6 +147,8 @@ You can customize these poll settings before deployment:
 - **`initialVoiceCreditProxy`**: Voice credit allocation method
 
 **Important**: The `policy` field determines which authentication policy users must satisfy to join the poll. Make sure the chosen policy is properly configured in the same config file.
+
+
 
 ### Account Configuration
 
@@ -453,6 +461,81 @@ Most tasks default to account 0 when no `--account` parameter is specified:
 - `join-poll` defaults to account 0  
 - `vote` defaults to account 0
 - Policy generation tasks default to account 0
+
+## PrivoteWrapper 
+
+PrivoteWrapper is a wrapper contract that allows you to deploy polls with custom policies and configurations in single transaction, this helps in better user experience.
+
+### PrivoteWrapper vs Basic Privote
+
+**Basic Privote (Default):**
+- **Single Policy**: Uses one policy specified in deploy-config.json
+- **Manual Setup**: Requires pre-deployment of policies  
+- **Configuration-Based**: Poll creation uses deploy-config.json settings
+- **Use Case**: Simple deployments with one authentication method
+
+**PrivoteWrapper:**
+- **Multi-Policy Support**: Can create polls with any policy type
+- **Automatic Deployment**: Deploys policies and voice credit proxies automatically
+- **Flexible Poll Creation**: Override any poll parameter during creation
+- **One-Transaction Polls**: Complete poll setup in a single transaction
+- **Dynamic Configuration**: No need to redeploy factories for different policies
+
+### PrivoteWrapper Deployment
+
+Deploy PrivoteWrapper instead of basic Privote:
+
+```bash
+yarn hardhat deploy-full --wrapper --network <network>
+```
+
+This deploys:
+- PrivoteWrapper contract with multi-policy support
+- Policy factories for all supported authentication methods
+- Voice credit proxy factories
+- All required infrastructure
+
+### PrivoteWrapper Poll Creation
+
+Create polls with enhanced flexibility:
+
+```bash
+# Use config settings
+yarn hardhat deploy-poll-wrapper --network <network>
+
+# Override specific settings
+yarn hardhat deploy-poll-wrapper \
+  --policy MerkleProofPolicy \
+  --name "My Custom Poll" \
+  --duration 3600 \
+  --voice-credits 200 \
+  --options "Yes,No,Maybe" \
+  --network <network>
+```
+
+**Available Parameters:**
+- `--policy`: Override policy type (FreeForAllPolicy, MerkleProofPolicy, EASPolicy, etc.)
+- `--name`: Poll name
+- `--metadata`: Poll description  
+- `--duration`: Poll duration in seconds
+- `--voice-credits`: Voice credits per user
+- `--options`: Comma-separated vote options
+
+### PrivoteWrapper Benefits
+
+- **No Policy Pre-deployment**: Create polls with any policy without prior setup
+- **Automatic Configuration**: Policies and voice credits deployed automatically
+- **Frontend Integration**: Perfect for applications needing dynamic poll creation
+- **Parameter Flexibility**: Override any setting at poll creation time
+- **Multi-Policy Projects**: Support different authentication methods per poll
+
+### When to Use PrivoteWrapper
+
+- Building frontend applications
+- Creating multiple polls with different policies
+- Need runtime flexibility in poll configuration
+- Want simplified deployment process
+- Developing production applications
 
 ## Quick Start (Automated Flow)
 

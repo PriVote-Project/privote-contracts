@@ -86,7 +86,12 @@ task("vote", "Submit votes to a poll")
       });
       
              // Get signer
-       const signer = await deployment.getDeployer();
+       const signers = await hre.ethers.getSigners();
+       const accountIndex = parseInt(account);
+       if (accountIndex >= signers.length) {
+        throw new Error(`Account index ${accountIndex} exceeds available signers (${signers.length}). Available indices: 0-${signers.length - 1}`);
+      }
+       const signer = signers[accountIndex];
        
        // Get Privote contract (which inherits from MACI)
        const privoteContractAddress = storage.getAddress(CustomEContracts.Privote, hre.network.name);
@@ -94,7 +99,11 @@ task("vote", "Submit votes to a poll")
          throw new Error("Privote contract not found");
        }
        
-       const privoteContract = await hre.ethers.getContractAt(CustomEContracts.Privote, privoteContractAddress);
+       const privoteContract = await deployment.getContract<Privote>({
+        name: CustomEContracts.Privote as any,
+        address: privoteContractAddress,
+        signer: signer
+      });
        
        console.log(info(`Using Privote contract at: ${privoteContractAddress}`));
        console.log(info(`Voting in poll ${poll} with account ${account}...`));

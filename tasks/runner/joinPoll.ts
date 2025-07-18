@@ -6,6 +6,7 @@ import { ContractStorage, EContracts, Deployment } from "@maci-protocol/contract
 import { info, logGreen, logRed, logYellow } from "@maci-protocol/contracts";
 import { CustomEContracts } from "../helpers/constants";
 import { loadAccountConfig } from "./create-account-config";
+import { Privote } from "../../typechain-types";
 
 /**
  * Get policy signup data based on poll's policy contract
@@ -100,7 +101,11 @@ task("join-poll", "Join a poll using MACI keypair")
       console.log(info(`Using Privote contract at: ${privoteContractAddress}`));
       
       // Get Privote contract instance to fetch poll data
-      const privoteContract = await hre.ethers.getContractAt(CustomEContracts.Privote, privoteContractAddress);
+      const privoteContract = await deployment.getContract<Privote>({
+        name: CustomEContracts.Privote as any,
+        address: privoteContractAddress
+      });
+      
       const pollData = await privoteContract.polls(poll);
       const pollContractAddress = pollData.poll;
       

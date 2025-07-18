@@ -24,6 +24,14 @@ interface IERC20CheckerFactory {
 	) external returns (address);
 }
 
+interface IERC20VotesCheckerFactory {
+	function deploy(
+		address token,
+		uint256 threshold,
+		uint256 snapshotBlock
+	) external returns (address);
+}
+
 interface ITokenCheckerFactory {
 	function deploy(address token) external returns (address);
 }
@@ -63,6 +71,13 @@ interface IZupassCheckerFactory {
 	) external returns (address);
 }
 
+interface IHatsCheckerFactory {
+	function deploy(
+		address hatsProtocol,
+		uint256[] memory criterionHats
+	) external returns (address);
+}
+
 interface IFreeForAllCheckerFactory {
 	function deploy() external returns (address);
 }
@@ -77,6 +92,8 @@ contract PrivoteWrapper is Privote {
 	error AnonAadhaarPolicyFactoryNotSet();
 	error ERC20CheckerFactoryNotSet();
 	error ERC20PolicyFactoryNotSet();
+	error ERC20VotesCheckerFactoryNotSet();
+	error ERC20VotesPolicyFactoryNotSet();
 	error TokenCheckerFactoryNotSet();
 	error TokenPolicyFactoryNotSet();
 	error EASCheckerFactoryNotSet();
@@ -89,15 +106,20 @@ contract PrivoteWrapper is Privote {
 	error SemaphorePolicyFactoryNotSet();
 	error ZupassCheckerFactoryNotSet();
 	error ZupassPolicyFactoryNotSet();
+	error HatsCheckerFactoryNotSet();
+	error HatsPolicyFactoryNotSet();
 	error FreeForAllCheckerFactoryNotSet();
 	error FreeForAllPolicyFactoryNotSet();
 	error VoiceCreditProxyFactoryNotSet();
 	error InvalidPolicyAddress();
+
 	/// @notice Factory contracts for auto-deployment
 	IAnonAadhaarCheckerFactory public anonAadhaarCheckerFactory;
 	IPolicyFactory public anonAadhaarPolicyFactory;
 	IERC20CheckerFactory public erc20CheckerFactory;
 	IPolicyFactory public erc20PolicyFactory;
+	IERC20VotesCheckerFactory public erc20VotesCheckerFactory;
+	IPolicyFactory public erc20VotesPolicyFactory;
 	ITokenCheckerFactory public tokenCheckerFactory;
 	IPolicyFactory public tokenPolicyFactory;
 	IEASCheckerFactory public easCheckerFactory;
@@ -110,6 +132,8 @@ contract PrivoteWrapper is Privote {
 	IPolicyFactory public semaphorePolicyFactory;
 	IZupassCheckerFactory public zupassCheckerFactory;
 	IPolicyFactory public zupassPolicyFactory;
+	IHatsCheckerFactory public hatsCheckerFactory;
+	IPolicyFactory public hatsPolicyFactory;
 	IFreeForAllCheckerFactory public freeForAllCheckerFactory;
 	IPolicyFactory public freeForAllPolicyFactory;
 	ConstantInitialVoiceCreditProxyFactory
@@ -124,6 +148,12 @@ contract PrivoteWrapper is Privote {
 		address newPolicyFactory
 	);
 	event ERC20FactoriesUpdated(
+		address indexed oldCheckerFactory,
+		address indexed newCheckerFactory,
+		address indexed oldPolicyFactory,
+		address newPolicyFactory
+	);
+	event ERC20VotesFactoriesUpdated(
 		address indexed oldCheckerFactory,
 		address indexed newCheckerFactory,
 		address indexed oldPolicyFactory,
@@ -160,6 +190,12 @@ contract PrivoteWrapper is Privote {
 		address newPolicyFactory
 	);
 	event ZupassFactoriesUpdated(
+		address indexed oldCheckerFactory,
+		address indexed newCheckerFactory,
+		address indexed oldPolicyFactory,
+		address newPolicyFactory
+	);
+	event HatsFactoriesUpdated(
 		address indexed oldCheckerFactory,
 		address indexed newCheckerFactory,
 		address indexed oldPolicyFactory,
@@ -247,6 +283,32 @@ contract PrivoteWrapper is Privote {
 		erc20PolicyFactory = IPolicyFactory(_newPolicyFactory);
 
 		emit ERC20FactoriesUpdated(
+			oldCheckerFactory,
+			_newCheckerFactory,
+			oldPolicyFactory,
+			_newPolicyFactory
+		);
+	}
+
+	/// @notice Update both ERC20Votes checker and policy factories (only owner)
+	/// @param _newCheckerFactory The new ERC20Votes checker factory address
+	/// @param _newPolicyFactory The new ERC20Votes policy factory address
+	function setERC20VotesFactories(
+		address _newCheckerFactory,
+		address _newPolicyFactory
+	) external onlyOwner {
+		if (_newCheckerFactory == address(0)) revert InvalidFactoryAddress();
+		if (_newPolicyFactory == address(0)) revert InvalidFactoryAddress();
+
+		address oldCheckerFactory = address(erc20VotesCheckerFactory);
+		address oldPolicyFactory = address(erc20VotesPolicyFactory);
+
+		erc20VotesCheckerFactory = IERC20VotesCheckerFactory(
+			_newCheckerFactory
+		);
+		erc20VotesPolicyFactory = IPolicyFactory(_newPolicyFactory);
+
+		emit ERC20VotesFactoriesUpdated(
 			oldCheckerFactory,
 			_newCheckerFactory,
 			oldPolicyFactory,
@@ -400,6 +462,30 @@ contract PrivoteWrapper is Privote {
 		);
 	}
 
+	/// @notice Update both Hats checker and policy factories (only owner)
+	/// @param _newCheckerFactory The new Hats checker factory address
+	/// @param _newPolicyFactory The new Hats policy factory address
+	function setHatsFactories(
+		address _newCheckerFactory,
+		address _newPolicyFactory
+	) external onlyOwner {
+		if (_newCheckerFactory == address(0)) revert InvalidFactoryAddress();
+		if (_newPolicyFactory == address(0)) revert InvalidFactoryAddress();
+
+		address oldCheckerFactory = address(hatsCheckerFactory);
+		address oldPolicyFactory = address(hatsPolicyFactory);
+
+		hatsCheckerFactory = IHatsCheckerFactory(_newCheckerFactory);
+		hatsPolicyFactory = IPolicyFactory(_newPolicyFactory);
+
+		emit HatsFactoriesUpdated(
+			oldCheckerFactory,
+			_newCheckerFactory,
+			oldPolicyFactory,
+			_newPolicyFactory
+		);
+	}
+
 	/// @notice Update both Free For All checker and policy factories (only owner)
 	/// @param _newCheckerFactory The new Free For All checker factory address
 	/// @param _newPolicyFactory The new Free For All policy factory address
@@ -545,6 +631,76 @@ contract PrivoteWrapper is Privote {
 
 		// Deploy ERC20 policy using the checker
 		address policy = erc20PolicyFactory.deploy(checker);
+
+		// Deploy constant voice credit proxy
+		address voiceCreditProxy = constantVoiceCreditProxyFactory.deploy(
+			_voiceCreditsBalance
+		);
+
+		// Create the poll using the deployed contracts
+		PollContracts memory pollContracts = super.createPoll(
+			_name,
+			_options,
+			_optionInfo,
+			_metadata,
+			_startTime,
+			_endTime,
+			_mode,
+			_coordinatorPubKey,
+			policy,
+			voiceCreditProxy,
+			_relayers
+		);
+
+		// Set the target of the policy contract
+		IBasePolicy(policy).setTarget(pollContracts.poll);
+	}
+
+	/// @notice Create a poll with ERC20Votes token authentication
+	/// @param _name The name of the poll
+	/// @param _options The options of the poll
+	/// @param _optionInfo The info of the options
+	/// @param _metadata The metadata of the poll
+	/// @param _startTime The start time of the poll
+	/// @param _endTime The end time of the poll
+	/// @param _mode The mode of the poll
+	/// @param _coordinatorPubKey The coordinator public key
+	/// @param _relayers The relayers of the poll
+	/// @param _tokenAddress The ERC20Votes token contract address
+	/// @param _threshold The minimum token voting power required
+	/// @param _snapshotBlock The block number for the voting power snapshot
+	/// @param _voiceCreditsBalance The balance for voice credits
+	function createPollWithERC20Votes(
+		string calldata _name,
+		string[] calldata _options,
+		bytes[] calldata _optionInfo,
+		string calldata _metadata,
+		uint256 _startTime,
+		uint256 _endTime,
+		Mode _mode,
+		PublicKey memory _coordinatorPubKey,
+		address[] memory _relayers,
+		address _tokenAddress,
+		uint256 _threshold,
+		uint256 _snapshotBlock,
+		uint256 _voiceCreditsBalance
+	) public {
+		if (address(erc20VotesCheckerFactory) == address(0))
+			revert ERC20VotesCheckerFactoryNotSet();
+		if (address(erc20VotesPolicyFactory) == address(0))
+			revert ERC20VotesPolicyFactoryNotSet();
+		if (address(constantVoiceCreditProxyFactory) == address(0))
+			revert VoiceCreditProxyFactoryNotSet();
+
+		// Deploy ERC20Votes checker
+		address checker = erc20VotesCheckerFactory.deploy(
+			_tokenAddress,
+			_threshold,
+			_snapshotBlock
+		);
+
+		// Deploy ERC20Votes policy using the checker
+		address policy = erc20VotesPolicyFactory.deploy(checker);
 
 		// Deploy constant voice credit proxy
 		address voiceCreditProxy = constantVoiceCreditProxyFactory.deploy(
@@ -946,6 +1102,73 @@ contract PrivoteWrapper is Privote {
 
 		// Deploy Zupass policy using the checker
 		address policy = zupassPolicyFactory.deploy(checker);
+
+		// Deploy constant voice credit proxy
+		address voiceCreditProxy = constantVoiceCreditProxyFactory.deploy(
+			_voiceCreditsBalance
+		);
+
+		// Create the poll using the deployed contracts
+		PollContracts memory pollContracts = super.createPoll(
+			_name,
+			_options,
+			_optionInfo,
+			_metadata,
+			_startTime,
+			_endTime,
+			_mode,
+			_coordinatorPubKey,
+			policy,
+			voiceCreditProxy,
+			_relayers
+		);
+
+		// Set the target of the policy contract
+		IBasePolicy(policy).setTarget(pollContracts.poll);
+	}
+
+	/// @notice Create a poll with Hats Protocol authentication
+	/// @param _name The name of the poll
+	/// @param _options The options of the poll
+	/// @param _optionInfo The info of the options
+	/// @param _metadata The metadata of the poll
+	/// @param _startTime The start time of the poll
+	/// @param _endTime The end time of the poll
+	/// @param _mode The mode of the poll
+	/// @param _coordinatorPubKey The coordinator public key
+	/// @param _relayers The relayers of the poll
+	/// @param _hatsProtocol The Hats Protocol contract address
+	/// @param _criterionHats Array of hat IDs that qualify for participation
+	/// @param _voiceCreditsBalance The balance for voice credits
+	function createPollWithHats(
+		string calldata _name,
+		string[] calldata _options,
+		bytes[] calldata _optionInfo,
+		string calldata _metadata,
+		uint256 _startTime,
+		uint256 _endTime,
+		Mode _mode,
+		PublicKey memory _coordinatorPubKey,
+		address[] memory _relayers,
+		address _hatsProtocol,
+		uint256[] memory _criterionHats,
+		uint256 _voiceCreditsBalance
+	) public {
+		if (address(hatsCheckerFactory) == address(0))
+			revert HatsCheckerFactoryNotSet();
+		if (address(hatsPolicyFactory) == address(0))
+			revert HatsPolicyFactoryNotSet();
+		if (address(constantVoiceCreditProxyFactory) == address(0))
+			revert VoiceCreditProxyFactoryNotSet();
+
+		// Deploy Hats checker
+		address checker = hatsCheckerFactory.deploy(
+			_hatsProtocol,
+			_criterionHats
+		);
+
+		// Deploy Hats policy using the checker
+		address policy = hatsPolicyFactory.deploy(checker);
 
 		// Deploy constant voice credit proxy
 		address voiceCreditProxy = constantVoiceCreditProxyFactory.deploy(

@@ -2,10 +2,11 @@
 import { task, types } from "hardhat/config";
 
 import { PublicKey } from "@maci-protocol/domainobjs";
-import { ContractStorage } from "@maci-protocol/contracts";
+import { ContractStorage, Deployment } from "@maci-protocol/contracts";
 import { info, logGreen, logRed, logYellow } from "@maci-protocol/contracts";
 import { CustomEContracts } from "../helpers/constants";
 import { loadAccountConfig } from "./create-account-config";
+import { Privote } from "../../typechain-types";
 
 /**
  * Get policy data dynamically from Privote contract's signUpPolicy
@@ -56,6 +57,8 @@ task("signup", "Sign up to Privote with a deterministic MACI keypair tied to sig
   .addOptionalParam("account", "Account index (signer order, default: 0)", "0", types.string)
   .setAction(async ({ account }, hre) => {
     const storage = ContractStorage.getInstance();
+    const deployment = Deployment.getInstance();
+    deployment.setHre(hre);
     
     try {
       // Check if account config exists, if not create it
@@ -87,9 +90,15 @@ task("signup", "Sign up to Privote with a deterministic MACI keypair tied to sig
       if (accountIndex >= signers.length) {
         throw new Error(`Account index ${accountIndex} exceeds available signers (${signers.length}). Available indices: 0-${signers.length - 1}`);
       }
-      
+
       const signer = signers[accountIndex];
-      const privote = await hre.ethers.getContractAt(CustomEContracts.Privote, privoteContractAddress, signer);
+
+      // const privote = await hre.ethers.getContractAt(CustomEContracts.Privote, privoteContractAddress, signer);
+      const privote = await deployment.getContract<Privote>({
+        name: CustomEContracts.Privote as any,
+        address: privoteContractAddress,
+        signer: signer
+      });
       console.log(info(`Using Privote contract at: ${privoteContractAddress}`));
 
       // Create PublicKey object for contract call

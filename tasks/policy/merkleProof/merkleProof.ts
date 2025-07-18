@@ -15,7 +15,7 @@ task("generate-merkle-proof-data", "Generate signup data for MerkleProof policy"
   .addFlag("updateConfig", "Update the deploy-config.json file with generated data")
   .addOptionalParam("whitelist", "Path to JSON file containing whitelisted addresses", undefined, types.string)
   .addOptionalParam("treeFile", "Path to the tree.json file", "./tree.json", types.string)
-  .addOptionalParam("address", "Address to generate proof for (defaults to current signer)", undefined, types.string)
+  .addOptionalParam("address", "Address to generate proof for (defaults to current signer or --account's index signer)", undefined, types.string)
   .addOptionalParam("account", "Account index to save evidence to (saves to account-config.json, default: 0)", "0", types.string)
   .setAction(async ({ 
     createTree,
@@ -30,7 +30,13 @@ task("generate-merkle-proof-data", "Generate signup data for MerkleProof policy"
       
       let merkleRoot = "";
       let signupData = "";
-      
+      const signers = await hre.ethers.getSigners(); 
+      const accountIndex = parseInt(account);
+      if (accountIndex >= signers.length) {
+        throw new Error(`Account index ${accountIndex} exceeds available signers (${signers.length}). Available indices: 0-${signers.length - 1}`);
+      }
+      const signer = signers[accountIndex];
+
       // Step 1: Create tree if requested
       if (createTree) {
         console.log(info("🌳 Creating Merkle tree..."));
@@ -58,7 +64,6 @@ task("generate-merkle-proof-data", "Generate signup data for MerkleProof policy"
           console.log(info(`📋 Loaded ${addresses.length} addresses from whitelist`));
         } else {
           // Use default signer address
-          const [signer] = await hre.ethers.getSigners();
           addresses = [signer.address];
           console.log(info(`📋 Using default signer address: ${signer.address}`));
         }
@@ -108,7 +113,6 @@ task("generate-merkle-proof-data", "Generate signup data for MerkleProof policy"
       // Determine address to generate proof for
       let targetAddress = address;
       if (!targetAddress) {
-        const [signer] = await hre.ethers.getSigners();
         targetAddress = signer.address;
       }
       

@@ -114,12 +114,12 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		address _initialVoiceCreditProxy,
 		address[] memory _relayers
 	) public returns (PollContracts memory pollContracts) {
-		// if (_startTime < block.timestamp) {
-		// 	revert StartTimeMustBeInFuture();
-		// }
-		// if (_endTime <= _startTime) {
-		// 	revert EndTimeMustBeAfterStartTime();
-		// }
+		if (_startTime < block.timestamp) {
+			revert StartTimeMustBeInFuture();
+		}
+		if (_endTime <= _startTime) {
+			revert EndTimeMustBeAfterStartTime();
+		}
 
 		uint256 pollId = nextPollId;
 		uint256 voteOptions = _options.length;
@@ -182,34 +182,6 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		super.signUp(_publicKey, _signUpPolicyData);
 	}
 
-	function fetchPolls(
-		uint256 _page,
-		uint256 _perPage,
-		bool _ascending
-	) public view returns (PollData[] memory polls_) {
-		uint256 start = (_page - 1) * _perPage;
-		uint256 end = start + _perPage - 1;
-
-		if (start >= nextPollId) {
-			return new PollData[](0);
-		}
-
-		if (end >= nextPollId) {
-			end = nextPollId - 1;
-		}
-
-		polls_ = new PollData[](end - start + 1);
-
-		uint256 index = 0;
-		for (uint256 i = start; i <= end; i++) {
-			uint256 pollIndex = i;
-			if (!_ascending) {
-				pollIndex = nextPollId - i - 1;
-			}
-			polls_[index++] = _polls[pollIndex];
-		}
-	}
-
 	// Possible gas optimizations
 
 	function userTotalPolls(address user) public view returns (uint256) {
@@ -220,44 +192,6 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 			}
 		}
 		return total;
-	}
-
-	function fetchUserPolls(
-		address user,
-		uint256 _page,
-		uint256 _perPage,
-		bool _ascending
-	) public view returns (PollData[] memory polls_) {
-		uint256 totalPolls = userTotalPolls(user);
-		uint256 start = (_page - 1) * _perPage;
-		uint256 end = start + _perPage - 1;
-
-		if (start >= totalPolls) {
-			return new PollData[](0);
-		}
-
-		if (end >= totalPolls) {
-			end = totalPolls - 1;
-		}
-
-		polls_ = new PollData[](end - start + 1);
-		uint256 index = 0;
-		uint256 counted = 0;
-		for (uint256 i = 0; i < nextPollId; i++) {
-			if (_polls[i].pollDeployer == user) {
-				if (counted >= start && counted <= end) {
-					if (_ascending) {
-						polls_[index++] = _polls[i];
-					} else {
-						polls_[end - index++] = _polls[i];
-					}
-				}
-				counted++;
-				if (counted > end) {
-					break;
-				}
-			}
-		}
 	}
 
 	function fetchPoll(
