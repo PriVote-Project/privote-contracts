@@ -57,9 +57,9 @@ deployment.deployTask(EDeploySteps.Poll, "Deploy poll").then((task) =>
         throw new Error("Duration must be a positive number when both pollStartDate and pollEndDate are 0");
       }
       
-      // Set start time to current timestamp + 10 seconds
+      // Set start time to current timestamp
       const currentTimestamp = Math.floor(Date.now() / 1000);
-      pollStartTimestamp = currentTimestamp + 10;
+      pollStartTimestamp = currentTimestamp;
       pollEndTimestamp = pollStartTimestamp + duration;
       
       console.log(`Using duration-based timing:`);
@@ -171,6 +171,7 @@ deployment.deployTask(EDeploySteps.Poll, "Deploy poll").then((task) =>
         .setPollJoinedVerifyingKey(stateTreeDepth, pollJoinedVerifyingKey.asContractParam() as IVerifyingKeyStruct)
         .then((tx: { wait: () => any; }) => tx.wait());
     }
+    const deployer = await deployment.getDeployer();
 
     const receipt = await privoteContract
       .createPoll(
@@ -184,7 +185,8 @@ deployment.deployTask(EDeploySteps.Poll, "Deploy poll").then((task) =>
         unserializedKey.asContractParam(),
         policyContractAddress,
         initialVoiceCreditProxyContractAddress,
-        relayers
+        relayers,
+        deployer.getAddress()
       )
       .then((tx: { wait: () => any; }) => tx.wait());
 

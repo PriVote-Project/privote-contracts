@@ -12,6 +12,8 @@ import {
   EInitialVoiceCreditProxies,
   EInitialVoiceCreditProxiesFactories,
   IDeployParams,
+  deployConstantInitialVoiceCreditProxy,
+  deployERC20VotesInitialVoiceCreditProxy,
 } from "@maci-protocol/contracts";
 
 const DEFAULT_INITIAL_VOICE_CREDITS = 99;
@@ -26,10 +28,6 @@ deployment.deployTask(EDeploySteps.InitialVoiceCreditProxy, "Deploy initial voic
   task.setAction(async ({ incremental }: IDeployParams, hre) => {
     deployment.setHre(hre);
     const deployer = await deployment.getDeployer();
-    
-    const { deployConstantInitialVoiceCreditProxy, deployERC20VotesInitialVoiceCreditProxy } = await import("@maci-protocol/contracts");
-
-
     const voiceCreditProxyType = deployment.getDeployConfigField(EContracts.Poll, "initialVoiceCreditProxy");
 
     const needDeploy = deployment.getDeployConfigField(voiceCreditProxyType as EInitialVoiceCreditProxies, "deploy");
@@ -61,33 +59,33 @@ deployment.deployTask(EDeploySteps.InitialVoiceCreditProxy, "Deploy initial voic
         EInitialVoiceCreditProxiesFactories.Constant,
         hre.network.name,
       );
-      const constantProxyFactory = constantProxyFactoryAddress
-        ? await deployment.getContract<ConstantInitialVoiceCreditProxyFactory>({
-            name: EContracts.ConstantInitialVoiceCreditProxyFactory,
-            address: constantProxyFactoryAddress,
-            signer: deployer,
-          })
-        : undefined;
-      const [constantInitialVoiceCreditProxyContract, constantInitialVoiceCreditProxyContractFactory] =
-        await deployConstantInitialVoiceCreditProxy({ amount }, deployer, constantProxyFactory, true);
+      if (!constantProxyFactoryAddress) {
+        throw new Error(
+          "Need to deploy ConstantInitialVoiceCreditProxyFactory contract first by running the tasks in `tasks/deploy/maci`",
+        );
+      }
 
-      const constantImplementation = await constantInitialVoiceCreditProxyContractFactory.IMPLEMENTATION();
+      const constantProxyFactory = await deployment.getContract<ConstantInitialVoiceCreditProxyFactory>({
+        name: EContracts.ConstantInitialVoiceCreditProxyFactory,
+        address: constantProxyFactoryAddress,
+        signer: deployer,
+      });
 
-      await Promise.all([
-        storage.register({
-          id: EInitialVoiceCreditProxies.Constant,
-          contract: constantInitialVoiceCreditProxyContract,
-          implementation: constantImplementation,
-          args: [],
-          network: hre.network.name,
-        }),
-        storage.register({
-          id: EInitialVoiceCreditProxiesFactories.Constant,
-          contract: constantInitialVoiceCreditProxyContractFactory,
-          args: [],
-          network: hre.network.name,
-        }),
-      ]);
+      const constantInitialVoiceCreditProxyContract = await deployConstantInitialVoiceCreditProxy(
+        { amount },
+        constantProxyFactory,
+        deployer,
+      );
+
+      const constantImplementation = await constantProxyFactory.IMPLEMENTATION();
+
+      await storage.register({
+        id: EInitialVoiceCreditProxies.Constant,
+        contract: constantInitialVoiceCreditProxyContract,
+        implementation: constantImplementation,
+        args: [],
+        network: hre.network.name,
+      });
     }
 
     if (!skipDeployERC20VotesInitialVoiceCreditProxy) {
@@ -117,43 +115,37 @@ deployment.deployTask(EDeploySteps.InitialVoiceCreditProxy, "Deploy initial voic
         EInitialVoiceCreditProxiesFactories.ERC20Votes,
         hre.network.name,
       );
-      const erc20VotesProxyFactory = erc20VotesProxyFactoryAddress
-        ? await deployment.getContract<ERC20VotesInitialVoiceCreditProxyFactory>({
-            name: EContracts.ERC20VotesInitialVoiceCreditProxyFactory,
-            address: erc20VotesProxyFactoryAddress,
-            signer: deployer,
-          })
-        : undefined;
-
-      const [erc20VotesInitialVoiceCreditProxyContract, erc20VotesInitialVoiceCreditProxyContractFactory] =
-        await deployERC20VotesInitialVoiceCreditProxy(
-          {
-            token: tokenAddress,
-            snapshotBlock: BigInt(snapshotBlock),
-            factor: BigInt(factor),
-          },
-          deployer,
-          erc20VotesProxyFactory,
-          true,
+      if (!erc20VotesProxyFactoryAddress) {
+        throw new Error(
+          "Need to deploy ERC20VotesInitialVoiceCreditProxyFactory contract first by running the tasks in `tasks/deploy/maci`",
         );
+      }
 
-      const erc20VotesImplementation = await erc20VotesInitialVoiceCreditProxyContractFactory.IMPLEMENTATION();
+      const erc20VotesProxyFactory = await deployment.getContract<ERC20VotesInitialVoiceCreditProxyFactory>({
+        name: EContracts.ERC20VotesInitialVoiceCreditProxyFactory,
+        address: erc20VotesProxyFactoryAddress,
+        signer: deployer,
+      });
 
-      await Promise.all([
-        storage.register({
-          id: EInitialVoiceCreditProxies.ERC20Votes,
-          contract: erc20VotesInitialVoiceCreditProxyContract,
-          implementation: erc20VotesImplementation,
-          args: [],
-          network: hre.network.name,
-        }),
-        storage.register({
-          id: EInitialVoiceCreditProxiesFactories.ERC20Votes,
-          contract: erc20VotesInitialVoiceCreditProxyContractFactory,
-          args: [],
-          network: hre.network.name,
-        }),
-      ]);
+      const erc20VotesInitialVoiceCreditProxyContract = await deployERC20VotesInitialVoiceCreditProxy(
+        {
+          token: tokenAddress,
+          snapshotBlock: BigInt(snapshotBlock),
+          factor: BigInt(factor),
+        },
+        erc20VotesProxyFactory,
+        deployer,
+      );
+
+      const erc20VotesImplementation = await erc20VotesProxyFactory.IMPLEMENTATION();
+
+      await storage.register({
+        id: EInitialVoiceCreditProxies.ERC20Votes,
+        contract: erc20VotesInitialVoiceCreditProxyContract,
+        implementation: erc20VotesImplementation,
+        args: [],
+        network: hre.network.name,
+      });
     }
   }),
 );

@@ -112,7 +112,8 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		PublicKey memory _coordinatorPubKey,
 		address _policy,
 		address _initialVoiceCreditProxy,
-		address[] memory _relayers
+		address[] memory _relayers,
+		address deployer
 	) public returns (PollContracts memory pollContracts) {
 		if (_startTime < block.timestamp) {
 			revert StartTimeMustBeInFuture();
@@ -150,14 +151,14 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 			options: _options,
 			optionInfo: _optionInfo,
 			coordinatorPubKey: _coordinatorPubKey,
-			pollDeployer: msg.sender,
+			pollDeployer: deployer,
 			mode: _mode,
 			policy: _policy
 		});
 
 		emit PollCreated(
 			pollId,
-			msg.sender,
+			deployer,
 			pollContracts,
 			_name,
 			_options,

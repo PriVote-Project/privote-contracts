@@ -50,7 +50,7 @@ describe("Simplified MACI Voting Flow Test", function () {
       
       const hre = require("hardhat");
       await hre.run("deploy-poll", {
-        incremental: true,
+        incremental: false,
         strict: false,
         verify: false,
         skip: 0
@@ -102,13 +102,16 @@ describe("Simplified MACI Voting Flow Test", function () {
   });
 
   describe("Step 4: Voting", function () {
+    
     for (let i = 0; i < TEST_VOTERS.length; i++) {
       it(`should allow user ${i} to vote`, async function () {
+        const hre = require("hardhat");
+        console.log("⛏️  Mining a block to update blockchain timestamp...");
+        await hre.network.provider.send("evm_mine");
         const voter = TEST_VOTERS[i];
         console.log(`🗳️  User ${i} voting: ${voter.votes}`);
         
         try {
-          const hre = require("hardhat");
           await hre.run("vote", {
             poll: pollId,
             votes: voter.votes,

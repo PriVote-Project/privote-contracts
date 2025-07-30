@@ -585,7 +585,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -649,7 +650,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -719,7 +721,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -781,7 +784,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -851,7 +855,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -918,7 +923,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -980,7 +986,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -1047,7 +1054,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -1120,7 +1128,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -1187,7 +1196,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
@@ -1247,7 +1257,8 @@ contract PrivoteWrapper is Privote {
 			_coordinatorPubKey,
 			policy,
 			voiceCreditProxy,
-			_relayers
+			_relayers,
+			msg.sender
 		);
 
 		// Set the target of the policy contract
