@@ -69,12 +69,13 @@ async function generateDeterministicKeypair(
   signerAddress: string,
   hre: any
 ): Promise<{ privateKey: string; publicKey: string }> {
-
-  const message = `Login to https://www.privote.live`;
+  const appName = 'PRIVOTE';
+  const purpose = 'This signature will be used to generate your secure MACI private key.';
+  const signatureMessage = `Welcome to ${appName}! ${purpose}`;
 
   try {
     // Sign the message
-    const signature = await signer.signMessage(message);
+    const signature = await signer.signMessage(signatureMessage);
     
     // Use the signature hash as seed for the private key
     // We'll hash the signature to get a 32-byte value
