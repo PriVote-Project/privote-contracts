@@ -44,6 +44,7 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 		string[] options,
 		bytes[] optionInfo,
 		string metadata,
+		Mode mode,
 		uint256 startTime,
 		uint256 endTime,
 		address policy
@@ -164,6 +165,7 @@ contract Privote is MACI, Ownable, ReentrancyGuard {
 			_options,
 			_optionInfo,
 			_metadata,
+			_mode,
 			_startTime,
 			_endTime,
 			_policy
