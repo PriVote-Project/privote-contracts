@@ -115,25 +115,67 @@ deployment.deployTask(EDeploySteps.Policies, "Deploy policies").then((task) =>
     }
 
     if (!skipDeployFreeForAllPolicy) {
-      const factories = await getDeployedPolicyProxyFactories<FreeForAllCheckerFactory, FreeForAllPolicyFactory>({
-        policy: EPolicyFactories.FreeForAll,
-        checker: ECheckerFactories.FreeForAll,
-        network: hre.network.name,
+      console.log("🚀 Deploying FreeForAll policy components individually...");
+      
+      // Step 1: Deploy FreeForAllCheckerFactory
+      console.log("📋 Step 1: Deploying FreeForAllCheckerFactory...");
+      const checkerFactoryBaseContract = await deployment.deployContract({
+        name: "FreeForAllCheckerFactory",
         signer: deployer,
       });
-
-      const [
-        freeForAllPolicyContract,
-        freeForAllCheckerContract,
-        freeForAllPolicyFactoryContract,
-        freeForAllCheckerFactoryContract,
-      ] = await deployFreeForAllSignUpPolicy(factories, deployer);
-
+      const checkerFactoryAddress = await checkerFactoryBaseContract.getAddress();
+      const freeForAllCheckerFactoryContract = await hre.ethers.getContractAt("FreeForAllCheckerFactory", checkerFactoryAddress, deployer) as FreeForAllCheckerFactory;
+      logGreen({ text: `✅ FreeForAllCheckerFactory deployed to: ${checkerFactoryAddress}` });
+      //timeout 10 seconds
+      await new Promise(resolve => setTimeout(resolve, 10000));
+      // Step 2: Deploy FreeForAllPolicyFactory  
+      console.log("📋 Step 2: Deploying FreeForAllPolicyFactory...");
+      const policyFactoryBaseContract = await deployment.deployContract({
+        name: "FreeForAllPolicyFactory",
+        signer: deployer,
+      });
+      const policyFactoryAddress = await policyFactoryBaseContract.getAddress();
+      const freeForAllPolicyFactoryContract = await hre.ethers.getContractAt("FreeForAllPolicyFactory", policyFactoryAddress, deployer) as FreeForAllPolicyFactory;
+      logGreen({ text: `✅ FreeForAllPolicyFactory deployed to: ${policyFactoryAddress}` });
+      //timeout 10 seconds
+      await new Promise(resolve => setTimeout(resolve, 10000));
+      // Step 3: Deploy FreeForAllChecker using the factory
+      console.log("📋 Step 3: Deploying FreeForAllChecker using factory...");
+      
+      // First get the address that will be deployed using staticCall (doesn't actually deploy)
+      const checkerAddress = await freeForAllCheckerFactoryContract.deploy.staticCall();
+      
+      // Now actually deploy the checker
+      const checkerDeployTx = await freeForAllCheckerFactoryContract.deploy();
+      const checkerDeployReceipt = await checkerDeployTx.wait();
+      console.log("checkerDeployReceipt", checkerDeployReceipt);
+      
+      const freeForAllCheckerContract = await hre.ethers.getContractAt("FreeForAllChecker", checkerAddress, deployer);
+      logGreen({ text: `✅ FreeForAllChecker deployed to: ${checkerAddress}` });
+      //timeout 10 seconds
+      await new Promise(resolve => setTimeout(resolve, 10000));
+      // Step 4: Deploy FreeForAllPolicy using the factory and checker
+      console.log("📋 Step 4: Deploying FreeForAllPolicy using factory...");
+      
+      // First get the address that will be deployed using staticCall (doesn't actually deploy)
+      const policyAddress = await freeForAllPolicyFactoryContract.deploy.staticCall(checkerAddress);
+      
+      // Now actually deploy the policy
+      const policyDeployTx = await freeForAllPolicyFactoryContract.deploy(checkerAddress);
+      const policyDeployReceipt = await policyDeployTx.wait();
+      
+      const freeForAllPolicyContract = await hre.ethers.getContractAt("FreeForAllPolicy", policyAddress, deployer);
+      logGreen({ text: `✅ FreeForAllPolicy deployed to: ${policyAddress}` });
+      //timeout 10 seconds
+      await new Promise(resolve => setTimeout(resolve, 10000));
+      // Get implementation addresses
       const [policyContractImplementation, checkerContractImplementation] = await Promise.all([
         freeForAllPolicyFactoryContract.IMPLEMENTATION(),
         freeForAllCheckerFactoryContract.IMPLEMENTATION(),
       ]);
 
+      // Step 5: Register all contracts with storage
+      console.log("📋 Step 5: Registering contracts with storage...");
       await Promise.all([
         storage.register({
           id: EPolicies.FreeForAll,
@@ -166,6 +208,8 @@ deployment.deployTask(EDeploySteps.Policies, "Deploy policies").then((task) =>
           network: hre.network.name,
         }),
       ]);
+      
+      logGreen({ text: "✅ All FreeForAll policy components deployed and registered successfully!" });
     }
 
     const isSupportedEASPolicyNetwork = ![ESupportedChains.Hardhat, ESupportedChains.Coverage].includes(

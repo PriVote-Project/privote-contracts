@@ -59,7 +59,7 @@ deployment.deployTask(EDeploySteps.Poll, "Deploy poll").then((task) =>
       
       // Set start time to current timestamp
       const currentTimestamp = Math.floor(Date.now() / 1000);
-      pollStartTimestamp = currentTimestamp;
+      pollStartTimestamp = currentTimestamp + 10;
       pollEndTimestamp = pollStartTimestamp + duration;
       
       console.log(`Using duration-based timing:`);

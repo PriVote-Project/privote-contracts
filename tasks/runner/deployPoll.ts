@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import { task, types } from "hardhat/config";
 
-import { info, logMagenta, logRed } from "@maci-protocol/contracts";
+import { info, logMagenta, logRed, logYellow } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 import { type IDeployParams } from "@maci-protocol/contracts";
+import { runStepsWithTimeout } from "../../utils/deploymentUtils";
 
 /**
  * Poll deployment task which runs deploy steps in the same order that `Deployment#deployTask` is called.
@@ -15,7 +16,8 @@ task("deploy-poll", "Deploy poll")
   .addFlag("strict", "Fail on warnings")
   .addFlag("verify", "Verify contracts at Etherscan")
   .addOptionalParam("skip", "Skip steps with less or equal index", 0, types.int)
-  .setAction(async ({ strict, verify, skip = 0 }: IDeployParams, hre) => {
+  .addOptionalParam("timeout", "Timeout in seconds between deployment steps (default: 0)", 0, types.int)
+  .setAction(async ({ strict, verify, skip = 0, timeout = 0 }: IDeployParams & { timeout?: number }, hre) => {
     const deployment = Deployment.getInstance({ hre });
 
     deployment.setHre(hre);
@@ -27,7 +29,12 @@ task("deploy-poll", "Deploy poll")
     try {
       const steps = await deployment.start("poll", { incremental: true, verify });
 
-      await deployment.runSteps(steps, skip);
+      if (timeout > 0) {
+        logYellow({ text: `🕒 Running poll deployment with ${timeout} second timeout between steps` });
+        await runStepsWithTimeout(deployment, steps, skip, timeout);
+      } else {
+        await deployment.runSteps(steps, skip);
+      }
 
       await deployment.checkResults(strict);
 

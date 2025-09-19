@@ -36,11 +36,11 @@ deployment.deployTask("full:deploy-factories", "Deploy all policy factories for 
         // Check if factories already exist
         const [policyFactoryAddress, checkerFactoryAddress] = storage.getAddresses([config.policy, config.checker], hre.network.name);
         
-        if (incremental && policyFactoryAddress && checkerFactoryAddress) {
-          console.log(`⏭️  Skipping ${config.name} factories - already deployed`);
-          skippedCount++;
-          continue;
-        }
+        // if (incremental && policyFactoryAddress && checkerFactoryAddress) {
+        //   console.log(`⏭️  Skipping ${config.name} factories - already deployed`);
+        //   skippedCount++;
+        //   continue;
+        // }
 
         console.log(`🚀 Deploying ${config.name} factories...`);
 
@@ -50,6 +50,8 @@ deployment.deployTask("full:deploy-factories", "Deploy all policy factories for 
             name: config.checker as any,
             signer: deployer,
           });
+          //timeout 10 seconds
+          await new Promise(resolve => setTimeout(resolve, 10000));
 
           await storage.register({
             id: config.checker,
@@ -66,7 +68,8 @@ deployment.deployTask("full:deploy-factories", "Deploy all policy factories for 
             name: config.policy as any,
             signer: deployer,
           });
-
+          //timeout 10 seconds
+          await new Promise(resolve => setTimeout(resolve, 10000));
           await storage.register({
             id: config.policy,
             name: config.policy,

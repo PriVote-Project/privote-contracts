@@ -7,7 +7,7 @@ import { task, types } from "hardhat/config";
 import fs from "fs";
 
 import type { Proof } from "@maci-protocol/contracts";
-import type { MACI, Poll, Privote } from "../../typechain-types";
+import type { MACI, Poll, Privote, MessageProcessor } from "../../typechain-types";
 
 import { logMagenta, info } from "@maci-protocol/contracts";
 import { ContractStorage } from "@maci-protocol/contracts";
@@ -98,6 +98,9 @@ task("prove", "Command to generate proofs")
         address: privoteContractAddress 
       });
 
+      const nextPollId = await privoteContract.nextPollId();
+      console.log(`Next poll id: ${nextPollId}`);
+
       const pollContracts = await privoteContract.polls(poll);
       const pollContract = await deployment.getContract<Poll>({
         name: EContracts.Poll,
@@ -110,6 +113,8 @@ task("prove", "Command to generate proofs")
         throw new Error("The state tree has not been merged yet. Please use the mergeSignups subcommand to do so.");
       }
 
+      console.log("🔍 Debug: Preparing MACI state...");
+      
       const maciState = await ProofGenerator.prepareState({
         maciContract: privoteContract,
         pollContract,
@@ -127,12 +132,60 @@ task("prove", "Command to generate proofs")
           blocksPerBatch,
         },
       });
+      
+      console.log(`📊 MACI State Debug Info:`);
+      console.log(`   Number of polls in state: ${maciState.polls.size}`);
+      
+      // Check on-chain message processing state for comparison
+      console.log("🔍 Debug: Checking on-chain message processing state...");
+      const debugPollContracts = await privoteContract.polls(poll);
+      const currentPollContract = await deployment.getContract<Poll>({
+        name: EContracts.Poll,
+        address: debugPollContracts.poll,
+      });
+      const messageProcessorContract = await deployment.getContract<MessageProcessor>({
+        name: EContracts.MessageProcessor,
+        address: debugPollContracts.messageProcessor,
+      });
+      
+      const [onChainBatchHashes, onChainBatchesProcessed] = await Promise.all([
+        currentPollContract.getBatchHashes(),
+        messageProcessorContract.totalBatchesProcessed().then(Number),
+      ]);
+      
+      console.log(`📊 On-Chain State Debug Info:`);
+      console.log(`   Total batch hashes on-chain: ${onChainBatchHashes.length}`);
+      console.log(`   Batches processed on-chain: ${onChainBatchesProcessed}`);
+      
+      // Get more detailed on-chain info
+      const [totalSignupsAndMessages, onChainMessageBatchSize] = await Promise.all([
+        currentPollContract.totalSignupsAndMessages(),
+        currentPollContract.messageBatchSize().then(Number)
+      ]);
+      
+      const onChainTotalMessages = Number(totalSignupsAndMessages[1]);
+      console.log(`   Total messages on-chain: ${onChainTotalMessages}`);
+      console.log(`   Message batch size on-chain: ${onChainMessageBatchSize}`);
+      
+      // Calculate expected batches based on on-chain data
+      let expectedOnChainBatches = onChainTotalMessages <= onChainMessageBatchSize ? 1 : Math.floor(onChainTotalMessages / onChainMessageBatchSize);
+      if (onChainTotalMessages > onChainMessageBatchSize && onChainTotalMessages % onChainMessageBatchSize > 0) {
+        expectedOnChainBatches += 1;
+      }
+      console.log(`   Expected batches from on-chain messages: ${expectedOnChainBatches}`);
 
       const foundPoll = maciState.polls.get(BigInt(poll));
 
       if (!foundPoll) {
         throw new Error(`Poll ${poll} not found`);
       }
+      
+      // Store on-chain values for later comparison
+      const onChainDebugInfo = {
+        totalMessages: onChainTotalMessages,
+        expectedBatches: expectedOnChainBatches,
+        batchHashes: onChainBatchHashes.length
+      };
 
       const modeKeys = {
         [EMode.QV]: "qv",
@@ -190,10 +243,43 @@ task("prove", "Command to generate proofs")
         tallyProofs: [] as Proof[],
       };
 
+      // Debug logging for proof generation
+      console.log("🔍 Debug: Checking message processing state before proof generation...");
+      
+      const pollMessages = foundPoll.messages.length;
+      const { messageBatchSize } = foundPoll.batchSizes;
+      const hasUnprocessed = foundPoll.hasUnprocessedMessages();
+      const totalBatchesProcessed = foundPoll.totalBatchesProcessed;
+      
+      let expectedTotalBatches = pollMessages <= messageBatchSize ? 1 : Math.floor(pollMessages / messageBatchSize);
+      if (pollMessages > messageBatchSize && pollMessages % messageBatchSize > 0) {
+        expectedTotalBatches += 1;
+      }
+      
+      console.log(`📊 Message Processing Debug Info:`);
+      console.log(`   Total messages in poll: ${pollMessages}`);
+      console.log(`   Message batch size: ${messageBatchSize}`);
+      console.log(`   Expected total batches: ${expectedTotalBatches}`);
+      console.log(`   Batches already processed locally: ${totalBatchesProcessed}`);
+      console.log(`   Has unprocessed messages: ${hasUnprocessed}`);
+      console.log(`   Remaining batches to generate: ${expectedTotalBatches - totalBatchesProcessed}`);
+      
+      console.log(`🚨 STATE MISMATCH ANALYSIS:`);
+      console.log(`   Local state sees: ${pollMessages} messages → ${expectedTotalBatches} batch(es)`);
+      console.log(`   On-chain state has: ${onChainDebugInfo.totalMessages} messages → ${onChainDebugInfo.expectedBatches} batch(es)`);
+      console.log(`   But batch hashes suggest: ${onChainDebugInfo.batchHashes} batch(es) expected`);
+
       data.processProofs = await proofGenerator.generateMpProofs();
+      
+      console.log(`✅ Process proof generation completed:`);
+      console.log(`   Generated ${data.processProofs.length} process proof(s)`);
+      
       data.tallyProofs = await proofGenerator
         .generateTallyProofs(network.name, network.config.chainId?.toString())
         .then(({ proofs }) => proofs);
+        
+      console.log(`✅ Tally proof generation completed:`);
+      console.log(`   Generated ${data.tallyProofs.length} tally proof(s)`);
 
       const endBalance = await signer.provider!.getBalance(signer);
 

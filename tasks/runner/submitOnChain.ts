@@ -103,7 +103,6 @@ task("submitOnChain", "Command to prove the result of a poll on-chain")
       verifierContract,
       tallyContract,
     });
-
     await prover.proveMessageProcessing(data.processProofs);
 
     // read tally data

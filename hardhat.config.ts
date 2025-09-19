@@ -30,6 +30,7 @@ import "./tasks/runner/prove";
 import "./tasks/runner/signup";
 import "./tasks/runner/submitOnChain";
 import "./tasks/runner/vote";
+import "./tasks/runner/getTallyResults";
 import "./tasks/runner/encodeErrors";
 import "./tasks/runner/deployPollWrapper";
 
@@ -167,6 +168,16 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: `https://sepolia.infura.io/v3/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
+    "base-sepolia": {
+      url: `https://base-sepolia.gateway.tenderly.co`,
+      accounts: [deployerPrivateKey],
+      // gasPrice: 2000000000, // 2 gwei - higher base price
+      // gasMultiplier: 2.0,    // Increased from 1.5 to 2.0
+    },
+    "optimism-sepolia": {
+      url: `https://optimism-sepolia.gateway.tenderly.co`,
       accounts: [deployerPrivateKey],
     },
   },

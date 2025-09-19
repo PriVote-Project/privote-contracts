@@ -20,7 +20,7 @@ const storage = ContractStorage.getInstance();
  */
 task("deploy-poll-wrapper", "Deploy poll using PrivoteWrapper")
   .addOptionalParam("policy", "Policy type (overrides config)", undefined, types.string)
-  .addOptionalParam("voiceCredits", "Voice credits balance", 100, types.int)
+  .addOptionalParam("voiceCredits", "Voice credits balance", 99, types.int)
   .addOptionalParam("duration", "Poll duration in seconds (overrides config)", undefined, types.int)
   .addOptionalParam("name", "Poll name (overrides config)", undefined, types.string)
   .addOptionalParam("metadata", "Poll metadata (overrides config)", undefined, types.string)

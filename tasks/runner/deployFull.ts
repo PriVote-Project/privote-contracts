@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import { task, types } from "hardhat/config";
 
-import { info, logMagenta, logRed } from "@maci-protocol/contracts";
+import { info, logMagenta, logRed, logYellow } from "@maci-protocol/contracts";
 import { Deployment } from "@maci-protocol/contracts";
 import { type IDeployParams } from "@maci-protocol/contracts";
+import { runStepsWithTimeout } from "../../utils/deploymentUtils";
 
 /**
  * Main deployment task which runs deploy steps in the same order that `Deployment#deployTask` is called.
@@ -16,7 +17,8 @@ task("deploy-full", "Deploy environment")
   .addFlag("verify", "Verify contracts at Etherscan")
   .addFlag("wrapper", "Deploy PrivoteWrapper instead of basic Privote")
   .addOptionalParam("skip", "Skip steps with less or equal index", 0, types.int)
-  .setAction(async ({ incremental, strict, verify, wrapper, skip = 0 }: IDeployParams & { wrapper?: boolean }, hre) => {
+  .addOptionalParam("timeout", "Timeout in seconds between deployment steps (default: 0)", 0, types.int)
+  .setAction(async ({ incremental, strict, verify, wrapper, skip = 0, timeout = 0 }: IDeployParams & { wrapper?: boolean; timeout?: number }, hre) => {
     const deployment = Deployment.getInstance({ hre });
 
     deployment.setHre(hre);
@@ -31,7 +33,12 @@ task("deploy-full", "Deploy environment")
     try {
       const steps = await deployment.start("full", { incremental, verify });
 
-      await deployment.runSteps(steps, skip);
+      if (timeout > 0) {
+        logYellow({ text: `🕒 Running deployment with ${timeout} second timeout between steps` });
+        await runStepsWithTimeout(deployment, steps, skip, timeout);
+      } else {
+        await deployment.runSteps(steps, skip);
+      }
 
       await deployment.checkResults(strict);
 

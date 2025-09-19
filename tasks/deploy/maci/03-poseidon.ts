@@ -33,8 +33,14 @@ deployment.deployTask(EDeploySteps.Poseidon, "Deploy poseidon contracts").then((
     }
 
     const PoseidonT3Contract = await deployment.deployContract({ name: EContracts.PoseidonT3, signer: deployer });
+    //timeout 10 seconds
+    await new Promise(resolve => setTimeout(resolve, 10000));
     const PoseidonT4Contract = await deployment.deployContract({ name: EContracts.PoseidonT4, signer: deployer });
+    //timeout 10 seconds
+    await new Promise(resolve => setTimeout(resolve, 10000));
     const PoseidonT5Contract = await deployment.deployContract({ name: EContracts.PoseidonT5, signer: deployer });
+    //timeout 10 seconds
+    await new Promise(resolve => setTimeout(resolve, 10000));
     const PoseidonT6Contract = await deployment.deployContract({ name: EContracts.PoseidonT6, signer: deployer });
 
     await Promise.all([

@@ -1,0 +1,2138 @@
+{
+  "localhost": {
+    "instance": {
+      "0xb0C6421BdE3e29683F5eeD0361bF58589dE95fC7": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+          "impl": "0x127Ac224013F1918823AFfeb7053b867C496527f",
+          "args": "[]"
+        }
+      },
+      "0x02299a3DcaB0938d0544130D054Bcbfb32B588C3": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+          "impl": "0x8398bCD4f633C72939F9043dB78c574A91C99c0A",
+          "args": "[]"
+        }
+      },
+      "0x71C95911E9a5D330f4D621842EC243EE1343292e": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x8464135c8F25Da09e49BC8782676a84730C318bC": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xbCF26943C0197d2eE0E5D05c716Be60cc2761508": {
+        "id": "Verifier",
+        "deploymentTxHash": "0x059d9e948e368e6c05531ddc2c29583138a3e77447e7ad40294927bcab3d2fec",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0": {
+        "id": "PoseidonT3",
+        "deploymentTxHash": "0x4ac5104ce1419853dfb96220390ab3974b9dd6d97592ddcf9d43b3acc0f5a3dd",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xC6bA8C3233eCF65B761049ef63466945c362EdD2": {
+        "id": "PoseidonT4",
+        "deploymentTxHash": "0x93f29dd38ac669afed1507d7a25a93a5220d0286997eab16448ea0a6f89dcc6f",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x1275D096B9DBf2347bD2a131Fb6BDaB0B4882487": {
+        "id": "PoseidonT5",
+        "deploymentTxHash": "0x1d7aa3ffaa4e7be3eb281875f1cf7792d1445514b527f159885a2664a51c9204",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x05Aa229Aec102f78CE0E852A812a388F076Aa555": {
+        "id": "PoseidonT6",
+        "deploymentTxHash": "0x9692ec6f620ea60d30d7975055ecec25254f3b6ddcea163a980b96715fe49943",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x0b48aF34f4c854F5ae1A3D587da471FeA45bAD52": {
+        "id": "PollFactory",
+        "deploymentTxHash": "0xee31066756bc372c62c58300f2050dd4dc5abfeb00f87c9640da07f3150e3cc0",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xC6bA8C3233eCF65B761049ef63466945c362EdD2\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x1275D096B9DBf2347bD2a131Fb6BDaB0B4882487\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0x05Aa229Aec102f78CE0E852A812a388F076Aa555\"}"
+        }
+      },
+      "0x0f5D1ef48f12b6f691401bfe88c2037c690a6afe": {
+        "id": "MessageProcessorFactory",
+        "deploymentTxHash": "0x65ec9c52293b119d747143909c638b2fd1c4bc671e359dc2f15f5b58db70142b",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xC6bA8C3233eCF65B761049ef63466945c362EdD2\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x1275D096B9DBf2347bD2a131Fb6BDaB0B4882487\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0x05Aa229Aec102f78CE0E852A812a388F076Aa555\"}"
+        }
+      },
+      "0x90118d110B07ABB82Ba8980D1c5cC96EeA810d2C": {
+        "id": "TallyFactory",
+        "deploymentTxHash": "0x3127f4ff5a13a2e80454fddb8ea0bff3e765bf277a9f07cb133b49445d4ee05a",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xC6bA8C3233eCF65B761049ef63466945c362EdD2\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x1275D096B9DBf2347bD2a131Fb6BDaB0B4882487\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0x05Aa229Aec102f78CE0E852A812a388F076Aa555\"}"
+        }
+      },
+      "0xcA03Dc4665A8C3603cb4Fd5Ce71Af9649dC00d44": {
+        "id": "VerifyingKeysRegistry",
+        "deploymentTxHash": "0xf7aa8ec098499fa355784caac049e6b017f2c7dccc2cef141d99cc58aa4baa02",
+        "verify": {
+          "args": "[\"0x70997970C51812dc3A010C7d01b50e0d17dc79C8\"]"
+        }
+      },
+      "0x73eccD6288e117cAcA738BDAD4FEC51312166C1A": {
+        "id": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory.sol:AnonAadhaarCheckerFactory",
+        "deploymentTxHash": "0x11df859bdd5046f2a25188a2fc0ae13dd92b48d28df00ba65050bf115c502cc0",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory.sol:AnonAadhaarCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x381445710b5e73d34aF196c53A3D5cDa58EDBf7A": {
+        "id": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory.sol:AnonAadhaarPolicyFactory",
+        "deploymentTxHash": "0xd5592c5c431bfbde3e2621332df0b4547a245ad95fa08a1b553f4625b9498ffd",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory.sol:AnonAadhaarPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xe6b98F104c1BEf218F3893ADab4160Dc73Eb8367": {
+        "id": "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory.sol:ERC20CheckerFactory",
+        "deploymentTxHash": "0xd785add3a04b453ac0f04efc4acb39bc28c8b3b42922763b2db321cc959ef362",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory.sol:ERC20CheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x5C7c905B505f0Cf40Ab6600d05e677F717916F6B": {
+        "id": "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory.sol:ERC20PolicyFactory",
+        "deploymentTxHash": "0x1894a2cdd1714fa4d15b1a64a001c7deefd12717be63db7c5e21300ec01ea387",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory.sol:ERC20PolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x0D4ff719551E23185Aeb16FFbF2ABEbB90635942": {
+        "id": "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory.sol:TokenCheckerFactory",
+        "deploymentTxHash": "0x40ec8a63d16d844f28bc860e97a6099e8ca9cf9ac4cb29a6feef2d655592053e",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory.sol:TokenCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x85C5Dd61585773423e378146D4bEC6f8D149E248": {
+        "id": "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory.sol:TokenPolicyFactory",
+        "deploymentTxHash": "0xf485cd2093ab6aa03000a15966c2eb0ef2b79d11d7362ef81c6354f19d1185ec",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory.sol:TokenPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xfbAb4aa40C202E4e80390171E82379824f7372dd": {
+        "id": "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory.sol:EASCheckerFactory",
+        "deploymentTxHash": "0xa09869c9b463943d49f8e20d8a490c55b0546966775c6401f07aaf3662ffc48b",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory.sol:EASCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xAfe1b5bdEbD4ae65AF2024738bf0735fbb65d44b": {
+        "id": "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory.sol:EASPolicyFactory",
+        "deploymentTxHash": "0x6d175bcd61360202e087c16126f8192c5b7c39b00226fff74cd04c65f2edf8ee",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory.sol:EASPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x2fc631e4B3018258759C52AF169200213e84ABab": {
+        "id": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory.sol:GitcoinPassportCheckerFactory",
+        "deploymentTxHash": "0x721d35f55efccba8c24fb8c9674b318f474e0c5621801b2f5740d9cc63c7c23c",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory.sol:GitcoinPassportCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x63cf2Cd54fE91e3545D1379abf5bfd194545259d": {
+        "id": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory.sol:GitcoinPassportPolicyFactory",
+        "deploymentTxHash": "0x2b0137753e61b410115d6d1f20af65912807bf65eb3229355c50a876e7c1ef06",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory.sol:GitcoinPassportPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x1e2F4432bFeF9E9Ad39DA6d272F4aFf33629c770": {
+        "id": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory.sol:MerkleProofCheckerFactory",
+        "deploymentTxHash": "0xcd3a320cb5dbd62358887164913ec8ed8165b9fce76f468550f13194cce6f72e",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory.sol:MerkleProofCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x446e7636a5Fa9af46c3718719e465B547248bF62": {
+        "id": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory.sol:MerkleProofPolicyFactory",
+        "deploymentTxHash": "0x7cb0daa4dec3bc2aa91f5814aa68e0e5be1265db3aaee98134aca2823af60774",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory.sol:MerkleProofPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x505d59ffFd312983Cc0eD114d7F117B91520d742": {
+        "id": "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory.sol:SemaphoreCheckerFactory",
+        "deploymentTxHash": "0xae3aec6703a8b36699685a20da1a1125c5b39b7887e3faa8b2261720caff9a38",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory.sol:SemaphoreCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xed17543171C1459714cdC6519b58fFcC29A3C3c9": {
+        "id": "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory.sol:SemaphorePolicyFactory",
+        "deploymentTxHash": "0x09db030d4926486a0809b332c09128a94e562d91549dd20b4663bd96233a6b8d",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory.sol:SemaphorePolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x677df0cb865368207999F2862Ece576dC56D8dF6": {
+        "id": "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory.sol:ZupassCheckerFactory",
+        "deploymentTxHash": "0xa9daa09b752f6d2ee4622fa159e302c41521d16d5628a8ac83a2e159cf0b158e",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory.sol:ZupassCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x0Cf17D5DcDA9cF25889cEc9ae5610B0FB9725F65": {
+        "id": "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory.sol:ZupassPolicyFactory",
+        "deploymentTxHash": "0x4c04fe1f9b5ec0f2b9ec532f9e69c680a37ab052f30c54648db21a3a0d7d51fd",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory.sol:ZupassPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xcEC91d876E8f003110D43381359b1bAd124e7F2b": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0x6f7fa687d492a8aa1c7cd551d17d9c975d71deb4d001f3014a5664271eac53ac",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x5370F78c6af2Da9cF6642382A3a75F9D5aEc9cc1": {
+        "id": "Privote",
+        "deploymentTxHash": "0x4d5f306ba56f4e6849d851fa563acd1f32ebcc09c0f387d03aa5bf0a097cc6b8",
+        "verify": {
+          "args": "[\"0x0b48aF34f4c854F5ae1A3D587da471FeA45bAD52\",\"0x0f5D1ef48f12b6f691401bfe88c2037c690a6afe\",\"0x90118d110B07ABB82Ba8980D1c5cC96EeA810d2C\",\"0xb0C6421BdE3e29683F5eeD0361bF58589dE95fC7\",10,[\"16015576667038038422103932363190100635991292382181099511410843174865570503661\",\"166510078825589460025300915201657086611944528317298994959376081297530246971\",\"10057734083972610459557695472359628128485394923403014377687504571662791937025\",\"4904828619307091008204672239231377290495002626534171783829482835985709082773\",\"18694062287284245784028624966421731916526814537891066525886866373016385890569\"]]",
+          "libraries": "{\"@maci-protocol/contracts/contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xC6bA8C3233eCF65B761049ef63466945c362EdD2\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x1275D096B9DBf2347bD2a131Fb6BDaB0B4882487\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0x05Aa229Aec102f78CE0E852A812a388F076Aa555\"}"
+        }
+      },
+      "0x8613A4029EaA95dA61AE65380aC2e7366451bF2b": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0x6647db2a862941b719556890f3c9009c2554e19b4d8e5360ca66fedc35049e54",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x6F62d12568c81Dc0fb38426B7Cdba2d265f89B29": {
+        "id": "Poll",
+        "verify": {
+          "impl": "0x98A0Bc3f9FdAD482CB2e40dE1291f8b0A6FE1860",
+          "args": "[]"
+        }
+      },
+      "0x6dDaE9060f6B6af7004D87baF9C08350F1CB6e9B": {
+        "id": "MessageProcessor",
+        "verify": {
+          "impl": "0xFd326399839003A6f7238A03b7f4e6cF95dD03BD",
+          "args": "[]"
+        }
+      },
+      "0x16F57A4fb463CFC280C6E24a2310683725B4167B": {
+        "id": "Tally",
+        "verify": {
+          "impl": "0xc2Ac82860Fa561d3beBE07E1F5Ae9D9E624BE835",
+          "args": "[]"
+        }
+      },
+      "0x6DC4573ec72ae044237693424C3437105B76A24D": {
+        "id": "Poll",
+        "verify": {
+          "impl": "0x98A0Bc3f9FdAD482CB2e40dE1291f8b0A6FE1860",
+          "args": "[]"
+        }
+      },
+      "0x066653B412bd22E788cCCd2931Ceb6b23E7F7871": {
+        "id": "MessageProcessor",
+        "verify": {
+          "impl": "0xFd326399839003A6f7238A03b7f4e6cF95dD03BD",
+          "args": "[]"
+        }
+      },
+      "0x80fdcbD72960656b529004F6170F82D64dBcC4bd": {
+        "id": "Tally",
+        "verify": {
+          "impl": "0xc2Ac82860Fa561d3beBE07E1F5Ae9D9E624BE835",
+          "args": "[]"
+        }
+      }
+    },
+    "named": {
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy": {
+        "sol:FreeForAllPolicy": {
+          "address": "0xb0C6421BdE3e29683F5eeD0361bF58589dE95fC7",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker": {
+        "sol:FreeForAllChecker": {
+          "address": "0x02299a3DcaB0938d0544130D054Bcbfb32B588C3",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory": {
+        "sol:FreeForAllPolicyFactory": {
+          "address": "0x71C95911E9a5D330f4D621842EC243EE1343292e",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory": {
+        "sol:FreeForAllCheckerFactory": {
+          "address": "0x8464135c8F25Da09e49BC8782676a84730C318bC",
+          "count": 1
+        }
+      },
+      "Verifier": {
+        "address": "0xbCF26943C0197d2eE0E5D05c716Be60cc2761508",
+        "count": 1
+      },
+      "PoseidonT3": {
+        "address": "0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0",
+        "count": 1
+      },
+      "PoseidonT4": {
+        "address": "0xC6bA8C3233eCF65B761049ef63466945c362EdD2",
+        "count": 1
+      },
+      "PoseidonT5": {
+        "address": "0x1275D096B9DBf2347bD2a131Fb6BDaB0B4882487",
+        "count": 1
+      },
+      "PoseidonT6": {
+        "address": "0x05Aa229Aec102f78CE0E852A812a388F076Aa555",
+        "count": 1
+      },
+      "PollFactory": {
+        "address": "0x0b48aF34f4c854F5ae1A3D587da471FeA45bAD52",
+        "count": 1
+      },
+      "MessageProcessorFactory": {
+        "address": "0x0f5D1ef48f12b6f691401bfe88c2037c690a6afe",
+        "count": 1
+      },
+      "TallyFactory": {
+        "address": "0x90118d110B07ABB82Ba8980D1c5cC96EeA810d2C",
+        "count": 1
+      },
+      "VerifyingKeysRegistry": {
+        "address": "0xcA03Dc4665A8C3603cb4Fd5Ce71Af9649dC00d44",
+        "count": 1
+      },
+      "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory": {
+        "sol:AnonAadhaarCheckerFactory": {
+          "address": "0x73eccD6288e117cAcA738BDAD4FEC51312166C1A",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory": {
+        "sol:AnonAadhaarPolicyFactory": {
+          "address": "0x381445710b5e73d34aF196c53A3D5cDa58EDBf7A",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory": {
+        "sol:ERC20CheckerFactory": {
+          "address": "0xe6b98F104c1BEf218F3893ADab4160Dc73Eb8367",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory": {
+        "sol:ERC20PolicyFactory": {
+          "address": "0x5C7c905B505f0Cf40Ab6600d05e677F717916F6B",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory": {
+        "sol:TokenCheckerFactory": {
+          "address": "0x0D4ff719551E23185Aeb16FFbF2ABEbB90635942",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory": {
+        "sol:TokenPolicyFactory": {
+          "address": "0x85C5Dd61585773423e378146D4bEC6f8D149E248",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory": {
+        "sol:EASCheckerFactory": {
+          "address": "0xfbAb4aa40C202E4e80390171E82379824f7372dd",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory": {
+        "sol:EASPolicyFactory": {
+          "address": "0xAfe1b5bdEbD4ae65AF2024738bf0735fbb65d44b",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory": {
+        "sol:GitcoinPassportCheckerFactory": {
+          "address": "0x2fc631e4B3018258759C52AF169200213e84ABab",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory": {
+        "sol:GitcoinPassportPolicyFactory": {
+          "address": "0x63cf2Cd54fE91e3545D1379abf5bfd194545259d",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory": {
+        "sol:MerkleProofCheckerFactory": {
+          "address": "0x1e2F4432bFeF9E9Ad39DA6d272F4aFf33629c770",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory": {
+        "sol:MerkleProofPolicyFactory": {
+          "address": "0x446e7636a5Fa9af46c3718719e465B547248bF62",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory": {
+        "sol:SemaphoreCheckerFactory": {
+          "address": "0x505d59ffFd312983Cc0eD114d7F117B91520d742",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory": {
+        "sol:SemaphorePolicyFactory": {
+          "address": "0xed17543171C1459714cdC6519b58fFcC29A3C3c9",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory": {
+        "sol:ZupassCheckerFactory": {
+          "address": "0x677df0cb865368207999F2862Ece576dC56D8dF6",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory": {
+        "sol:ZupassPolicyFactory": {
+          "address": "0x0Cf17D5DcDA9cF25889cEc9ae5610B0FB9725F65",
+          "count": 1
+        }
+      },
+      "ConstantInitialVoiceCreditProxyFactory": {
+        "address": "0x8613A4029EaA95dA61AE65380aC2e7366451bF2b",
+        "count": 2
+      },
+      "PrivoteWrapper": {
+        "address": "0x5370F78c6af2Da9cF6642382A3a75F9D5aEc9cc1",
+        "count": 1
+      },
+      "Privote": {
+        "address": "0x5370F78c6af2Da9cF6642382A3a75F9D5aEc9cc1",
+        "count": 1
+      },
+      "Poll": {
+        "poll-0": {
+          "address": "0x6F62d12568c81Dc0fb38426B7Cdba2d265f89B29",
+          "count": 1
+        },
+        "poll-1": {
+          "address": "0x6DC4573ec72ae044237693424C3437105B76A24D",
+          "count": 1
+        }
+      },
+      "MessageProcessor": {
+        "poll-0": {
+          "address": "0x6dDaE9060f6B6af7004D87baF9C08350F1CB6e9B",
+          "count": 1
+        },
+        "poll-1": {
+          "address": "0x066653B412bd22E788cCCd2931Ceb6b23E7F7871",
+          "count": 1
+        }
+      },
+      "Tally": {
+        "poll-0": {
+          "address": "0x16F57A4fb463CFC280C6E24a2310683725B4167B",
+          "count": 1
+        },
+        "poll-1": {
+          "address": "0x80fdcbD72960656b529004F6170F82D64dBcC4bd",
+          "count": 1
+        }
+      }
+    }
+  },
+  "hardhat": {
+    "instance": {
+      "0xE451980132E65465d0a498c53f0b5227326Dd73F": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+          "impl": "0x75537828f2ce51be7289709686A69CbFDbB714F1",
+          "args": "[]"
+        }
+      },
+      "0xB7A5bd0345EF1Cc5E66bf61BdeC17D2461fBd968": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+          "impl": "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
+          "args": "[]"
+        }
+      },
+      "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9": {
+        "id": "Verifier",
+        "deploymentTxHash": "0x95f29ffce5eaef86b52c20ce5cc4c7568fe3a4f787e97dde664dfa2b0f8dcbf0",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707": {
+        "id": "PoseidonT3",
+        "deploymentTxHash": "0xc6f6be91b8e89d3da361034d80c285bba199bb3f0c6529faaf1b761b89c89912",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x0165878A594ca255338adfa4d48449f69242Eb8F": {
+        "id": "PoseidonT4",
+        "deploymentTxHash": "0xcd8883185549de52a27da83d66c33e05b0a3ecfd1a86f56ada7c780f1f488fa0",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853": {
+        "id": "PoseidonT5",
+        "deploymentTxHash": "0x97444dcb155fe2c67ca21596b8abdc452f470a5332ab6b30f0a37b5c45664eb8",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6": {
+        "id": "PoseidonT6",
+        "deploymentTxHash": "0x577da4767c77eb5a699153d72358e241ca100b8ecd606130e063f9dd020550f6",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318": {
+        "id": "PollFactory",
+        "deploymentTxHash": "0xbf833ff81b51928b7f5d0892c7e14f1d94bd615a96d1f9a35ee20ac4f4624fae",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x5FC8d32690cc91D4c39d9d3abcBD16989F875707\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0x0165878A594ca255338adfa4d48449f69242Eb8F\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0xa513E6E4b8f2a923D98304ec87F64353C4D5C853\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6\"}"
+        }
+      },
+      "0x610178dA211FEF7D417bC0e6FeD39F05609AD788": {
+        "id": "MessageProcessorFactory",
+        "deploymentTxHash": "0x18fae1045476ba692a010963b576b48d50e663eaf543bf1e96c4321e63812870",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x5FC8d32690cc91D4c39d9d3abcBD16989F875707\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0x0165878A594ca255338adfa4d48449f69242Eb8F\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0xa513E6E4b8f2a923D98304ec87F64353C4D5C853\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6\"}"
+        }
+      },
+      "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e": {
+        "id": "TallyFactory",
+        "deploymentTxHash": "0xd5f7f14409840063041c874755d4dbb096ebabf42cf29fb7601bf9d93e90b62a",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x5FC8d32690cc91D4c39d9d3abcBD16989F875707\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0x0165878A594ca255338adfa4d48449f69242Eb8F\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0xa513E6E4b8f2a923D98304ec87F64353C4D5C853\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6\"}"
+        }
+      },
+      "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0": {
+        "id": "VerifyingKeysRegistry",
+        "deploymentTxHash": "0x5716f1dfc7848d4a1d2cae375c1a5ec737d036c0d833ed0e62918b5df69b4ee1",
+        "verify": {
+          "args": "[\"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\"]"
+        }
+      },
+      "0x9A676e781A523b5d0C0e43731313A708CB607508": {
+        "id": "Privote",
+        "deploymentTxHash": "0xa4a55bf6b25f324ee25f2caf09fe50e81d645fd7cf015ea7c87296663e710052",
+        "verify": {
+          "args": "[\"0x8A791620dd6260079BF849Dc5567aDC3F2FdC318\",\"0x610178dA211FEF7D417bC0e6FeD39F05609AD788\",\"0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e\",\"0xE451980132E65465d0a498c53f0b5227326Dd73F\",10,[\"16015576667038038422103932363190100635991292382181099511410843174865570503661\",\"166510078825589460025300915201657086611944528317298994959376081297530246971\",\"10057734083972610459557695472359628128485394923403014377687504571662791937025\",\"4904828619307091008204672239231377290495002626534171783829482835985709082773\",\"18694062287284245784028624966421731916526814537891066525886866373016385890569\"]]",
+          "libraries": "{\"@maci-protocol/contracts/contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x5FC8d32690cc91D4c39d9d3abcBD16989F875707\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0x0165878A594ca255338adfa4d48449f69242Eb8F\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0xa513E6E4b8f2a923D98304ec87F64353C4D5C853\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6\"}"
+        }
+      },
+      "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0x0027dabfb3e03a1501ba3476cac0b7c9e9e00e8d8af1280296c3838362eeb3fe",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x532323de74BAb864b7005D910E5bD8562D038b9b": {
+        "id": "ConstantInitialVoiceCreditProxy",
+        "verify": {
+          "impl": "0x2b961E3959b79326A8e7F64Ef0d2d825707669b5",
+          "args": "[]"
+        }
+      },
+      "0x5392A33F7F677f59e833FEBF4016cDDD88fF9E67": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+          "impl": "0x75537828f2ce51be7289709686A69CbFDbB714F1",
+          "args": "[]"
+        }
+      },
+      "0xeEBe00Ac0756308ac4AaBfD76c05c4F3088B8883": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+          "impl": "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
+          "args": "[]"
+        }
+      },
+      "0xe082b26cEf079a095147F35c9647eC97c2401B83": {
+        "id": "Poll",
+        "verify": {
+          "impl": "0x8aCd85898458400f7Db866d53FCFF6f0D49741FF",
+          "args": "[]"
+        }
+      },
+      "0xdAD42D43ecE0f6e8da8c2BCbC6A25FF6b3922C58": {
+        "id": "MessageProcessor",
+        "verify": {
+          "impl": "0x6F1216D1BFe15c98520CA1434FC1d9D57AC95321",
+          "args": "[]"
+        }
+      },
+      "0x3Ca8f9C04c7e3E1624Ac2008F92f6F366A869444": {
+        "id": "Tally",
+        "verify": {
+          "impl": "0x8dAF17A20c9DBA35f005b6324F493785D239719d",
+          "args": "[]"
+        }
+      }
+    },
+    "named": {
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy": {
+        "sol:FreeForAllPolicy": {
+          "address": "0xE451980132E65465d0a498c53f0b5227326Dd73F",
+          "count": 1,
+          "poll-0": {
+            "address": "0x5392A33F7F677f59e833FEBF4016cDDD88fF9E67",
+            "count": 1
+          }
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker": {
+        "sol:FreeForAllChecker": {
+          "address": "0xB7A5bd0345EF1Cc5E66bf61BdeC17D2461fBd968",
+          "count": 1,
+          "poll-0": {
+            "address": "0xeEBe00Ac0756308ac4AaBfD76c05c4F3088B8883",
+            "count": 1
+          }
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory": {
+        "sol:FreeForAllPolicyFactory": {
+          "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+          "count": 1,
+          "poll-0": {
+            "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+            "count": 1
+          }
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory": {
+        "sol:FreeForAllCheckerFactory": {
+          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          "count": 1,
+          "poll-0": {
+            "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            "count": 1
+          }
+        }
+      },
+      "Verifier": {
+        "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        "count": 1
+      },
+      "PoseidonT3": {
+        "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+        "count": 1
+      },
+      "PoseidonT4": {
+        "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+        "count": 1
+      },
+      "PoseidonT5": {
+        "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+        "count": 1
+      },
+      "PoseidonT6": {
+        "address": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+        "count": 1
+      },
+      "PollFactory": {
+        "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+        "count": 1
+      },
+      "MessageProcessorFactory": {
+        "address": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+        "count": 1
+      },
+      "TallyFactory": {
+        "address": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+        "count": 1
+      },
+      "VerifyingKeysRegistry": {
+        "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+        "count": 1
+      },
+      "Privote": {
+        "address": "0x9A676e781A523b5d0C0e43731313A708CB607508",
+        "count": 1
+      },
+      "ConstantInitialVoiceCreditProxyFactory": {
+        "address": "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE",
+        "count": 1
+      },
+      "ConstantInitialVoiceCreditProxy": {
+        "address": "0x532323de74BAb864b7005D910E5bD8562D038b9b",
+        "count": 1
+      },
+      "Poll": {
+        "poll-0": {
+          "address": "0xe082b26cEf079a095147F35c9647eC97c2401B83",
+          "count": 1
+        }
+      },
+      "MessageProcessor": {
+        "poll-0": {
+          "address": "0xdAD42D43ecE0f6e8da8c2BCbC6A25FF6b3922C58",
+          "count": 1
+        }
+      },
+      "Tally": {
+        "poll-0": {
+          "address": "0x3Ca8f9C04c7e3E1624Ac2008F92f6F366A869444",
+          "count": 1
+        }
+      }
+    }
+  },
+  "optimism-sepolia": {
+    "instance": {
+      "0x4b1c671d49De1F5cD12028b90B9a75EF684A50a0": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+          "impl": "0xd62Fb73353fE29C24feD7EA018ec09eb9BC70a5E",
+          "args": "[]"
+        }
+      },
+      "0xbd722803Aa03f6ec0b15f7a882aEd6AdDA13e0cD": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+          "impl": "0xE22566043A5A81a8c62c4f4beB5a9beD9792b49C",
+          "args": "[]"
+        }
+      },
+      "0x283EED546EEaFb14cf523dADD3e2c0592aa1DCD6": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+        "deploymentTxHash": "0x2b48f16ad9e81df1b88dfe75772eda281907a51220107e90a6c99d35257f8cd5",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x2c5d3e2004c9aB223A857b0E7160bB73Ea963C5A": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+        "deploymentTxHash": "0x8dbd28c6b376acda6531e69d3dfd84ec1f9ff0afe3e57cbd0255beeed7adc233",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x6de017F098FCCF7D62989a5B9938406AbFbe360B": {
+        "id": "Verifier",
+        "deploymentTxHash": "0x910c3f197d04252a66d2fc8f4e9e55ce6db3c7020e2fcee73322890cb443ee4c",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xb356Da5B2c32EB900d339b010f64Aa52a45c2859": {
+        "id": "PoseidonT3",
+        "deploymentTxHash": "0x1593a9e040d2791d240e682d8b148dfe71a507ade421192dd4a9ed03c25ab197",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x302B72887479013b393e5beC2c59896362dcB482": {
+        "id": "PoseidonT4",
+        "deploymentTxHash": "0x5615f5bd7ee3add5d70850e698a60658dbabe824c3b89ee118b85f12202b65ba",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x11cF3b7A3bf06Df902Fa869695cb779362587523": {
+        "id": "PoseidonT5",
+        "deploymentTxHash": "0xda255ee93b98943c1f3c5d8050e1696ae4aed5ce90dd91cd0bf64f2da81ddd9a",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xfc448183ea62F68dF6a2bf43763fd7384f0277AC": {
+        "id": "PoseidonT6",
+        "deploymentTxHash": "0x556877031795e7dea2b157a102c0c41e733270d7ccd309a14b216e42b640b5ab",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x20760898105A6ddD30934137606EDf0F974D5c40": {
+        "id": "PollFactory",
+        "deploymentTxHash": "0x313ee7ffbbbff0d04cb1ae69eb75c578e82871dd3055b43c091a11359632f050",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0xb356Da5B2c32EB900d339b010f64Aa52a45c2859\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0x302B72887479013b393e5beC2c59896362dcB482\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x11cF3b7A3bf06Df902Fa869695cb779362587523\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xfc448183ea62F68dF6a2bf43763fd7384f0277AC\"}"
+        }
+      },
+      "0xFF22964eA7dA71150A3ad1bF1C7D129D2e7958Be": {
+        "id": "MessageProcessorFactory",
+        "deploymentTxHash": "0x82bb9871e9cb923dc8bc2c12e4f251e25afd64ad53c059b78975a24accc7f729",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0xb356Da5B2c32EB900d339b010f64Aa52a45c2859\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0x302B72887479013b393e5beC2c59896362dcB482\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x11cF3b7A3bf06Df902Fa869695cb779362587523\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xfc448183ea62F68dF6a2bf43763fd7384f0277AC\"}"
+        }
+      },
+      "0x18fF3C3b55D50C740A69D580AC8C1C7fbFe30B66": {
+        "id": "TallyFactory",
+        "deploymentTxHash": "0x0f3d0dd37038fd74e530fd4e225b95b389b403f2d26900b52e8224c4c5ece7c4",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0xb356Da5B2c32EB900d339b010f64Aa52a45c2859\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0x302B72887479013b393e5beC2c59896362dcB482\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x11cF3b7A3bf06Df902Fa869695cb779362587523\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xfc448183ea62F68dF6a2bf43763fd7384f0277AC\"}"
+        }
+      },
+      "0xb6B023db313cebEFae5733b0965E78C4ab00dDd3": {
+        "id": "VerifyingKeysRegistry",
+        "deploymentTxHash": "0xb8b11fa906b09bd15d93b743517edc008013078aba2856a9599cf0b709fe14f8",
+        "verify": {
+          "args": "[\"0xCe340D9A71b2aa8F7FAa2f989158f14BEDE3E1b2\"]"
+        }
+      },
+      "0x4fD4c4a83306533a799B1b1CD4A2A86365D9d80D": {
+        "id": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory.sol:AnonAadhaarCheckerFactory",
+        "deploymentTxHash": "0xa7284d43228cf133d16472545949002651e0d46a22e78b4fa06fa2c15bb3b807",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory.sol:AnonAadhaarCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x2860E69735dd83B11de7B252E116a33B45fbC26e": {
+        "id": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory.sol:AnonAadhaarPolicyFactory",
+        "deploymentTxHash": "0x0ca9f0e4b0eebd7b55c28d5f96ade77b1bd7063697e87677c730c57f5335a861",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory.sol:AnonAadhaarPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x0C299a73380a7680ADd80816DC42ADdda6B57F74": {
+        "id": "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory.sol:ERC20CheckerFactory",
+        "deploymentTxHash": "0x0dea1a6862db60d1d89c1eda42d3f31621952b678ced9ddb4f32563c54f121e6",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory.sol:ERC20CheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xEdfd9D6fB7Aa34FEAecbcD039d1f01184cEB07b2": {
+        "id": "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory.sol:ERC20PolicyFactory",
+        "deploymentTxHash": "0x4d7de4e9519e8e430d19e3c60273549196cb91098a28f772913ce37b2c3264b1",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory.sol:ERC20PolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x022a693d6Dbe7b73691a229FE7B2301D3DAad7c8": {
+        "id": "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory.sol:TokenCheckerFactory",
+        "deploymentTxHash": "0xbd470a1ae50cd43c6629f851f4fb681983d4db1505bb7c9c06276e71aa4929cf",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory.sol:TokenCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x6871D11d7FDcD57c1b4956D39afF01A1Bfa74cf3": {
+        "id": "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory.sol:TokenPolicyFactory",
+        "deploymentTxHash": "0xf30a4317122fbd077678f6147153871542ed1bd378a8528e93d0973a2ba68996",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory.sol:TokenPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xDe7aB97692cB9d01214b2679Be79fce54De7247a": {
+        "id": "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory.sol:EASCheckerFactory",
+        "deploymentTxHash": "0x010864eb2531da8453b83d684313cea7b46b5cf17cdba02a322baaf25c589580",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory.sol:EASCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x89DAd4aE8c6E1fB6467a05811B88f970e607E7fA": {
+        "id": "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory.sol:EASPolicyFactory",
+        "deploymentTxHash": "0xb3f12634d85a320479d7d011219e7acbe06b8324078b6c8836fd822d74d47ad7",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory.sol:EASPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xd268AE0A2bf79D019FC0543720B8295Cf217902F": {
+        "id": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory.sol:GitcoinPassportCheckerFactory",
+        "deploymentTxHash": "0x3e37b15c40de65babca370574ba3d5747898fcf0006f78c7732dbb9f0c9fb4b4",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory.sol:GitcoinPassportCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xD0dBf092410C2c788e599ea5A266EEB4A6D5593A": {
+        "id": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory.sol:GitcoinPassportPolicyFactory",
+        "deploymentTxHash": "0x8f7c9f33425a13f6abdb29602c9f4336d8a8792d4a3a05ade5f4223340b93c0a",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory.sol:GitcoinPassportPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xc5bE7d4aD79C9Cadd947a43d226d46b5Cb456Fc3": {
+        "id": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory.sol:MerkleProofCheckerFactory",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory.sol:MerkleProofCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x65545918738bC052520A17De865Dbe14BD3dbFf5": {
+        "id": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory.sol:MerkleProofPolicyFactory",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory.sol:MerkleProofPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x95E79b019263e6dA1e9d3F6EE87120560ffF7B6e": {
+        "id": "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory.sol:SemaphoreCheckerFactory",
+        "deploymentTxHash": "0x1e8f6dbec3ecbc26bf0b0a917b40230d1ed8d8d291e2a765f2de422f67ac0f97",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory.sol:SemaphoreCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x36ADE04B9BC5E77c4B382F2a0de1964EC9C89EAf": {
+        "id": "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory.sol:SemaphorePolicyFactory",
+        "deploymentTxHash": "0x8b4dce662942e5dfba8b3181606d3d267bb2f5f13b9d46f8c009da88fe8486c3",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory.sol:SemaphorePolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x357CAdaf659583AB769D27dFeAf85215406c378f": {
+        "id": "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory.sol:ZupassCheckerFactory",
+        "deploymentTxHash": "0x28595fdbb3f4cff8b56931e2a0680846feccf2ad825ff3cd14f37019a2c3172a",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory.sol:ZupassCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x296559d5Ad6AD2e8306b7005B6F82e8ad908154d": {
+        "id": "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory.sol:ZupassPolicyFactory",
+        "deploymentTxHash": "0x9e78387c683c9c8fd8c70a26d61cf9f0d4a562f799a0041394325e03601b6a83",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory.sol:ZupassPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xeF83D0A839d887E84Dcf7b1Cd526186Cef00b8be": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0xaec8f30e18c827b49ca8f3294dca4430f8076d262da7aaf9b0935fa64776fc23",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xbaFcaEEd9f48C237673Bf9D5D50D66E2fc6be8b1": {
+        "id": "Privote",
+        "deploymentTxHash": "0x2d7a1213df543170f89cc8620fe741c28158a49866460aa60937ecf2d1427410",
+        "verify": {
+          "args": "[\"0x20760898105A6ddD30934137606EDf0F974D5c40\",\"0xFF22964eA7dA71150A3ad1bF1C7D129D2e7958Be\",\"0x18fF3C3b55D50C740A69D580AC8C1C7fbFe30B66\",\"0x4b1c671d49De1F5cD12028b90B9a75EF684A50a0\",10,[\"16015576667038038422103932363190100635991292382181099511410843174865570503661\",\"166510078825589460025300915201657086611944528317298994959376081297530246971\",\"10057734083972610459557695472359628128485394923403014377687504571662791937025\",\"4904828619307091008204672239231377290495002626534171783829482835985709082773\",\"18694062287284245784028624966421731916526814537891066525886866373016385890569\"]]",
+          "libraries": "{\"@maci-protocol/contracts/contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0xb356Da5B2c32EB900d339b010f64Aa52a45c2859\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0x302B72887479013b393e5beC2c59896362dcB482\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x11cF3b7A3bf06Df902Fa869695cb779362587523\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xfc448183ea62F68dF6a2bf43763fd7384f0277AC\"}"
+        }
+      },
+      "0x24c0f15a02Fd1762b1aA4C8061c38c05DA61FCcb": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0xb9bf1ed883a73f665b8d8205977839a1a2f971fbd77c52305b73886dc794bf7f",
+        "verify": {
+          "args": "[]"
+        }
+      }
+    },
+    "named": {
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy": {
+        "sol:FreeForAllPolicy": {
+          "address": "0x4b1c671d49De1F5cD12028b90B9a75EF684A50a0",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker": {
+        "sol:FreeForAllChecker": {
+          "address": "0xbd722803Aa03f6ec0b15f7a882aEd6AdDA13e0cD",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory": {
+        "sol:FreeForAllPolicyFactory": {
+          "address": "0x283EED546EEaFb14cf523dADD3e2c0592aa1DCD6",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory": {
+        "sol:FreeForAllCheckerFactory": {
+          "address": "0x2c5d3e2004c9aB223A857b0E7160bB73Ea963C5A",
+          "count": 1
+        }
+      },
+      "Verifier": {
+        "address": "0x6de017F098FCCF7D62989a5B9938406AbFbe360B",
+        "count": 1
+      },
+      "PoseidonT3": {
+        "address": "0xb356Da5B2c32EB900d339b010f64Aa52a45c2859",
+        "count": 1
+      },
+      "PoseidonT4": {
+        "address": "0x302B72887479013b393e5beC2c59896362dcB482",
+        "count": 1
+      },
+      "PoseidonT5": {
+        "address": "0x11cF3b7A3bf06Df902Fa869695cb779362587523",
+        "count": 1
+      },
+      "PoseidonT6": {
+        "address": "0xfc448183ea62F68dF6a2bf43763fd7384f0277AC",
+        "count": 1
+      },
+      "PollFactory": {
+        "address": "0x20760898105A6ddD30934137606EDf0F974D5c40",
+        "count": 1
+      },
+      "MessageProcessorFactory": {
+        "address": "0xFF22964eA7dA71150A3ad1bF1C7D129D2e7958Be",
+        "count": 1
+      },
+      "TallyFactory": {
+        "address": "0x18fF3C3b55D50C740A69D580AC8C1C7fbFe30B66",
+        "count": 1
+      },
+      "VerifyingKeysRegistry": {
+        "address": "0xb6B023db313cebEFae5733b0965E78C4ab00dDd3",
+        "count": 1
+      },
+      "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory": {
+        "sol:AnonAadhaarCheckerFactory": {
+          "address": "0x4fD4c4a83306533a799B1b1CD4A2A86365D9d80D",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory": {
+        "sol:AnonAadhaarPolicyFactory": {
+          "address": "0x2860E69735dd83B11de7B252E116a33B45fbC26e",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory": {
+        "sol:ERC20CheckerFactory": {
+          "address": "0x0C299a73380a7680ADd80816DC42ADdda6B57F74",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory": {
+        "sol:ERC20PolicyFactory": {
+          "address": "0xEdfd9D6fB7Aa34FEAecbcD039d1f01184cEB07b2",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory": {
+        "sol:TokenCheckerFactory": {
+          "address": "0x022a693d6Dbe7b73691a229FE7B2301D3DAad7c8",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory": {
+        "sol:TokenPolicyFactory": {
+          "address": "0x6871D11d7FDcD57c1b4956D39afF01A1Bfa74cf3",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory": {
+        "sol:EASCheckerFactory": {
+          "address": "0xDe7aB97692cB9d01214b2679Be79fce54De7247a",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory": {
+        "sol:EASPolicyFactory": {
+          "address": "0x89DAd4aE8c6E1fB6467a05811B88f970e607E7fA",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory": {
+        "sol:GitcoinPassportCheckerFactory": {
+          "address": "0xd268AE0A2bf79D019FC0543720B8295Cf217902F",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory": {
+        "sol:GitcoinPassportPolicyFactory": {
+          "address": "0xD0dBf092410C2c788e599ea5A266EEB4A6D5593A",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory": {
+        "sol:MerkleProofCheckerFactory": {
+          "address": "0xc5bE7d4aD79C9Cadd947a43d226d46b5Cb456Fc3",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory": {
+        "sol:MerkleProofPolicyFactory": {
+          "address": "0x65545918738bC052520A17De865Dbe14BD3dbFf5",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory": {
+        "sol:SemaphoreCheckerFactory": {
+          "address": "0x95E79b019263e6dA1e9d3F6EE87120560ffF7B6e",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory": {
+        "sol:SemaphorePolicyFactory": {
+          "address": "0x36ADE04B9BC5E77c4B382F2a0de1964EC9C89EAf",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory": {
+        "sol:ZupassCheckerFactory": {
+          "address": "0x357CAdaf659583AB769D27dFeAf85215406c378f",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory": {
+        "sol:ZupassPolicyFactory": {
+          "address": "0x296559d5Ad6AD2e8306b7005B6F82e8ad908154d",
+          "count": 1
+        }
+      },
+      "ConstantInitialVoiceCreditProxyFactory": {
+        "address": "0x24c0f15a02Fd1762b1aA4C8061c38c05DA61FCcb",
+        "count": 2
+      },
+      "PrivoteWrapper": {
+        "address": "0xbaFcaEEd9f48C237673Bf9D5D50D66E2fc6be8b1",
+        "count": 1
+      },
+      "Privote": {
+        "address": "0xbaFcaEEd9f48C237673Bf9D5D50D66E2fc6be8b1",
+        "count": 1
+      }
+    }
+  },
+  "scroll-sepolia": {
+    "instance": {
+      "0xeA7b1883E8C541BC2dbAFC74D46B971678D7dC65": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+          "impl": "0xd9809D724E5093b08EEA09FF8ED8AEC8F71007A1",
+          "args": "[]"
+        }
+      },
+      "0x410fBFE9D316023eeb5621d9793e8c9bf67C2e9c": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+          "impl": "0xa6B1C0D753E8b542FF85262DAfC7044fB249e062",
+          "args": "[]"
+        }
+      },
+      "0x9D6a4fB33FF0D00a0f22A00f98CAfe1F99bD1bcc": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+        "deploymentTxHash": "0x295110ad281aeebb1e0267e0a9742351bf395014e5d728a5686539be3991133d",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x2CDf6F912Fb36B9488CB53cf11238b6D56877D01": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+        "deploymentTxHash": "0x229031a7e392c70e3981d40f615d123e62355c076e01cd167ca4c8e30332ecce",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x21046d78637897f667E1e3504A58777C0e9A95cc": {
+        "id": "Verifier",
+        "deploymentTxHash": "0xe313aa02b34fd957b1f13deae0710c3f5e1ec3f0c29f28421d032e476d3a8779",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xd8Ef31B9281497Fb8Fd8156381beA7147F8F1F00": {
+        "id": "PoseidonT3",
+        "deploymentTxHash": "0xae605a0456185de9776b4ec65f402290dfe957b02a524a0680bdee462f1b267a",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xfea003EF8C4DdDCDa3489C57065A0F30a1263ae4": {
+        "id": "PoseidonT4",
+        "deploymentTxHash": "0x1fc3edc1714a72203942d2c90973f521b4ff5f9c104a1b4341051fc8dea6f062",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x580d9417F8479841D307274F8818Ef8cacAd7200": {
+        "id": "PoseidonT5",
+        "deploymentTxHash": "0x607653b2df214905ec505f02fc0da9d72ac03cdfe344f8d0fb4e8627a7a42332",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xE47F26D0ec473Fb6D50E5E95df6A149b5208Fe61": {
+        "id": "PoseidonT6",
+        "deploymentTxHash": "0x28ace5c44aeca6d54c259f504738f8264e629f5d596402ea3591270bf5f0a31f",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xaa3361b545dFd9249973C40EEA497F5F1E2E0057": {
+        "id": "PollFactory",
+        "deploymentTxHash": "0x9e6fb7e0319e355ebd9eea5122042aca7b454cf9ef7e4e2e373e881011f154c1",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0xd8Ef31B9281497Fb8Fd8156381beA7147F8F1F00\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xfea003EF8C4DdDCDa3489C57065A0F30a1263ae4\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x580d9417F8479841D307274F8818Ef8cacAd7200\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xE47F26D0ec473Fb6D50E5E95df6A149b5208Fe61\"}"
+        }
+      },
+      "0x495504E448EB44E756e89aD4cbBe7a3DF12F1aac": {
+        "id": "MessageProcessorFactory",
+        "deploymentTxHash": "0xa480db56c2ac488c70a490d90de090f8f02d85b953990f18e8949614760fac2a",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0xd8Ef31B9281497Fb8Fd8156381beA7147F8F1F00\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xfea003EF8C4DdDCDa3489C57065A0F30a1263ae4\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x580d9417F8479841D307274F8818Ef8cacAd7200\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xE47F26D0ec473Fb6D50E5E95df6A149b5208Fe61\"}"
+        }
+      },
+      "0xf7cF01Ffe85Ea684377fa91430D969494c6B805C": {
+        "id": "TallyFactory",
+        "deploymentTxHash": "0x92402d7ef789d0e7861f931e4a2ab759fb84c3be794468b1e5acb7aed6e8a902",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0xd8Ef31B9281497Fb8Fd8156381beA7147F8F1F00\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xfea003EF8C4DdDCDa3489C57065A0F30a1263ae4\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x580d9417F8479841D307274F8818Ef8cacAd7200\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xE47F26D0ec473Fb6D50E5E95df6A149b5208Fe61\"}"
+        }
+      },
+      "0x48b5DEBa3273db7bbaaF35E4fa3290F17afFdD5E": {
+        "id": "VerifyingKeysRegistry",
+        "deploymentTxHash": "0x28849e9f9b464bdd7be722601a22b645421eac36121378c7532d12c77d557526",
+        "verify": {
+          "args": "[\"0xCe340D9A71b2aa8F7FAa2f989158f14BEDE3E1b2\"]"
+        }
+      },
+      "0xB19cEea22C02b87F0Ac61479329e659c9b8a67b5": {
+        "id": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory.sol:AnonAadhaarCheckerFactory",
+        "deploymentTxHash": "0x62c54629fddfab0905705bcb6498706842558981994189da327a1408143f68ee",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory.sol:AnonAadhaarCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xd07A5b1faD15246a9D301c8c6d97BBf18d3F2B5B": {
+        "id": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory.sol:AnonAadhaarPolicyFactory",
+        "deploymentTxHash": "0xc4b9ec9e7262b3036135dce3a5957a6418e81c10a85923cac3c1ddc13bf0f501",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory.sol:AnonAadhaarPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x60Ae170d9c17e3aCaa2e166Dd63425dF6D0bea03": {
+        "id": "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory.sol:ERC20CheckerFactory",
+        "deploymentTxHash": "0x367ee59a52402edfa8c195e65e05a4101bca68615d8bcd446cb2e56b0d74ac29",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory.sol:ERC20CheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x11Be3E8677AA6C16904262e2ba815a9eCC9B07e5": {
+        "id": "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory.sol:ERC20PolicyFactory",
+        "deploymentTxHash": "0xec4f42edc60e87213aa528a6b2d3ec5e48e308f36a0c2fc43c702475c3a571f7",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory.sol:ERC20PolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x84324eB6C72e4332c8dc7100FC27461e98A0b423": {
+        "id": "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory.sol:TokenCheckerFactory",
+        "deploymentTxHash": "0xbeca79c89ac4ed1fdf0070782ab443055c875d7f27f6fb63fdafc80991a146de",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory.sol:TokenCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x0a4B5E46b655024cAcdE5886F7eB355B1D26837e": {
+        "id": "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory.sol:TokenPolicyFactory",
+        "deploymentTxHash": "0xb39a212c2cfb22ddbdbefe571260bc21e2472d917d891ec2099f3a7056a8a909",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory.sol:TokenPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xD72f109Aba6B0d2A9cf0353Ab4C198021AFA2235": {
+        "id": "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory.sol:EASCheckerFactory",
+        "deploymentTxHash": "0xe9cc8f2e276ed5718ee487a2acdc0dbe7334307f4e130ae20e2b83f214bd04e0",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory.sol:EASCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xffd595c60570230865ef5617E6e002E75b28De4e": {
+        "id": "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory.sol:EASPolicyFactory",
+        "deploymentTxHash": "0x2ccd49a2e457778eb1fda146b82ecf0dc83b911e854704ec5ae8b2cce6f5b0bd",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory.sol:EASPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x910616a22C8923727f21a5AE5358fa9b630C4f41": {
+        "id": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory.sol:GitcoinPassportCheckerFactory",
+        "deploymentTxHash": "0x6bd0b945ae1b4c18c12c44570f7396e08141b05bc8f8729f305dfaf9b9ede58f",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory.sol:GitcoinPassportCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x5d00288B9E01ea2fcD8E075aC8c0A51052105E0c": {
+        "id": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory.sol:GitcoinPassportPolicyFactory",
+        "deploymentTxHash": "0x3c1daf3d04aa2f5abd41fb7fccb01612afe54cf994c1060699be49448c7f49f6",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory.sol:GitcoinPassportPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xeB279137D0fF26472076AB6Ee45f3dda53a14b68": {
+        "id": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory.sol:MerkleProofCheckerFactory",
+        "deploymentTxHash": "0xaa063adfa342c69e4bcee5ed0e6865870d8239ae496777d079f83c40322c983d",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory.sol:MerkleProofCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x5FC7d1D8C274960B76D497da9a46F517d250c339": {
+        "id": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory.sol:MerkleProofPolicyFactory",
+        "deploymentTxHash": "0xb516443e2c510f0c38bd15371bae255daafc93a3efbb684cfbe05bbb1ec3a70e",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory.sol:MerkleProofPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x589aBf019475EC52ec2B92803e5aE8a565d84A41": {
+        "id": "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory.sol:SemaphoreCheckerFactory",
+        "deploymentTxHash": "0x5dbeb988a3963c7bcf64dd443d5712ecc52ccf3a75b396ab89544889cce12a3f",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory.sol:SemaphoreCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x65BBcE75E196b3b4C3B48d0e33056A0E03D7349b": {
+        "id": "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory.sol:SemaphorePolicyFactory",
+        "deploymentTxHash": "0x22c5eda48e6731e236393f394b23e50c0a3b6c137d625ba10cf40d2f0f960ad2",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory.sol:SemaphorePolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x0231657471474a7b1274a2264502c5a69f09eb4F": {
+        "id": "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory.sol:ZupassCheckerFactory",
+        "deploymentTxHash": "0x671e52b73b6e685796f2509cc9ca59a67a24172d90d574449ec072b8f3811960",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory.sol:ZupassCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x33cA227A4E34180bF81528A9349c776D93641518": {
+        "id": "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory.sol:ZupassPolicyFactory",
+        "deploymentTxHash": "0x5b8f761d6ae7b30ddf862a62d63e03cc0dae231dedd8dafeb81f783009621128",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory.sol:ZupassPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x4673CDd3F21a8d5c5A76FD5d7AE85547E6b32FBd": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0x89b59d1371e658704d7a86b6a6f7eb34283977ecefbe0ca0a238e4a9e7f8284d",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xC789c79cf8e3675d8Ac94dD3143BfC7c3BF324Ff": {
+        "id": "Privote",
+        "deploymentTxHash": "0xe46cd9d95a93e9fb70c72a416b33f8bcbb504ebcffbabb74337ff6a00e076fcc",
+        "verify": {
+          "args": "[\"0xaa3361b545dFd9249973C40EEA497F5F1E2E0057\",\"0x495504E448EB44E756e89aD4cbBe7a3DF12F1aac\",\"0xf7cF01Ffe85Ea684377fa91430D969494c6B805C\",\"0xeA7b1883E8C541BC2dbAFC74D46B971678D7dC65\",10,[\"16015576667038038422103932363190100635991292382181099511410843174865570503661\",\"166510078825589460025300915201657086611944528317298994959376081297530246971\",\"10057734083972610459557695472359628128485394923403014377687504571662791937025\",\"4904828619307091008204672239231377290495002626534171783829482835985709082773\",\"18694062287284245784028624966421731916526814537891066525886866373016385890569\"]]",
+          "libraries": "{\"@maci-protocol/contracts/contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0xd8Ef31B9281497Fb8Fd8156381beA7147F8F1F00\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xfea003EF8C4DdDCDa3489C57065A0F30a1263ae4\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0x580d9417F8479841D307274F8818Ef8cacAd7200\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xE47F26D0ec473Fb6D50E5E95df6A149b5208Fe61\"}"
+        }
+      },
+      "0xCB3cDE1ba86083c1887E07F776984De66D078d2E": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0xf8f20e6f188a0e12db78505d16290a091259834687621c3a6b75a50fb391ddab",
+        "verify": {
+          "args": "[]"
+        }
+      }
+    },
+    "named": {
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy": {
+        "sol:FreeForAllPolicy": {
+          "address": "0xeA7b1883E8C541BC2dbAFC74D46B971678D7dC65",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker": {
+        "sol:FreeForAllChecker": {
+          "address": "0x410fBFE9D316023eeb5621d9793e8c9bf67C2e9c",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory": {
+        "sol:FreeForAllPolicyFactory": {
+          "address": "0x9D6a4fB33FF0D00a0f22A00f98CAfe1F99bD1bcc",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory": {
+        "sol:FreeForAllCheckerFactory": {
+          "address": "0x2CDf6F912Fb36B9488CB53cf11238b6D56877D01",
+          "count": 1
+        }
+      },
+      "Verifier": {
+        "address": "0x21046d78637897f667E1e3504A58777C0e9A95cc",
+        "count": 1
+      },
+      "PoseidonT3": {
+        "address": "0xd8Ef31B9281497Fb8Fd8156381beA7147F8F1F00",
+        "count": 1
+      },
+      "PoseidonT4": {
+        "address": "0xfea003EF8C4DdDCDa3489C57065A0F30a1263ae4",
+        "count": 1
+      },
+      "PoseidonT5": {
+        "address": "0x580d9417F8479841D307274F8818Ef8cacAd7200",
+        "count": 1
+      },
+      "PoseidonT6": {
+        "address": "0xE47F26D0ec473Fb6D50E5E95df6A149b5208Fe61",
+        "count": 1
+      },
+      "PollFactory": {
+        "address": "0xaa3361b545dFd9249973C40EEA497F5F1E2E0057",
+        "count": 1
+      },
+      "MessageProcessorFactory": {
+        "address": "0x495504E448EB44E756e89aD4cbBe7a3DF12F1aac",
+        "count": 1
+      },
+      "TallyFactory": {
+        "address": "0xf7cF01Ffe85Ea684377fa91430D969494c6B805C",
+        "count": 1
+      },
+      "VerifyingKeysRegistry": {
+        "address": "0x48b5DEBa3273db7bbaaF35E4fa3290F17afFdD5E",
+        "count": 1
+      },
+      "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory": {
+        "sol:AnonAadhaarCheckerFactory": {
+          "address": "0xB19cEea22C02b87F0Ac61479329e659c9b8a67b5",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory": {
+        "sol:AnonAadhaarPolicyFactory": {
+          "address": "0xd07A5b1faD15246a9D301c8c6d97BBf18d3F2B5B",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory": {
+        "sol:ERC20CheckerFactory": {
+          "address": "0x60Ae170d9c17e3aCaa2e166Dd63425dF6D0bea03",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory": {
+        "sol:ERC20PolicyFactory": {
+          "address": "0x11Be3E8677AA6C16904262e2ba815a9eCC9B07e5",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory": {
+        "sol:TokenCheckerFactory": {
+          "address": "0x84324eB6C72e4332c8dc7100FC27461e98A0b423",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory": {
+        "sol:TokenPolicyFactory": {
+          "address": "0x0a4B5E46b655024cAcdE5886F7eB355B1D26837e",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory": {
+        "sol:EASCheckerFactory": {
+          "address": "0xD72f109Aba6B0d2A9cf0353Ab4C198021AFA2235",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory": {
+        "sol:EASPolicyFactory": {
+          "address": "0xffd595c60570230865ef5617E6e002E75b28De4e",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory": {
+        "sol:GitcoinPassportCheckerFactory": {
+          "address": "0x910616a22C8923727f21a5AE5358fa9b630C4f41",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory": {
+        "sol:GitcoinPassportPolicyFactory": {
+          "address": "0x5d00288B9E01ea2fcD8E075aC8c0A51052105E0c",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory": {
+        "sol:MerkleProofCheckerFactory": {
+          "address": "0xeB279137D0fF26472076AB6Ee45f3dda53a14b68",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory": {
+        "sol:MerkleProofPolicyFactory": {
+          "address": "0x5FC7d1D8C274960B76D497da9a46F517d250c339",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory": {
+        "sol:SemaphoreCheckerFactory": {
+          "address": "0x589aBf019475EC52ec2B92803e5aE8a565d84A41",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory": {
+        "sol:SemaphorePolicyFactory": {
+          "address": "0x65BBcE75E196b3b4C3B48d0e33056A0E03D7349b",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory": {
+        "sol:ZupassCheckerFactory": {
+          "address": "0x0231657471474a7b1274a2264502c5a69f09eb4F",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory": {
+        "sol:ZupassPolicyFactory": {
+          "address": "0x33cA227A4E34180bF81528A9349c776D93641518",
+          "count": 1
+        }
+      },
+      "ConstantInitialVoiceCreditProxyFactory": {
+        "address": "0xCB3cDE1ba86083c1887E07F776984De66D078d2E",
+        "count": 2
+      },
+      "PrivoteWrapper": {
+        "address": "0xC789c79cf8e3675d8Ac94dD3143BfC7c3BF324Ff",
+        "count": 1
+      },
+      "Privote": {
+        "address": "0xC789c79cf8e3675d8Ac94dD3143BfC7c3BF324Ff",
+        "count": 1
+      }
+    }
+  },
+  "base-sepolia": {
+    "instance": {
+      "0x1879EA2A86C6fA000b51246151093ff55F0b267f": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+          "impl": "0x50cCbd92482ffb69310Ee0DAAaA2787F987440b6",
+          "args": "[]"
+        }
+      },
+      "0x6F618a2d5cE41EC8A6B4553f765a022380930856": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+          "impl": "0x9940FA8FC491744b186dD2A61792c1d1Bb4C3E4f",
+          "args": "[]"
+        }
+      },
+      "0x3102D3485Da80BaD06B90D1Bc6021d7944c7dC9C": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory.sol:FreeForAllPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x5Db548c4e6f99a9D606e08Ba664c157506611053": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory.sol:FreeForAllCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x2fD42b16E9bB873BbfD9a14dA9E923072AAB68b6": {
+        "id": "Verifier",
+        "deploymentTxHash": "0x60c1061e90538dd1cb7fd30bfd91aea58ca89b7ec296c6be40990e08fc8dc7e6",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x90b4E4b4649B5711dE501b288c0aa17e7b541a63": {
+        "id": "PoseidonT3",
+        "deploymentTxHash": "0xa00bf5a20011898e4515e50598933ae94f887066baf5cdf3958052876f6c383d",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xb0C7B1B58eE3709B6DC91E2F730Ca3Ea482fFdDC": {
+        "id": "PoseidonT4",
+        "deploymentTxHash": "0x3d920549d37980edfc7ae3a8c751097c5ec222ff31b04bf75cb6bf89caeadffb",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xdEc3ac3eD3F49afdcF9bE516e5Fc4d5644Fc469f": {
+        "id": "PoseidonT5",
+        "deploymentTxHash": "0xfedce92c4bf67fd1f7fba55e98cad1b13d44440a752733cfd9e67c930d78b2fa",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xECA2Fdbb594eF3a1948409592849a5E74Ce00D31": {
+        "id": "PoseidonT6",
+        "deploymentTxHash": "0x49df6da928f43ae92825296599dfaec250cf9c68d5cb732fe6940f0324bacd0e",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x18305149aDdF56726C6513831Ad3688c7a9F3B0c": {
+        "id": "PollFactory",
+        "deploymentTxHash": "0xb3684a890f40df809cc53b5fe3b2cbaa5562eea22d72807ceb1ffdf5a1c947c6",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x90b4E4b4649B5711dE501b288c0aa17e7b541a63\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xb0C7B1B58eE3709B6DC91E2F730Ca3Ea482fFdDC\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0xdEc3ac3eD3F49afdcF9bE516e5Fc4d5644Fc469f\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xECA2Fdbb594eF3a1948409592849a5E74Ce00D31\"}"
+        }
+      },
+      "0xDC26de9f091ef4302bf1b053E61a6779e9e43ED4": {
+        "id": "MessageProcessorFactory",
+        "deploymentTxHash": "0xea077ade28da22da1b16e9684888daeb2893f3ef4e8adb3d9bf3f4c4b4c6e691",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x90b4E4b4649B5711dE501b288c0aa17e7b541a63\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xb0C7B1B58eE3709B6DC91E2F730Ca3Ea482fFdDC\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0xdEc3ac3eD3F49afdcF9bE516e5Fc4d5644Fc469f\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xECA2Fdbb594eF3a1948409592849a5E74Ce00D31\"}"
+        }
+      },
+      "0xB20cb0e2Fe105952CFc4FC180Da9c36Bf69ac497": {
+        "id": "TallyFactory",
+        "deploymentTxHash": "0x0ccd7f1d7a2a88252b3b03d2eafdf2f13c14e85c44746a19c219f9581029078d",
+        "verify": {
+          "args": "[]",
+          "libraries": "{\"contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x90b4E4b4649B5711dE501b288c0aa17e7b541a63\",\"contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xb0C7B1B58eE3709B6DC91E2F730Ca3Ea482fFdDC\",\"contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0xdEc3ac3eD3F49afdcF9bE516e5Fc4d5644Fc469f\",\"contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xECA2Fdbb594eF3a1948409592849a5E74Ce00D31\"}"
+        }
+      },
+      "0x1091A98D93f2A18A45b315Fd2c390351AF05B6e0": {
+        "id": "VerifyingKeysRegistry",
+        "deploymentTxHash": "0x6bcb166c2f19151233f424470b344af7881daaf41761c2e18e0fb7093d8ce273",
+        "verify": {
+          "args": "[\"0x9299eac94952235Ae86b94122D2f7c77F7F6Ad30\"]"
+        }
+      },
+      "0xbC92E09D6aebE7B0d452851A59a10541C788d1A7": {
+        "id": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory.sol:AnonAadhaarCheckerFactory",
+        "deploymentTxHash": "0xfd04013e0298fcb5c88a0866c41e9ad94408ce18523d93958d9502f6311090e8",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory.sol:AnonAadhaarCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x46dFB13A955387aE4FadEDd1AAa4AB862e036D32": {
+        "id": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory.sol:AnonAadhaarPolicyFactory",
+        "deploymentTxHash": "0xf90ef0175c2799afb4bb9ed61e73f77eec998ac296da9c43bb81ad4eb93328d8",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory.sol:AnonAadhaarPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x2Ad7aBd98200ECf4E07B328c2Bbe82716907B524": {
+        "id": "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory.sol:ERC20CheckerFactory",
+        "deploymentTxHash": "0xa3b8ba6fbbb04259bce2c851db3bb85158060cf94331746d4ccf9aad5c851b13",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory.sol:ERC20CheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x5Ef9cD92468bbD54a4850Eb093B6afbc6BAA0c74": {
+        "id": "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory.sol:ERC20PolicyFactory",
+        "deploymentTxHash": "0x137127c83a8d7eac531f28a0f8d6b27973cc7e501ec0754630ce4212b84482ab",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory.sol:ERC20PolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x4ee23507A5971E531273550B574e1C5692a091e6": {
+        "id": "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory.sol:TokenCheckerFactory",
+        "deploymentTxHash": "0x7321d94e5eeb9b3ea5c25f4eb7c487367517e2cc1976c8667b43397eebdde14e",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory.sol:TokenCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xe568d595A96c918C552Ebd745b8ffEF697c599A2": {
+        "id": "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory.sol:TokenPolicyFactory",
+        "deploymentTxHash": "0xa3465cdf70309aa692338ec3e7abefe756e57eef8a199c100cf36c7355c8239f",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory.sol:TokenPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xc2165297f1f4B62D7497a22f2e0D5CeC9085057C": {
+        "id": "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory.sol:EASCheckerFactory",
+        "deploymentTxHash": "0x3361f440e7fefe647abaebfeaa942e7961fecf82233da818d4231ef69a10ad45",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory.sol:EASCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x91E2F707E4672b277A664AeB56468284846F15c5": {
+        "id": "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory.sol:EASPolicyFactory",
+        "deploymentTxHash": "0x562c02d8ce8abdb1913f9b62b91df78597495a8539075eee0347ed2a86331fb2",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory.sol:EASPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xb0F4173E50D263F4094b8b5e8974b3421C189d02": {
+        "id": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory.sol:GitcoinPassportCheckerFactory",
+        "deploymentTxHash": "0xd8830534d7c932246b9037f2b45477fd9f0a46debfad793da5a8789061e37560",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory.sol:GitcoinPassportCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x717954c690AE0c724AA19499A742137c37468E5e": {
+        "id": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory.sol:GitcoinPassportPolicyFactory",
+        "deploymentTxHash": "0xf64b13170868b1785c31203fa79dc33f84254d4bf4b4a776b2613f0bace697fb",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory.sol:GitcoinPassportPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xc9eE56dfeA11F9F08eF361174C88b295F71364fC": {
+        "id": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory.sol:MerkleProofCheckerFactory",
+        "deploymentTxHash": "0xd403848ad6fd84d6909067521c29c5e09a7c3a2924f8a67a60ab25a71f64ef94",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory.sol:MerkleProofCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0xc5d13802528Ef1085a22B6eC1bf246B606A3881b": {
+        "id": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory.sol:MerkleProofPolicyFactory",
+        "deploymentTxHash": "0xd289aa490fdec58b031e633d703e83e71e3343d405a9543f758c81fc62b562f7",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory.sol:MerkleProofPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x80020a0bBCb821a18823714C8C77F92ab3092374": {
+        "id": "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory.sol:SemaphoreCheckerFactory",
+        "deploymentTxHash": "0xdb26ecd7196527b9974e676ad3b3983aee2ec1e2e51c2247d38b85d766b0767b",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory.sol:SemaphoreCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x3Da51eAAE0E44A73bB1E55bDc738A52b6BE9fbD7": {
+        "id": "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory.sol:SemaphorePolicyFactory",
+        "deploymentTxHash": "0xdaeae3d755a58fe288e78dca534a0722e0e0ca8173e2578ba8efe09d0aa50dee",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory.sol:SemaphorePolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0xBaD3a9dafc4313c938E78A95A173ef8D46f30ff4": {
+        "id": "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory.sol:ZupassCheckerFactory",
+        "deploymentTxHash": "0xaddfb6353586becec74b2bd3328d1e431d9cc8506a3b41987fc3d9d1c1566663",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory.sol:ZupassCheckerFactory",
+          "args": "[]"
+        }
+      },
+      "0x66eA0812b1B4fD2256F55E023CA40D2B4d458dD5": {
+        "id": "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory.sol:ZupassPolicyFactory",
+        "deploymentTxHash": "0x12648ee68815d97197362505460c666212c796c17403f201fc87a051c6eb2599",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory.sol:ZupassPolicyFactory",
+          "args": "[]"
+        }
+      },
+      "0x2b08ED6faB709662e022C76ADa69Cf9588676BEb": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0x1d480801619aab17c34f0561d685104a5b045a10b6ab3ef18b597157d987905a",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x49b142100F9E2752E1DbA3b7189CF7A1cBd277f3": {
+        "id": "Privote",
+        "deploymentTxHash": "0x65eeb837ecaad20a101597064bc4c9c58b7c20a1af0f3ed61ae9634b50ae4bae",
+        "verify": {
+          "args": "[\"0x18305149aDdF56726C6513831Ad3688c7a9F3B0c\",\"0xDC26de9f091ef4302bf1b053E61a6779e9e43ED4\",\"0xB20cb0e2Fe105952CFc4FC180Da9c36Bf69ac497\",\"0x1879EA2A86C6fA000b51246151093ff55F0b267f\",10,[\"16015576667038038422103932363190100635991292382181099511410843174865570503661\",\"166510078825589460025300915201657086611944528317298994959376081297530246971\",\"10057734083972610459557695472359628128485394923403014377687504571662791937025\",\"4904828619307091008204672239231377290495002626534171783829482835985709082773\",\"18694062287284245784028624966421731916526814537891066525886866373016385890569\"]]",
+          "libraries": "{\"@maci-protocol/contracts/contracts/crypto/PoseidonT3.sol:PoseidonT3\":\"0x90b4E4b4649B5711dE501b288c0aa17e7b541a63\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT4.sol:PoseidonT4\":\"0xb0C7B1B58eE3709B6DC91E2F730Ca3Ea482fFdDC\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT5.sol:PoseidonT5\":\"0xdEc3ac3eD3F49afdcF9bE516e5Fc4d5644Fc469f\",\"@maci-protocol/contracts/contracts/crypto/PoseidonT6.sol:PoseidonT6\":\"0xECA2Fdbb594eF3a1948409592849a5E74Ce00D31\"}"
+        }
+      },
+      "0x0318A6c438269656A9589eACAbBea3f03E26620D": {
+        "id": "ConstantInitialVoiceCreditProxyFactory",
+        "deploymentTxHash": "0x8e91a7c9472534e4b767c6c9cd5a8a414725dae1ca126a6641941760815efdb9",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xFFb8e83DA062aEc255c6ABE8eF2E4A226683a278": {
+        "id": "ConstantInitialVoiceCreditProxy",
+        "verify": {
+          "impl": "0x2bDae5CCE21503e69F437A639a63f160a00329f7",
+          "args": "[]"
+        }
+      },
+      "0x549b301CA2A3e22765ee4895255479491eE3D801": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy.sol:FreeForAllPolicy",
+          "impl": "0x50cCbd92482ffb69310Ee0DAAaA2787F987440b6",
+          "args": "[]"
+        }
+      },
+      "0x403Be7b607487B29a0074E179CA44A7c2FDb8Ff6": {
+        "id": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+        "verify": {
+          "name": "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker.sol:FreeForAllChecker",
+          "impl": "0x9940FA8FC491744b186dD2A61792c1d1Bb4C3E4f",
+          "args": "[]"
+        }
+      },
+      "0xb509a36F670fb2264B4ED384E3BfdAD5C1d72128": {
+        "id": "Poll",
+        "verify": {
+          "impl": "0xDB4Db86Fe0D26BdDb8cAaeB6E5460966ABa50b4f",
+          "args": "[]"
+        }
+      },
+      "0xeD2397EEA6D3b22cA85A21151c7C28B45b9A9539": {
+        "id": "MessageProcessor",
+        "verify": {
+          "impl": "0xA35d04f59b63a3f161312A5b62070dDb3F794077",
+          "args": "[]"
+        }
+      },
+      "0xACffe9038340205EA02d2AFf6a11333Dd1E5077D": {
+        "id": "Tally",
+        "verify": {
+          "impl": "0x128B03243439B3819B60473482EfcFD4CCadfcf3",
+          "args": "[]"
+        }
+      },
+      "0xC5b273829Ecf7B17c26277EabAf1082eE6B9ABCB": {
+        "id": "Poll",
+        "verify": {
+          "impl": "0xDB4Db86Fe0D26BdDb8cAaeB6E5460966ABa50b4f",
+          "args": "[]"
+        }
+      },
+      "0xBc863b46d311B6c30D7FF4148FD925801816B3c3": {
+        "id": "MessageProcessor",
+        "verify": {
+          "impl": "0xA35d04f59b63a3f161312A5b62070dDb3F794077",
+          "args": "[]"
+        }
+      },
+      "0x3b171c4e9D52634BA936e4ed161a85af06EA4FD8": {
+        "id": "Tally",
+        "verify": {
+          "impl": "0x128B03243439B3819B60473482EfcFD4CCadfcf3",
+          "args": "[]"
+        }
+      }
+    },
+    "named": {
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicy": {
+        "sol:FreeForAllPolicy": {
+          "address": "0x1879EA2A86C6fA000b51246151093ff55F0b267f",
+          "count": 1,
+          "poll-0": {
+            "address": "0x549b301CA2A3e22765ee4895255479491eE3D801",
+            "count": 1
+          }
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllChecker": {
+        "sol:FreeForAllChecker": {
+          "address": "0x6F618a2d5cE41EC8A6B4553f765a022380930856",
+          "count": 1,
+          "poll-0": {
+            "address": "0x403Be7b607487B29a0074E179CA44A7c2FDb8Ff6",
+            "count": 1
+          }
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllPolicyFactory": {
+        "sol:FreeForAllPolicyFactory": {
+          "address": "0x3102D3485Da80BaD06B90D1Bc6021d7944c7dC9C",
+          "count": 1,
+          "poll-0": {
+            "address": "0x3102D3485Da80BaD06B90D1Bc6021d7944c7dC9C",
+            "count": 1
+          }
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/freeForAll/FreeForAllCheckerFactory": {
+        "sol:FreeForAllCheckerFactory": {
+          "address": "0x5Db548c4e6f99a9D606e08Ba664c157506611053",
+          "count": 1,
+          "poll-0": {
+            "address": "0x5Db548c4e6f99a9D606e08Ba664c157506611053",
+            "count": 1
+          }
+        }
+      },
+      "Verifier": {
+        "address": "0x2fD42b16E9bB873BbfD9a14dA9E923072AAB68b6",
+        "count": 1
+      },
+      "PoseidonT3": {
+        "address": "0x90b4E4b4649B5711dE501b288c0aa17e7b541a63",
+        "count": 1
+      },
+      "PoseidonT4": {
+        "address": "0xb0C7B1B58eE3709B6DC91E2F730Ca3Ea482fFdDC",
+        "count": 1
+      },
+      "PoseidonT5": {
+        "address": "0xdEc3ac3eD3F49afdcF9bE516e5Fc4d5644Fc469f",
+        "count": 1
+      },
+      "PoseidonT6": {
+        "address": "0xECA2Fdbb594eF3a1948409592849a5E74Ce00D31",
+        "count": 1
+      },
+      "PollFactory": {
+        "address": "0x18305149aDdF56726C6513831Ad3688c7a9F3B0c",
+        "count": 1
+      },
+      "MessageProcessorFactory": {
+        "address": "0xDC26de9f091ef4302bf1b053E61a6779e9e43ED4",
+        "count": 1
+      },
+      "TallyFactory": {
+        "address": "0xB20cb0e2Fe105952CFc4FC180Da9c36Bf69ac497",
+        "count": 1
+      },
+      "VerifyingKeysRegistry": {
+        "address": "0x1091A98D93f2A18A45b315Fd2c390351AF05B6e0",
+        "count": 1
+      },
+      "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarCheckerFactory": {
+        "sol:AnonAadhaarCheckerFactory": {
+          "address": "0xbC92E09D6aebE7B0d452851A59a10541C788d1A7",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/anonAadhaar/AnonAadhaarPolicyFactory": {
+        "sol:AnonAadhaarPolicyFactory": {
+          "address": "0x46dFB13A955387aE4FadEDd1AAa4AB862e036D32",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/erc20/ERC20CheckerFactory": {
+        "sol:ERC20CheckerFactory": {
+          "address": "0x2Ad7aBd98200ECf4E07B328c2Bbe82716907B524",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/erc20/ERC20PolicyFactory": {
+        "sol:ERC20PolicyFactory": {
+          "address": "0x5Ef9cD92468bbD54a4850Eb093B6afbc6BAA0c74",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/token/TokenCheckerFactory": {
+        "sol:TokenCheckerFactory": {
+          "address": "0x4ee23507A5971E531273550B574e1C5692a091e6",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/token/TokenPolicyFactory": {
+        "sol:TokenPolicyFactory": {
+          "address": "0xe568d595A96c918C552Ebd745b8ffEF697c599A2",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/eas/EASCheckerFactory": {
+        "sol:EASCheckerFactory": {
+          "address": "0xc2165297f1f4B62D7497a22f2e0D5CeC9085057C",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/eas/EASPolicyFactory": {
+        "sol:EASPolicyFactory": {
+          "address": "0x91E2F707E4672b277A664AeB56468284846F15c5",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportCheckerFactory": {
+        "sol:GitcoinPassportCheckerFactory": {
+          "address": "0xb0F4173E50D263F4094b8b5e8974b3421C189d02",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/gitcoin/GitcoinPassportPolicyFactory": {
+        "sol:GitcoinPassportPolicyFactory": {
+          "address": "0x717954c690AE0c724AA19499A742137c37468E5e",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/merkle/MerkleProofCheckerFactory": {
+        "sol:MerkleProofCheckerFactory": {
+          "address": "0xc9eE56dfeA11F9F08eF361174C88b295F71364fC",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/merkle/MerkleProofPolicyFactory": {
+        "sol:MerkleProofPolicyFactory": {
+          "address": "0xc5d13802528Ef1085a22B6eC1bf246B606A3881b",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/semaphore/SemaphoreCheckerFactory": {
+        "sol:SemaphoreCheckerFactory": {
+          "address": "0x80020a0bBCb821a18823714C8C77F92ab3092374",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/semaphore/SemaphorePolicyFactory": {
+        "sol:SemaphorePolicyFactory": {
+          "address": "0x3Da51eAAE0E44A73bB1E55bDc738A52b6BE9fbD7",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/zupass/ZupassCheckerFactory": {
+        "sol:ZupassCheckerFactory": {
+          "address": "0xBaD3a9dafc4313c938E78A95A173ef8D46f30ff4",
+          "count": 1
+        }
+      },
+      "@excubiae/contracts/contracts/extensions/zupass/ZupassPolicyFactory": {
+        "sol:ZupassPolicyFactory": {
+          "address": "0x66eA0812b1B4fD2256F55E023CA40D2B4d458dD5",
+          "count": 1
+        }
+      },
+      "ConstantInitialVoiceCreditProxyFactory": {
+        "address": "0x0318A6c438269656A9589eACAbBea3f03E26620D",
+        "count": 2
+      },
+      "PrivoteWrapper": {
+        "address": "0x49b142100F9E2752E1DbA3b7189CF7A1cBd277f3",
+        "count": 1
+      },
+      "Privote": {
+        "address": "0x49b142100F9E2752E1DbA3b7189CF7A1cBd277f3",
+        "count": 1
+      },
+      "ConstantInitialVoiceCreditProxy": {
+        "address": "0xFFb8e83DA062aEc255c6ABE8eF2E4A226683a278",
+        "count": 1
+      },
+      "Poll": {
+        "poll-0": {
+          "address": "0xb509a36F670fb2264B4ED384E3BfdAD5C1d72128",
+          "count": 1
+        },
+        "poll-1": {
+          "address": "0xC5b273829Ecf7B17c26277EabAf1082eE6B9ABCB",
+          "count": 1
+        }
+      },
+      "MessageProcessor": {
+        "poll-0": {
+          "address": "0xeD2397EEA6D3b22cA85A21151c7C28B45b9A9539",
+          "count": 1
+        },
+        "poll-1": {
+          "address": "0xBc863b46d311B6c30D7FF4148FD925801816B3c3",
+          "count": 1
+        }
+      },
+      "Tally": {
+        "poll-0": {
+          "address": "0xACffe9038340205EA02d2AFf6a11333Dd1E5077D",
+          "count": 1
+        },
+        "poll-1": {
+          "address": "0x3b171c4e9D52634BA936e4ed161a85af06EA4FD8",
+          "count": 1
+        }
+      }
+    }
+  }
+}

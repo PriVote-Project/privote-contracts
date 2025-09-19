@@ -127,7 +127,8 @@ deployment.deployTask(EDeploySteps.VerifyingKeysRegistry, "Deploy verifying key 
       },
       initialOwner,
     );
-
+    //timeout 10 seconds
+    await new Promise(resolve => setTimeout(resolve, 10000));
     const processZkeys = [qvProcessVerifyingKey, nonQvProcessVerifyingKey, fullProcessVerifyingKey].filter(
       Boolean,
     ) as IVerifyingKeyStruct[];
